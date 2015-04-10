@@ -17,6 +17,7 @@ import javax.xml.bind.Marshaller;
 import ec.com.vipsoft.ce.backend.service.AdministradorAutorizacionContingencia;
 import ec.com.vipsoft.ce.backend.service.VerificadorIndisponibilidad;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
+import ec.com.vipsoft.ce.ui.RegistradorUsuario;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
@@ -39,6 +40,8 @@ public class ProcesoEnvioEJB {
 	private EnviadorSRIEJB enviador;
 	@Inject
 	private UtilClaveAcceso utilClaveAcceso;
+	@EJB
+	private RegistradorUsuario registradorUsuario;
 	public void lanzarProcesoEnvio(Map<String,Object> parametros){
 		
 		String rucEntidad=(String) parametros.get("rucEmisor");
@@ -86,6 +89,7 @@ public class ProcesoEnvioEJB {
 					comautorizado.setEnXML(swriter.toString().getBytes());								
 					comprobante.setComprobanteAutorizado(comautorizado);									
 				}	
+				registradorUsuario.registrarUsuario((String)parametros.get("idCliente"), (String)parametros.get("idCliente"), "", "");
 				em.persist(comprobante);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

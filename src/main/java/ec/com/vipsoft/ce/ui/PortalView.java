@@ -1,104 +1,117 @@
 package ec.com.vipsoft.ce.ui;
 
+import java.util.Set;
+
+
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.inject.Inject;
+
+
 import com.vaadin.cdi.CDIView;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.FontAwesome;
+import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.OptionGroup;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.renderers.HtmlRenderer;
 
-import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
-import ec.com.vipsoft.erp.gui.componentesbasicos.BotonPreferencias;
-import ec.com.vipsoft.erp.gui.componentesbasicos.BotonSalir;
-import ec.com.vipsoft.erp.gui.componentesbasicos.ComboTipoDocumento;
+
+import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
+import ec.com.vipsoft.ce.backend.service.ListarComprobantesEmitidos;
+import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 @CDIView("portal")
 public class PortalView extends VerticalLayout implements View{
 
-	private static final long serialVersionUID = 196537394702809526L;
-	private BotonSalir botonSalir;
-	private BotonPreferencias preferencias;
-	private Label labelNombreUsuario;
-	private ComboTipoDocumento comboTipoDocumento;
-	private TextField criterioBusquedaTexto;
-	private BotonBuscar botonBusqueda;
-	private Grid gridComprobantes;
-	public PortalView() {
-		super();
-		setMargin(true);
-		setSpacing(true);
-		
-		HorizontalLayout layoutsessionPreferencias=new HorizontalLayout();
-		layoutsessionPreferencias.setSpacing(true);
-		
-		labelNombreUsuario=new Label();		
-		labelNombreUsuario.setValue("christian valverde");
-		preferencias=new BotonPreferencias();
-		botonSalir=new BotonSalir();
-		comboTipoDocumento=new ComboTipoDocumento();
-		Label labelEspacio=new Label("  ");
-		labelEspacio.setWidth("100px");
-		botonSalir.addClickListener(event -> {
-			//SecurityUtils.getSubject().logout();
-			UI.getCurrent().getNavigator().navigateTo("login");
-			VaadinSession.getCurrent().getSession().invalidate();
-		});
-		OptionGroup criterioBusqueda=new OptionGroup();
-		criterioBusqueda.addItem("porClave");
-		criterioBusqueda.addItem("pornumdoc");
-		criterioBusqueda.setItemCaption("porClave", "Clave de Acceso");
-		criterioBusqueda.setItemCaption("pornumdoc", "Número de Documento");
-		criterioBusqueda.setStyleName("horizontal");
-		criterioBusquedaTexto=new TextField();
-		criterioBusquedaTexto.setWidth("200px");
-		botonBusqueda=new BotonBuscar();
-		layoutsessionPreferencias.addComponent(labelEspacio);
-		Label liconoUsuario=new Label(" ");
-		liconoUsuario.setIcon(FontAwesome.USER);
-		layoutsessionPreferencias.addComponent(comboTipoDocumento);
-		layoutsessionPreferencias.addComponent(criterioBusqueda);
-		layoutsessionPreferencias.addComponent(criterioBusquedaTexto);
-		layoutsessionPreferencias.addComponent(botonBusqueda);
-		layoutsessionPreferencias.addComponent(labelEspacio);
-		layoutsessionPreferencias.addComponent(liconoUsuario);
-		layoutsessionPreferencias.addComponent(labelNombreUsuario);
-		layoutsessionPreferencias.addComponent(preferencias);
-		layoutsessionPreferencias.addComponent(botonSalir);
-		
-		addComponent(layoutsessionPreferencias);
-		setComponentAlignment(layoutsessionPreferencias, Alignment.TOP_RIGHT);
-		gridComprobantes=new Grid();
-		
-		gridComprobantes.addColumn("Fecha Emisión");
-		gridComprobantes.addColumn("Tipo");
-		gridComprobantes.addColumn("Número de  Documento");
-		gridComprobantes.addColumn("Clave Acceso");
-		gridComprobantes.addColumn("Autorización");
-		gridComprobantes.addColumn("Fecha Autorización");
-		gridComprobantes.addColumn("XML");
-		gridComprobantes.addColumn("PDF ");
-		gridComprobantes.setWidth("60%");
-		gridComprobantes.setEditorEnabled(true);
-		//gridComprobantes.setSizeFull();
-		addComponent(gridComprobantes);
-		setComponentAlignment(gridComprobantes, Alignment.MIDDLE_CENTER);
-	}
+	@EJB
+	private ListarComprobantesEmitidos listadoComprobantesEmitidos;
+	@Inject 
+	private UserInfo userInfo;
+	private static final long serialVersionUID = 5820107472515714341L;
+	private Grid grid;
+	private BeanItemContainer<ComprobanteRideXmlBean>beanItemContainer;
+	private BotonCancelar botonCancelar;
 	@Override
 	public void enter(ViewChangeEvent event) {
-//		if(SecurityUtils.getSubject().isAuthenticated()){
-//			if(!SecurityUtils.getSubject().hasRole("lector")){
-//				UI.getCurrent().getNavigator().navigateTo("login");
-//			}
-//		}else{
-//			UI.getCurrent().getNavigator().navigateTo("login");
-//		}
+	//	actualizarVista();
 		
 	}
+	 public PortalView() {
+		
+		super();
+		
+		beanItemContainer=new BeanItemContainer<ComprobanteRideXmlBean>(ComprobanteRideXmlBean.class);	
+		grid=new Grid(beanItemContainer);	
+		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion","fechaAprobacion");
+		grid.getColumn("claveAcceso").setRenderer(new HtmlRenderer());
+		grid.getColumn("autorizacion").setRenderer(new HtmlRenderer());
+		grid.setSizeFull();
+		grid.setSelectionMode(SelectionMode.NONE);
+		
+		setMargin(true);
+		setSpacing(true);
+		setSizeFull();
+		HorizontalLayout l1=new HorizontalLayout();
+		botonCancelar=new BotonCancelar();
+		botonCancelar.addClickListener(event->{
+			UI.getCurrent().getNavigator().navigateTo("login");
+			VaadinSession.getCurrent().close();
+			
+		});
+		l1.addComponent(botonCancelar);
+		l1.setComponentAlignment(botonCancelar, Alignment.TOP_RIGHT);
+		addComponent(l1);
+		addComponent(grid);
+		setComponentAlignment(l1, Alignment.TOP_RIGHT);
+		setExpandRatio(l1, 1);
+		setExpandRatio(grid, 9);
+	}
+	@PostConstruct
+	public void actualizarVista(){
+		System.out.println("llamado postconstruct");
+		Long ultimo=0l;
+		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.listarCompronbantesDeBeneficiario(userInfo.getName());
+		for(ComprobanteEmitido c:listarSiguientes){
+			System.out.println(c.getId());
+			ultimo=c.getId();
+			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
+			StringBuilder sbca=new StringBuilder("<a href='");
+			sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
+			sbca.append("/VisorRide?claveAcceso=");
+			sbca.append(c.getClaveAcceso());
+			sbca.append("' target='_blank'>");
+			sbca.append(c.getClaveAcceso());
+			sbca.append("</a>");
+			bean.setClaveAcceso(sbca.toString());
+			
+			
+			
+			bean.setNumeroDocumento(c.getNumeroDocumento());
+			StringBuilder sba=new StringBuilder("<a href='");
+			sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
+			sba.append("/VisorAutorizacion?claveAcceso=");
+			sba.append(c.getClaveAcceso());
+			sba.append("' download >");
+			sba.append(c.getNumeroAutorizacion());			
+			sba.append("</a>");
+			bean.setAutorizacion(sba.toString());
+			bean.setTipo(c.getTipo());
+			if(c.getFechaAutorizacion()!=null)
+				bean.setFechaAprobacion(c.getFechaAutorizacion());
+			
+			
+			beanItemContainer.addBean(bean);
+			grid.setContainerDataSource(beanItemContainer);
+		}
+	}
+	
+
+	
 
 }

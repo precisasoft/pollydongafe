@@ -30,7 +30,6 @@ public class VerificadorRespuestaIndividual {
 	
 	@Inject
 	private ConsultaAutorizacion consultorAutorizacion;
-	
 	public String verificarAutorizacionComprobante(String claveAcceso){
 		StringBuilder sb=new StringBuilder();
 		JAXBContext contexto=null;
@@ -63,6 +62,7 @@ public class VerificadorRespuestaIndividual {
 							//notificador.equals(elcomprobante.getIdentificacionBeneficiario().)
 						}else{
 							elcomprobante.setAutorizado(false);
+							elcomprobante.setAutorizacionConsultadoAlSRI(true);
 						}
 					}
 				}else{
@@ -74,6 +74,53 @@ public class VerificadorRespuestaIndividual {
 			e.getMessage();
 			e.printStackTrace();
 		}
+
+		return sb.toString();
+	}
+//	public String verificarAutorizacionComprobante(String claveAcceso){
+//		StringBuilder sb=new StringBuilder();
+//		JAXBContext contexto=null;
+//		Marshaller marshaller=null;
+//		Query q=em.createQuery("select c from ComprobanteElectronico c where c.claveAcceso=?1");
+//		q.setParameter(1, claveAcceso);
+//		List<ComprobanteElectronico>listaComprobantes=q.getResultList();
+//		
+//		try {
+//			contexto=JAXBContext.newInstance(Autorizacion.class);
+//			marshaller=contexto.createMarshaller();		
+//			for(ComprobanteElectronico c:listaComprobantes){
+//				RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(c.getClaveAcceso());
+//				if(!respuesta.getAutorizaciones().isEmpty()){
+//					for(Autorizacion a:respuesta.getAutorizaciones()){
+//						ComprobanteElectronico elcomprobante=em.find(ComprobanteElectronico.class, c.getId());
+//						elcomprobante.setAutorizacionConsultadoAlSRI(true);
+//						if(a.getEstado().equalsIgnoreCase("AUTORIZADO")){
+//							//aqui construir el pdf ... y xml ... 							
+//							elcomprobante.setAutorizado(true);
+//							elcomprobante.setNumeroAutorizacion(a.getNumeroAutorizacion());
+//							sb.append(a.getNumeroAutorizacion());
+//							ComprobanteAutorizado ca=new ComprobanteAutorizado();
+//							StringWriter swriter=new StringWriter();
+//							marshaller.marshal(respuesta.getAutorizaciones().get(0), swriter);		
+//							ca.setEnXML(swriter.toString().getBytes());
+//							elcomprobante.setComprobanteAutorizado(ca);
+//							elcomprobante.setFechaAutorizacion(a.getFechaAutorizacion());
+//							c.setAutorizado(true);						
+//							//notificador.equals(elcomprobante.getIdentificacionBeneficiario().)
+//						}else{
+//							elcomprobante.setAutorizado(false);
+//							elcomprobante.setAutorizacionConsultadoAlSRI(true);
+//						}
+//					}
+//				}else{
+//					
+//				}
+//				
+//			}
+//		}catch(SOAPException | JAXBException e){
+//			e.getMessage();
+//			e.printStackTrace();
+//		}
 			
 			
 //				try {
@@ -99,7 +146,7 @@ public class VerificadorRespuestaIndividual {
 //						}
 //					}
 //
-
-		return sb.toString();
-	}
+//
+//		return sb.toString();
+//	}
 }

@@ -19,6 +19,7 @@ import com.vaadin.server.Responsive;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
+import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
@@ -58,7 +59,7 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 	private ComboBox comboImpuesto;
 	private TextField comboCodigoImpuesto;
 	private BotonAnadir botnAnadirDetalle;
-	private Table tablaDetalles;
+	private Grid tablaDetalles;
 	private TextField campoPorcentajeARetener;
 	private ComprobanteRetencionBinding comprobante;
 	private ImpuestoRetencion impuestoRetencion;
@@ -100,7 +101,8 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 		razonSocialBeneficiario=new CampoRazonSocial();
 		fechaComprobante=new DateField();
 		fechaComprobante.setDateFormat("dd/MM/yyyy");	
-		fechaComprobante.setValue(new Date());
+		//fechaComprobante.setValue(new Date());
+		
 		fechaComprobante.setWidth("140px");
 		tipoDocumento=new ComboBox();
 		tipoDocumento.setNullSelectionAllowed(false);
@@ -171,9 +173,9 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 		
 		HorizontalLayout l3=new HorizontalLayout();
 		l3.setWidth("100%");
-		tablaDetalles=new Table();
+		tablaDetalles=new Grid();
 		tablaDetalles.setWidth("100%");
-		tablaDetalles.setPageLength(4);
+		
 		//BeanItemContainer<ImpuestoRetencion>bicImpuestoRetencion=new BeanItemContainer<ImpuestoRetencion>(ImpuestoRetencion.class);		
 	//	bicImpuestoRetencion.addAll(detalles);
 	//	tablaDetalles.setContainerDataSource(bicImpuestoRetencion);
@@ -219,8 +221,11 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 		BeanItemContainer<ImpuestoRetencion>biir=new BeanItemContainer<ImpuestoRetencion>(ImpuestoRetencion.class) ;
 		biir.addAll(comprobante.getImpuestos());
 		tablaDetalles.setContainerDataSource(biir);
-		tablaDetalles.setSelectable(true);
-		tablaDetalles.setMultiSelect(false);
+		tablaDetalles.removeColumn("fechaEmisionDocumentoSustento");
+		tablaDetalles.removeColumn("codigo");
+	//	tablaDetalles.getColumn("fechaEmisionDocumentoSustentoTexto").setHeaderCaption("Fecha Documento");
+	//	tablaDetalles.setSelectable(true);
+		//tablaDetalles.setMultiSelect(false);
 		botnAnadirDetalle.addClickListener(event -> {
 			try {
 				

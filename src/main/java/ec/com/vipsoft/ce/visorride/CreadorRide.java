@@ -51,11 +51,11 @@ import ec.com.vipsoft.sri.notacredito._v1_1_0.NotaCredito;
 @Stateless
 public class CreadorRide {
 	
-	@Inject
-	private UtilClaveAcceso utilClaveAcceso;
+	
 	@EJB
 	private ContenedorReportesRide contenedorRIDE;
-	
+	@Inject
+	private UtilClaveAcceso utilClaveAcceso;
 	@PersistenceContext
 	private EntityManager em;
 	@Inject

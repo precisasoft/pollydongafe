@@ -90,10 +90,10 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			bean.setNumeroDocumento(c.getNumeroDocumento());
 			StringBuilder sba=new StringBuilder("<a href='");
 			sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
-			sba.append("/VisorRide?claveAcceso=");
-			sba.append(c.getNumeroAutorizacion());
-			sba.append("' target='_blank'>");
-			sba.append(c.getNumeroAutorizacion());
+			sba.append("/VisorAutorizacion?claveAcceso=");
+			sba.append(c.getClaveAcceso());
+			sba.append("' download >");
+			sba.append(c.getNumeroAutorizacion());			
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
 			bean.setTipo(c.getTipo());

@@ -86,13 +86,14 @@ public class GeneradorGuiaRemisionFacturaCompleta {
 			String puntoEmision=stok.nextToken();
 			String secuenciaFactura=stok.nextToken();
 			
-			Query qcomprobanteelectronica=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.tipo=?2 and c.establecimiento=?3 and c.puntoEMision=?4 and c.secuencia=?5 and c.enviado=?6" );
+			Query qcomprobanteelectronica=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.tipo=?2 and c.establecimiento=?3 and c.puntoEMision=?4 and c.secuencia=?5 and c.enviado=?6 and c.autorizado=?7"  );
 			qcomprobanteelectronica.setParameter(1,entidad);
 			qcomprobanteelectronica.setParameter(2, TipoComprobante.factura);
 			qcomprobanteelectronica.setParameter(3, establecimiento);
 			qcomprobanteelectronica.setParameter(4, puntoEmision);
 			qcomprobanteelectronica.setParameter(5, secuenciaFactura);
 			qcomprobanteelectronica.setParameter(6, Boolean.TRUE);
+			qcomprobanteelectronica.setParameter(7, Boolean.TRUE);
 			List<ComprobanteElectronico>listaComprobante=qcomprobanteelectronica.getResultList();
 			if(!listaComprobante.isEmpty()){
 				ComprobanteElectronico comprobanteElectonicofactura=em.find(ComprobanteElectronico.class, listaComprobante.get(0).getId());

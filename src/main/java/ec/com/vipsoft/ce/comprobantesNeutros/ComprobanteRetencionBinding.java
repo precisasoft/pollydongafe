@@ -58,7 +58,7 @@ public class ComprobanteRetencionBinding extends BaseComprobanteElectronicoBindi
 			nimpuesto.setCodigo(tipoImpuesto);
 			nimpuesto.setNumeroDocumento(numeroDocumento);
 			nimpuesto.setCodigoRetention(codigoImpuesto);
-			nimpuesto.setFechaEmisionDocumentoSustento(fechaEmision);
+			nimpuesto.setFechaEmisionDocumentoSustento(fechaDocumento);
 			if (codigoDocumento.equals("01")) {
 				nimpuesto.setTipoComprobante(TipoComprobante.factura);
 			}

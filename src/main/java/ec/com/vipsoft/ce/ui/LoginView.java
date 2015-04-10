@@ -86,8 +86,11 @@ public class LoginView extends VerticalLayout implements View {
 						userInfo.setCodigoEstablecimiento(mapa.get("codigoEstablecimiento"));
 					//	userInfo.setIdEstablecimiento(Integer.valueOf(mapa.get("idEstablecimiento")));
 						userInfo.setPuntoEmision(mapa.get("puntoEmision"));
+						userInfo.setName(usuario.getValue());
 						userInfo.setRazonSocialEmisor(mapa.get("razonSocialEmisor"));
 					//	userInfo.setIdPuntoEmision(Integer.valueOf(mapa.get("idPuntoEmision")));	
+					}else{
+						userInfo.setName(usuario.getValue());
 					}
 					
 					
@@ -96,13 +99,13 @@ public class LoginView extends VerticalLayout implements View {
 						//amarrar el login con las variables de usuario
 						
 						UI.getCurrent().getNavigator().navigateTo("menu");
+				
+					}else{
+						if(currentUser.hasRole("usuario")){
+							//no se amarra a ninguna variable ... por lo menos por ahora
+							UI.getCurrent().getNavigator().navigateTo("portal");
+						}
 					}
-//					}else{
-//						if(currentUser.hasRole("usuario")){
-//							//no se amarra a ninguna variable ... por lo menos por ahora
-//							UI.getCurrent().getNavigator().navigateTo("portal");
-//						}
-//					}
 				}catch(AuthenticationException e){
 					Notification.show("error", e.getMessage(),Type.ERROR_MESSAGE);
 				}

@@ -42,12 +42,15 @@ public class VerificadorRespuestaSRI {
 		if(!verificadorIndisponibilidad.estamosEnContingencia()){
 			JAXBContext contexto=null;
 			Marshaller marshaller=null;
-			Query q=em.createQuery("select c from ComprobanteElectronico c where c.enviado=?1 and c.autorizacionConsultadoAlSRI=?2 and c.fechaEnvio<=?3");		
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.enviado=?1 and c.autorizacionConsultadoAlSRI=?2 and c.fechaEnvio<=?3  and c.fechaEnvio>=?4 and c.autorizado=?5 order by c.id desc");		
 			q.setParameter(1, Boolean.TRUE);
 			q.setParameter(2, Boolean.FALSE);
 			Calendar ahora=GregorianCalendar.getInstance();
-			ahora.add(Calendar.SECOND, -3);
-			q.setParameter(3, ahora.getTime());					
+			ahora.add(Calendar.SECOND, -3);			
+			q.setParameter(3, ahora.getTime());
+			ahora.add(Calendar.HOUR,-24);
+			q.setParameter(4, ahora.getTime());
+			q.setParameter(5, Boolean.FALSE);
 
 			List<ComprobanteElectronico>lista=q.getResultList();		
 			if(!lista.isEmpty()){
