@@ -31,6 +31,7 @@ public class ComprobanteElectronico implements Serializable {
 	}
 
 	private static final long serialVersionUID = -7861134113150414156L;
+	@Column(columnDefinition="boolean default false")
 	private boolean autorizado;
 	private String claveAcceso;
 	private String codigoError;		

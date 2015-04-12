@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-04-11T10:12:29 -->
+<!-- 2015-04-11T10:12:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ride_factura_1_1_0" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c657c4f3-61fd-4627-a281-efbb7413152a">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="numeroDocumento" class="java.lang.String"/>
@@ -106,7 +106,7 @@
 				<text><![CDATA[NÚMERO DE AUTORIZACIÓN]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="297" y="63" width="250" height="24" uuid="404528bf-097c-45c7-b078-a99c89c5f628">
+				<reportElement x="297" y="63" width="248" height="24" uuid="404528bf-097c-45c7-b078-a99c89c5f628">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
@@ -281,10 +281,6 @@
 				</reportElement>
 				<textFieldExpression><![CDATA[$P{guiaRemision}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="0" y="5" width="223" height="56" uuid="9d18a84d-4603-4c95-8f30-68c9cd3682a4"/>
-				<imageExpression><![CDATA["/home/chrisvv/"+$P{rucEmisor}+".png"]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="0" y="62" width="270" height="16" uuid="e76a1466-6a36-4b88-b93d-996f4bed43d4"/>
 				<textElement>

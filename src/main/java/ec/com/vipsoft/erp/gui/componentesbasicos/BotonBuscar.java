@@ -11,7 +11,7 @@ public class BotonBuscar extends Button {
 	private static final long serialVersionUID = 3940053910705572164L;
 
 	public BotonBuscar() {
-		super("...");
+		super("");
 		setStyleName("friendly");
 		setIcon(FontAwesome.SEARCH);
 	}
