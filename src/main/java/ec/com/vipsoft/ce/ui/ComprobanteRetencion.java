@@ -30,11 +30,13 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
+import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.ImpuestoRetencion;
 import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutra;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonAnadir;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonRegistrar;
@@ -78,6 +80,8 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 	private ReceptorComprobanteRetencionNeutra receptorComprobanteRetencionNeutra;
 	@Inject
 	private UtilClaveAcceso utilClaveAcceso;
+	@EJB
+	private RegistradorDemografia demografia;
 	public ComprobanteRetencion() {
 		super();
 		detalles=new ArrayList<ImpuestoRetencion>();
@@ -273,6 +277,16 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 				}
 			}
 			
-		});				 		 
+		});				 
+		identificacionBeneficiario.addTextChangeListener(event->{
+			
+			int len=event.getText().length();
+			if(len>=6){
+				DemografiaCliente clienteEncontrado = demografia.buscarCliente(event.getText(),userInfo.getRucEmisor());
+				if(clienteEncontrado.getRazonSocial()!=null){
+					razonSocialBeneficiario.setValue(clienteEncontrado.getRazonSocial());					
+				}				
+			}
+		});
 	}
 }

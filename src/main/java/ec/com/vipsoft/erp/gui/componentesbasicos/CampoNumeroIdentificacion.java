@@ -16,6 +16,7 @@ public class CampoNumeroIdentificacion extends TextField {
 		setWidth("140px");
 		setNullRepresentation("");
 		setValidationVisible(false);
+		setImmediate(true);
 	}
 
 	

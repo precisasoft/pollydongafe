@@ -153,7 +153,7 @@ private ComboBox tipoIdentificacion;
 				n.setRazonSocial(razonSocial.getValue().toUpperCase());
 				n.setTipoIdentificacion((String)tipoIdentificacion.getValue());
 				n.setIdentificacion(id.getValue());				
-				beanItemC.addBean(n);
+				//beanItemC.addBean(n);
 				gestorDemog.registrarActualizaCliente(n, userInfo.getRucEmisor());
 				
 			}catch(Exception e){

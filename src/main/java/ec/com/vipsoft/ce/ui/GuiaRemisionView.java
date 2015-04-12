@@ -19,7 +19,9 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
+import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.GeneradorGuiaRemisionFacturaCompleta;
+import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonRegistrar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoCodigo;
@@ -44,6 +46,8 @@ public class GuiaRemisionView extends VerticalLayout implements View {
 	private DateField fechaFinal;
 	private CampoDireccion direccionDestino;
 	private BotonRegistrar botonRegistrar;
+	@EJB
+	private RegistradorDemografia demografia;
 	@Override
 	public void enter(ViewChangeEvent event) {
 		
@@ -123,6 +127,15 @@ public class GuiaRemisionView extends VerticalLayout implements View {
 			String claveAcceso = generadorGuia.generarGuiaRemisionFacturaCompleta(userInfo.getRucEmisor(), numeroDocumento.getValue(), identificacionTransportista.getValue(),(String) tipoIdentificacionTransportista.getValue(), razonSocialTransportista.getValue(), placa.getValue(), fechaInicial.getValue(), fechaFinal.getValue(), direccionDestino.getValue());
 			
 			Notification.show(claveAcceso, Notification.Type.HUMANIZED_MESSAGE);
+		});
+		identificacionTransportista.addTextChangeListener(event->{
+			int len=event.getText().length();
+			if(len>=6){
+				DemografiaCliente clienteEncontrado = demografia.buscarCliente(event.getText(),userInfo.getRucEmisor());
+				if(clienteEncontrado.getRazonSocial()!=null){
+					razonSocialTransportista.setValue(clienteEncontrado.getRazonSocial());					
+				}				
+			}
 		});
 	}
 }

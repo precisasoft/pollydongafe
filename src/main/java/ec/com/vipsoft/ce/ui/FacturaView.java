@@ -18,6 +18,8 @@ import org.apache.shiro.SecurityUtils;
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.FieldEvents.FocusEvent;
+import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -36,11 +38,13 @@ import com.vaadin.ui.Window;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.ListadorBienEconomico;
+import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
 import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorFacturaNeutra;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.BienEconomico;
+import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonAnadir;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
@@ -83,6 +87,8 @@ public class FacturaView extends VerticalLayout implements View{
     private CampoFecha fechaEmision;
     private TextField formaPago;
 	private TextField informacion_adicional;
+	@EJB
+	private RegistradorDemografia demografia;
     //private 
     //private 
 	@EJB
@@ -453,6 +459,20 @@ public class FacturaView extends VerticalLayout implements View{
         	
         	
         });
+        rucBeneficiario.addTextChangeListener(event -> {
+			int len=event.getText().length();
+			if(len>=6){
+				DemografiaCliente clienteEncontrado = demografia.buscarCliente(event.getText(),userInfo.getRucEmisor());
+				if(clienteEncontrado.getRazonSocial()!=null){
+					razonSocialBeneficiario.setValue(clienteEncontrado.getRazonSocial());					
+				}
+				if(clienteEncontrado.getDireccion()!=null){
+					direccion.setValue(clienteEncontrado.getDireccion());
+				}
+			}
+			
+		});
+
     }
     
     

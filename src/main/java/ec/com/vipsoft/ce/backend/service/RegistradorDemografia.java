@@ -52,10 +52,32 @@ public class RegistradorDemografia {
 		if(!listaEntidad.isEmpty()){
 			Entidad e=em.getReference(Entidad.class, listaEntidad.get(0).getId());
 			Query qd=em.createQuery("select d from DemografiaCliente d where d.entidadEmisora=?1");
-			qd.setParameter(1, e);
+			qd.setParameter(1, e);			
 			retorno.addAll(qd.getResultList());		
 		}
 		return retorno;
 		
+	}
+	public DemografiaCliente buscarCliente(String identificacion,String rucEmisor){
+		DemografiaCliente demo=new DemografiaCliente();
+		
+		Query q=em.createQuery("select e from Entidad e where e.ruc=?1");
+		q.setParameter(1, rucEmisor);
+		List<Entidad>listaEntidad=q.getResultList();
+		if(!listaEntidad.isEmpty()){
+			Entidad e=em.getReference(Entidad.class, listaEntidad.get(0).getId());
+			Query qd=em.createQuery("select d from DemografiaCliente d where d.entidadEmisora=?1 and d.identificacion=?2");
+			qd.setParameter(1, e);
+			qd.setParameter(2, identificacion);
+			List<DemografiaCliente>listaDemografiaClientes=qd.getResultList();
+			if(!listaDemografiaClientes.isEmpty()){
+				DemografiaCliente encontrado=listaDemografiaClientes.get(0);
+				demo.setCorreoElectronico(encontrado.getCorreoElectronico());
+				demo.setDireccion(encontrado.getDireccion());
+				demo.setRazonSocial(encontrado.getRazonSocial());
+				
+			}
+		}
+		return demo;
 	}
 }
