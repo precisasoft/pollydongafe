@@ -65,7 +65,7 @@ import es.mityc.javasign.xml.refs.ObjectToSign;
  *
  */
 @Stateless
-@WebService
+//@WebService
 public class ReceptorFacturaNeutra {
 	@EJB
 	private GeneradorClaveAccesoPorEntidad generadorClaveAcceso;

@@ -66,7 +66,7 @@ import es.mityc.javasign.xml.refs.ObjectToSign;
  * @author chrisvv
  */
 @Stateless
-@WebService
+//@WebService
 public class ReceptorComprobanteRetencionNeutra {            
 	@EJB
 	private GeneradorClaveAccesoPorEntidad generadorClaveAcceso;

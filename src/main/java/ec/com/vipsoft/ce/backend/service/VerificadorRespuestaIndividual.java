@@ -21,7 +21,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 
 @Stateless
-@WebService
+//@WebService
 public class VerificadorRespuestaIndividual {
 
 	@PersistenceContext

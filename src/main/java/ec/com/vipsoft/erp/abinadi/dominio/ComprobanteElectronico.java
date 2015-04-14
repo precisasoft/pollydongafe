@@ -61,7 +61,7 @@ public class ComprobanteElectronico implements Serializable {
 	private String identificacionBeneficiario;
 	@Column(name="error")
 	private String mensajeError;
-	@Column(name = "nbc")
+	@Column(name = "nbc"  , columnDefinition="boolean default false")
 	protected boolean notificadoBeneficiario;
 	@Column(name = "nci")
 	protected boolean notificadoCorreoInterno;

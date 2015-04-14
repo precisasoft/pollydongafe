@@ -27,7 +27,7 @@ public class BienEconomico implements Serializable ,Comparable<BienEconomico>{
 	private static final long serialVersionUID = 1L;
 	@NotNull
 	private String codigo;
-	private String codigoIce;
+	private String codigoIce;	
 	//@Column(name="codigoiva" ,columnDefinition="char(1) default '2' check codigoiva='0' or codigoiva='2' or codigoiva='6' or codigoiva='7'")
 	private String codigoIva;
 	@NotNull

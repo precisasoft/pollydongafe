@@ -44,7 +44,7 @@ import ec.com.vipsoft.sri.guiaremision._v1_1_0.GuiaRemision;
 import ec.com.vipsoft.sri.guiaremision._v1_1_0.ObligadoContabilidad;
 
 @Stateless
-@WebService
+//@WebService
 public class ReceptorGuiaRemisionNeutra implements Serializable{
 	/**
 	 * 

@@ -26,7 +26,7 @@ public class ListarComprobantesEmitidos {
 		List<Entidad>listadoEntidad=qentidad.getResultList();
 		if(!listadoEntidad.isEmpty()){
 			GregorianCalendar ahora=new GregorianCalendar();
-			ahora.add(GregorianCalendar.HOUR_OF_DAY, -336);
+			ahora.add(GregorianCalendar.DAY_OF_MONTH, -60);
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.codigoError is null  and c.fechaRegistro>=?2 order by c.id desc");
