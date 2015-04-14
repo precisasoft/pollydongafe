@@ -105,11 +105,17 @@ public class CreadorRide {
 						StringReader reader = new StringReader(new String(cautorizado.getEnXML()));
 						autorizacion = (Autorizacion) unmarshaller.unmarshal(new InputSource(reader));
 					} else {
-						String verificacionComprobante = verificadorRespuestaIndividual.verificarAutorizacionComprobante(claveAcceso);
-						autorizacion=(Autorizacion)unmarshaller.unmarshal(new InputSource(new StringReader(verificacionComprobante)));
-						ComprobanteAutorizado cautorizado=new ComprobanteAutorizado();						
-						cautorizado.setEnXML(verificacionComprobante.getBytes());		
-						_comprobante.setComprobanteAutorizado(cautorizado);
+						autorizacion=verificadorRespuestaIndividual.verificarAutorizacion(claveAcceso);
+						if(autorizacion.getEstado().equalsIgnoreCase("AUTORIZADO")){
+							_comprobante.setAutorizado(true);
+							_comprobante.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+							ComprobanteAutorizado ca__=new ComprobanteAutorizado();
+							ca__.setEnXML(autorizacion.getComprobante().getBytes());
+							_comprobante.setComprobanteAutorizado(ca__);
+						}
+						
+						
+						
 					}
 				} else {
 					try {

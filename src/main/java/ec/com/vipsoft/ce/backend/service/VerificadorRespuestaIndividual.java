@@ -4,6 +4,8 @@ import java.io.StringWriter;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
@@ -30,6 +32,27 @@ public class VerificadorRespuestaIndividual {
 	
 	@Inject
 	private ConsultaAutorizacion consultorAutorizacion;
+	public Autorizacion verificarAutorizacion(String claveAcceso) throws JAXBException{
+		Autorizacion autorizacion=null;
+		JAXBContext contexto=null;
+		Marshaller marshaller=null;		
+		contexto=JAXBContext.newInstance(Autorizacion.class);
+		marshaller=contexto.createMarshaller();		
+		try {
+			RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(claveAcceso);
+			if(!respuesta.getAutorizaciones().isEmpty()){
+				autorizacion=respuesta.getAutorizaciones().get(0);
+			}
+			
+		} catch (SOAPException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return autorizacion;
+	}
+	
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String verificarAutorizacionComprobante(String claveAcceso){
 		StringBuilder sb=new StringBuilder();
 		JAXBContext contexto=null;
@@ -58,7 +81,16 @@ public class VerificadorRespuestaIndividual {
 							ca.setEnXML(swriter.toString().getBytes());
 							elcomprobante.setComprobanteAutorizado(ca);
 							elcomprobante.setFechaAutorizacion(a.getFechaAutorizacion());
-							c.setAutorizado(true);						
+							if((elcomprobante.getNumeroAutorizacion()==null)||(elcomprobante.getComprobanteAutorizado()==null)){
+								ComprobanteElectronico actualizador=em.find(ComprobanteElectronico.class, c.getId());
+								actualizador.setAutorizado(true);
+								actualizador.setNumeroAutorizacion(a.getNumeroAutorizacion());
+								actualizador.setComprobanteAutorizado(ca);
+							}
+							em.refresh(elcomprobante);
+							em.refresh(c);
+							c.setAutorizado(true);
+							
 							//notificador.equals(elcomprobante.getIdentificacionBeneficiario().)
 						}else{
 							elcomprobante.setAutorizado(false);
