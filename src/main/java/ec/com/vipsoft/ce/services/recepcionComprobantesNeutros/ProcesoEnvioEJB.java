@@ -32,8 +32,8 @@ public class ProcesoEnvioEJB {
 	
 	@PersistenceContext
 	private EntityManager em;
-	@EJB
-	private FirmadorDocumentoEJB firmador;
+//	@EJB
+//	private FirmadorDocumentoEJB firmador;
 	@EJB
 	private VerificadorIndisponibilidad verificadorIndisponibilidad;
 	@EJB

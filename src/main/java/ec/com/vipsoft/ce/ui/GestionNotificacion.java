@@ -19,11 +19,9 @@ import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonAnadir;
-import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoCorreoElectronico;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoDireccion;
-import ec.com.vipsoft.erp.gui.componentesbasicos.CampoNumeroIdentificacion;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoRazonSocial;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoRuc;
 import ec.com.vipsoft.erp.gui.componentesbasicos.HorizontalL;
@@ -41,13 +39,13 @@ public class GestionNotificacion extends VerticalLayout implements View {
 	private CampoDireccion direccion;
 	private CampoCorreoElectronico correoElectronico;
 	private BotonAnadir botonAnadir;
-	private BotonBuscar botonBuscar;
+
 	private Grid grid;
 	private BeanItemContainer<DemografiaCliente> beanItemC;
 	private BotonCancelar botonCancelar;
-private FieldGroup fg;
-private BeanItem<DemografiaCliente> beanItem;
-private ComboBox tipoIdentificacion;
+	private FieldGroup fg;
+	private BeanItem<DemografiaCliente> beanItem;
+	private ComboBox tipoIdentificacion;
 	public GestionNotificacion() {
 		super();
 		setMargin(true);
@@ -84,13 +82,13 @@ private ComboBox tipoIdentificacion;
 		//h1.addComponent("Dirección",direccion);
 		h1.addComponent("Email",correoElectronico);
 		botonAnadir=new BotonAnadir();
-		botonBuscar=new BotonBuscar();
+		
 		
 		addComponent(h1);
 		setComponentAlignment(h1, Alignment.TOP_CENTER);		
 		HorizontalL h2=new HorizontalL();
 		h2.addComponent("direccion",direccion);
-		h2.addComponent(botonAnadir,botonBuscar);
+		h2.addComponent(botonAnadir);
 		addComponent(h2);
 		
 		grid=new Grid();

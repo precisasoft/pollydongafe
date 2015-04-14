@@ -72,6 +72,7 @@ public class ListadorBienEconomico implements Serializable{
 				}
 				nuevoBien.setCodigoIva(codigoPorcentajeIva);
 				nuevoBien.setDescripcion(descripcion);
+				nuevoBien.setCodigo(codigo);
 				nuevoBien.setEntidad(e);
 				em.persist(nuevoBien);
 			}

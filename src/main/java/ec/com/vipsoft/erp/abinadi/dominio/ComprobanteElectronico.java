@@ -14,8 +14,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 /**
  * este entidad se usa para generar tabla que se muestra en el portal web 
@@ -24,7 +26,8 @@ import javax.persistence.TemporalType;
  *
  */
 @Entity
-public class ComprobanteElectronico implements Serializable {
+@Table(uniqueConstraints={@UniqueConstraint(columnNames={"claveAcceso"})})
+public class ComprobanteElectronico implements Serializable,Comparable<ComprobanteElectronico>{
 
 	public enum TipoComprobante {
 		factura, guiaRemision, notaCredito, notaDebito, retencion;
@@ -271,5 +274,10 @@ public class ComprobanteElectronico implements Serializable {
 		fechaRegistro=new Date();
 		notificadoBeneficiario=false;
 		notificadoCorreoInterno=false;
+	}
+	@Override
+	public int compareTo(ComprobanteElectronico o) {
+		int retorno=claveAcceso.compareTo(o.claveAcceso);
+		return retorno;
 	}
 }

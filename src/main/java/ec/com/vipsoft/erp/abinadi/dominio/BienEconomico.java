@@ -25,15 +25,15 @@ public class BienEconomico implements Serializable ,Comparable<BienEconomico>{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private static final long serialVersionUID = 1L;
-	@NotNull
+//	@NotNull
 	private String codigo;
 	private String codigoIce;	
 	//@Column(name="codigoiva" ,columnDefinition="char(1) default '2' check codigoiva='0' or codigoiva='2' or codigoiva='6' or codigoiva='7'")
 	private String codigoIva;
-	@NotNull
+	//@NotNull
 	private String descripcion;
-	@NotNull
-	@ManyToOne
+	//@NotNull
+	//@ManyToOne
 	private Entidad entidad;
 	
 	public String getCodigo() {

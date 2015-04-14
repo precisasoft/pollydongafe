@@ -82,7 +82,7 @@ public class NotificadorCorreo {
     private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
     private static String SUBJECT = "Testing JavaMail API";
     private static String TEXT = "This is a test message from my java application. Just ignore it";
-  //  @Schedule(dayOfMonth="*",hour="*",minute="*",second="0",year="*",month="*")
+//  @Schedule(dayOfMonth="*",hour="*",minute="*",second="0",year="*",month="*")
     public static synchronized void send() {
         //Use Properties object to set environment properties
         Properties props = new Properties();

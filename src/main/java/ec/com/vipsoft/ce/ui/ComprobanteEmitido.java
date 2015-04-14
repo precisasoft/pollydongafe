@@ -67,6 +67,9 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 			}
 			if(retorno==0){
 				retorno=numeroDocumento.compareTo(o.numeroDocumento);
+				if(retorno==0){
+					retorno=claveAcceso.compareTo(o.claveAcceso);
+				}
 				if(retorno<1){
 					retorno=1;
 				}

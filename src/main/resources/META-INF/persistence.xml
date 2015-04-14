@@ -2,9 +2,9 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="c2-ui-persistence-unit" transaction-type="JTA">
     <description>Forge Persistence Unit</description>
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+   <!-- <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
      <jta-data-source>jdbc/abinadi</jta-data-source>
-    <!--  <jta-data-source>java:jboss/datasources/abinadiDS</jta-data-source>-->
+   <!--  <jta-data-source>java:jboss/datasource/abinadiDS</jta-data-source>-->
     <class>ec.com.vipsoft.ce.ui.RolesPermission</class>
     <class>ec.com.vipsoft.ce.ui.RolesPermissionPK</class>
     <class>ec.com.vipsoft.ce.ui.UserRole</class>
@@ -18,7 +18,8 @@
     <class>ec.com.vipsoft.erp.abinadi.dominio.Servicio</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>   
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>
   </persistence-unit>
 </persistence>

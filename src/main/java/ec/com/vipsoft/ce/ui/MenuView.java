@@ -23,6 +23,7 @@ public class MenuView extends VerticalLayout implements View{
 	private Button botonGuiaRemision;
 	private Button secuencias;
 	private Button botonNotificaciones;
+	private Button productos;
 
 	public MenuView() {
 		super();
@@ -67,6 +68,11 @@ public class MenuView extends VerticalLayout implements View{
 		botonNotificaciones.setIcon(FontAwesome.ENVELOPE);
 		botonNotificaciones.addClickListener(event->UI.getCurrent().getNavigator().navigateTo("gestionNotificacion"));
 		addComponent(botonNotificaciones);
+		productos=new Button("productos");
+		productos.addClickListener(event->{
+			UI.getCurrent().getNavigator().navigateTo("bien");
+		});
+		addComponent(productos);
 		addComponent(botonSalir);	
 	}
 
