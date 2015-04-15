@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -16,6 +17,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.Producto;
 import ec.com.vipsoft.erp.abinadi.dominio.Servicio;
 
 @Stateless
+@WebService
 public class ListadorBienEconomico implements Serializable{
 	
 	/**

@@ -153,7 +153,11 @@ public class GestionNotificacion extends VerticalLayout implements View {
 				n.setIdentificacion(id.getValue());				
 				//beanItemC.addBean(n);
 				gestorDemog.registrarActualizaCliente(n, userInfo.getRucEmisor());
-				
+				llenarDatos();
+				id.clear();
+				razonSocial.clear();
+				correoElectronico.clear();
+				direccion.clear();
 			}catch(Exception e){
 				e.printStackTrace();
 			}

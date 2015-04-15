@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlType;
     "fechaAutorizacion",
     "ambiente",
     "comprobante",
+    "mensaje",
     "informacionAdicional"
 })
 @XmlRootElement(name = "autorizacion", namespace = "")
@@ -31,6 +32,18 @@ public class Autorizacion {
 	private String comprobante;
 	@XmlElement(required=false)
 	private String informacionAdicional;
+	@XmlElement(required=false)
+	private Mensaje mensaje;
+	
+	public Mensaje getMensaje() {
+		if(mensaje==null){
+			mensaje=new Mensaje();
+		}
+		return mensaje;
+	}
+	public void setMensaje(Mensaje mensaje) {
+		this.mensaje = mensaje;
+	}
 	public String getEstado() {
 		return estado;
 	}
@@ -67,5 +80,6 @@ public class Autorizacion {
 	public void setInformacionAdicional(String informacionAdicional) {
 		this.informacionAdicional = informacionAdicional;
 	}
+	
 	
 }

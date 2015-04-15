@@ -12,6 +12,14 @@ public class ComprobanteRideXmlBean implements Serializable{
 	private String autorizacion;
 	private String  claveAcceso;
 	private String numeroDocumento;
+	private String nota;
+	
+	public String getNota() {
+		return nota;
+	}
+	public void setNota(String nota) {
+		this.nota = nota;
+	}
 	public String getTipo() {
 		return tipo;
 	}

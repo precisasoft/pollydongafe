@@ -29,7 +29,7 @@ public class ListarComprobantesEmitidos {
 			ahora.add(GregorianCalendar.DAY_OF_MONTH, -60);
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.codigoError is null  and c.fechaRegistro>=?2 order by c.id desc");
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.fechaRegistro>=?2 order by c.id desc");
 			q.setMaxResults(2000);
 			//q.setParameter(1, idMinimo);
 			q.setParameter(1, entidad);
@@ -40,6 +40,9 @@ public class ListarComprobantesEmitidos {
 				ComprobanteEmitido bean=new ComprobanteEmitido();			
 				bean.setClaveAcceso(c.getClaveAcceso());
 				bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+				if(c.getCodigoError()!=null){
+					bean.setNota(c.getCodigoError());
+				}
 				if(c.getFechaAutorizacion()!=null){
 					bean.setFechaAutorizacion(sdf.format(c.getFechaAutorizacion()));	
 				}	
@@ -90,6 +93,9 @@ public class ListarComprobantesEmitidos {
 			ComprobanteEmitido bean=new ComprobanteEmitido();			
 			bean.setClaveAcceso(c.getClaveAcceso());
 			bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+			if(c.getCodigoError()!=null){
+				bean.setNota(c.getCodigoError());
+			}
 			if(c.getFechaAutorizacion()!=null){
 				bean.setFechaAutorizacion(sdf.format(c.getFechaAutorizacion()));	
 			}	

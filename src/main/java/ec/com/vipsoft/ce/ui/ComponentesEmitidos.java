@@ -97,6 +97,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
 			bean.setTipo(c.getTipo());
+			bean.setNota(c.getNota());
 			if(c.getFechaAutorizacion()!=null)
 				bean.setFechaAprobacion(c.getFechaAutorizacion());
 			

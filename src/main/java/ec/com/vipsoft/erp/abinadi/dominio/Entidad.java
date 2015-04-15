@@ -78,8 +78,10 @@ public class Entidad implements Serializable, Comparable<Entidad> {
     private String transportecorreo;
     private String corremoEmisor;
     private String passowrdCorreoEmisor;
+    private String userCorreo;
     private boolean habilitarNotificacionCorreo;
-    
+    private String textoMensajeCorreo;
+    private String subjectMensajeCorreo;
     
     
     public boolean isHabilitarNotificacionCorreo() {
@@ -549,4 +551,13 @@ public class Entidad implements Serializable, Comparable<Entidad> {
 //        }
     }
 
+	public String getUserCorreo() {
+		return userCorreo;
+	}
+
+	public void setUserCorreo(String userCorreo) {
+		this.userCorreo = userCorreo;
+	}
+
+	
 }

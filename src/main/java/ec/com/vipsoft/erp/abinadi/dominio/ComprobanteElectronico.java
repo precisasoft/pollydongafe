@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -38,8 +39,10 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
 	private boolean autorizado;
 	private String claveAcceso;
 	private String codigoError;		
+	@JoinColumn(name="caid")
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private ComprobanteAutorizado comprobanteAutorizado;     
+	@JoinColumn(name="df")
 	@ManyToOne(cascade=CascadeType.PERSIST)
 	private DocumentoFirmado documentoFirmado;
 	private boolean enPruebas;
@@ -77,7 +80,7 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
 	private Integer reintentos;
     @Enumerated(EnumType.ORDINAL)
 	private TipoComprobante tipo;
-    
+    @Column(name="acs")
     private boolean autorizacionConsultadoAlSRI;
     
     public boolean isAutorizacionConsultadoAlSRI() {

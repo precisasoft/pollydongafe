@@ -7,6 +7,7 @@ package ec.com.vipsoft.ce.ui;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 import java.util.StringTokenizer;
 
 import javax.annotation.PostConstruct;
@@ -17,19 +18,21 @@ import org.apache.shiro.SecurityUtils;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanContainer;
+import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.FieldEvents.FocusEvent;
-import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
+import com.vaadin.ui.Grid.SelectionModel;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -118,6 +121,7 @@ public class FacturaView extends VerticalLayout implements View{
     private UtilClaveAcceso utilClaveAcceso;
 	private Button botonSeleccionaDesdeVentanar;
 	private TextField tfiltro;
+	private Grid gridBusqueda;
     protected void actualizarTablaTotales(){
     	BigDecimal _subtotal=BigDecimal.ZERO;
     	BigDecimal _iva12=BigDecimal.ZERO;
@@ -428,11 +432,18 @@ public class FacturaView extends VerticalLayout implements View{
         	 
         });
         botonBuscarDetalle.addClickListener(event->{
-        	Table gridBusqueda=new Table();
+        	gridBusqueda=new Grid();
         	BeanItemContainer<BienEconomico>beaitem=new BeanItemContainer<BienEconomico>(BienEconomico.class);
+        	
         	gridBusqueda.setContainerDataSource(beaitem);
-        	gridBusqueda.setVisibleColumns(new String[]{"codigo","descripcion"});
-        	gridBusqueda.setWidth("200px");
+        	
+        	gridBusqueda.setSizeFull();
+        	gridBusqueda.removeColumn("id");
+        	gridBusqueda.removeColumn("codigoIva");
+        	gridBusqueda.removeColumn("codigoIce");
+        	gridBusqueda.setColumnOrder("codigo","descripcion");
+        	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
+        	
         	 tfiltro=new TextField();
         	botonSeleccionaDesdeVentanar = new Button("seleccionar");
         	
@@ -454,6 +465,16 @@ public class FacturaView extends VerticalLayout implements View{
         	layoutventana.addComponent(gridBusqueda);
         	ventana.setContent(layoutventana);
             ventana.center();
+            gridBusqueda.addSelectionListener(e -> { // Java 8
+        	    // Get the item of the selected row
+        	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
+        	    codigoP.setValue(item.getBean().getCodigo());
+        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
+        	    ventana.close();
+        	});
+            botonSeleccionaDesdeVentanar.addClickListener(eventa->{
+            	ventana.close();
+        	});
             UI.getCurrent().addWindow(ventana);
             
         	

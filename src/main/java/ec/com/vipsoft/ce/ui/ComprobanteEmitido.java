@@ -15,6 +15,14 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 	private String numeroAutorizacion;
 	private String fechaAutorizacion;
 	private String tipo;
+	private String nota;
+	
+	public String getNota() {
+		return nota;
+	}
+	public void setNota(String nota) {
+		this.nota = nota;
+	}
 	public String getNumeroDocumento() {
 		return numeroDocumento;
 	}

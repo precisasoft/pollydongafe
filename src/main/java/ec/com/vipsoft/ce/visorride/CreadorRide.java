@@ -109,6 +109,7 @@ public class CreadorRide {
 						if(autorizacion.getEstado().equalsIgnoreCase("AUTORIZADO")){
 							_comprobante.setAutorizado(true);
 							_comprobante.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+							_comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
 							ComprobanteAutorizado ca__=new ComprobanteAutorizado();
 							ca__.setEnXML(autorizacion.getComprobante().getBytes());
 							_comprobante.setComprobanteAutorizado(ca__);
@@ -147,11 +148,20 @@ public class CreadorRide {
 			}
 		}		
 		Map<String,Object>parametros=new HashMap<>();
-		if(autorizacion.getAmbiente().equalsIgnoreCase("PRUEBAS")){
-			parametros.put("ambiente", "PRUEBAS");
+		if(autorizacion.getAmbiente()!=null){
+			if(autorizacion.getAmbiente().equalsIgnoreCase("PRUEBAS")){
+				parametros.put("ambiente", "PRUEBAS");
+			}else{
+				parametros.put("ambiente", "PRODUCCION");
+			}	
 		}else{
-			parametros.put("ambiente", "PRODUCCION");
+			if(utilClaveAcceso.esEnPruebas(claveAcceso)){
+				parametros.put("ambiente", "PRUEBAS");
+			}else{
+				parametros.put("ambiente", "PRODUCCION");
+			}
 		}
+		
 		parametros.put("claveAcceso", claveAcceso);
 		parametros.put("numeroAutorizacion","NO AUTORIZADO");
 		if(autorizacion.getNumeroAutorizacion().length()>0){

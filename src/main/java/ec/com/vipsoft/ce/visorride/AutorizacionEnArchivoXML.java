@@ -65,7 +65,7 @@ public class AutorizacionEnArchivoXML {
 						StringReader reader = new StringReader(new String(cautorizado.getEnXML()));
 						autorizacion = (Autorizacion) unmarshaller.unmarshal(new InputSource(reader));
 					} else {
-						String verificacionComprobante = verificadorRespuestaIndividual.verificarAutorizacionComprobante(claveAcceso);
+						String verificacionComprobante = verificadorRespuestaIndividual.verificarAutorizacionComprobante(claveAcceso,_comprobante.getId());
 						autorizacion=(Autorizacion)unmarshaller.unmarshal(new InputSource(new StringReader(verificacionComprobante)));
 						ComprobanteAutorizado cautorizado=new ComprobanteAutorizado();						
 						cautorizado.setEnXML(verificacionComprobante.getBytes());		

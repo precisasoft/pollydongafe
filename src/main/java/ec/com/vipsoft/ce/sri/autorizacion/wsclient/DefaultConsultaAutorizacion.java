@@ -19,6 +19,7 @@ import javax.xml.ws.soap.SOAPBinding;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
@@ -97,9 +98,15 @@ public class DefaultConsultaAutorizacion implements ConsultaAutorizacion{
 					    autorizacion.setFechaAutorizacion(sdf.parse(elementAutXml.getElementsByTagName("fechaAutorizacion").item(0).getFirstChild().getNodeValue()));
 						autorizacion.setAmbiente(elementAutXml.getElementsByTagName("ambiente").item(0).getFirstChild().getNodeValue());
 						autorizacion.setComprobante(elementAutXml.getElementsByTagName("comprobante").item(0).getFirstChild().getNodeValue());
-						// autorizacion.setInformacionAdicional(elementAutXml.getElementsByTagName("mensajes").item(0).getFirstChild().getNodeValue());
-						respuestaAutorizacionComprobante.getAutorizaciones().add(autorizacion);	
-					}					
+						// autorizacion.setInformacionAdicional(elementAutXml.getElementsByTagName("mensajes").item(0).getFirstChild().getNodeValue());							
+					}else{
+						Node firstChild = elementAutXml.getElementsByTagName("mensaje").item(0).getFirstChild();
+						autorizacion.getMensaje().setIdentificador(firstChild.getFirstChild().getNodeValue());
+//						Node se=elementAutXml.getElementsByTagName("mensaje").item(0).getNextSibling();
+//						autorizacion.getMensaje().setMensaje(se.getFirstChild().getNodeValue());
+					//	autorizacion.getMensaje().getMensaje();
+					}
+					respuestaAutorizacionComprobante.getAutorizaciones().add(autorizacion);
 				}
 			}
 		} catch (Exception e) {

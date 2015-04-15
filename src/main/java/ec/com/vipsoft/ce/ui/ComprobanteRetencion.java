@@ -179,7 +179,13 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 		l3.setWidth("100%");
 		tablaDetalles=new Grid();
 		tablaDetalles.setWidth("100%");
-		
+	//	tablaDetalles.getColumn("codigoRetention").setHeaderCaption("Código de rentención");
+		//tablaDetalles.getColumn("fechaEmisionDocumentoSustentoTexto").setHeaderCaption("Fecha emisión doc.");
+		//tablaDetalles.getColumn("numeroDocumento").setHeaderCaption("N° Documento");
+	//	tablaDetalles.getColumn("codigoRetention").setHeaderCaption("Código de rentención");
+	//	tablaDetalles.getColumn("porcentajeRetencion").setHeaderCaption("% Retención");
+	//	tablaDetalles.getColumn("codigoRetention").setHeaderCaption("Código de rentención");
+		//tablaDetalles.removeColumn("tipoComprobante");
 		//BeanItemContainer<ImpuestoRetencion>bicImpuestoRetencion=new BeanItemContainer<ImpuestoRetencion>(ImpuestoRetencion.class);		
 	//	bicImpuestoRetencion.addAll(detalles);
 	//	tablaDetalles.setContainerDataSource(bicImpuestoRetencion);
@@ -268,6 +274,11 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 							sbnumerodocumento.append(utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
 							sbnumerodocumento.append("-").append(utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
 							Notification.show("Resultado", "Documento "+sbnumerodocumento.toString()+"  clave de acceso "+claveAcceso,Notification.TYPE_HUMANIZED_MESSAGE);
+							identificacionBeneficiario.clear();
+							razonSocialBeneficiario.clear();
+							camponumeroFactura.clear();
+							campoBaseImponible.clear();
+							campoPorcentajeARetener.clear();
 						}
 						
 					}

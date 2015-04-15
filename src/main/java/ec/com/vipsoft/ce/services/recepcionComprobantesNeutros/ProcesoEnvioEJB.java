@@ -57,7 +57,7 @@ public class ProcesoEnvioEJB {
 			Entidad entidad=listadoEntidad.get(0);
 			//verificar si se ha manadado o autorizado
 			boolean enviarlo=true;
-			Query qautorizado=em.createQuery("seelct c from ComprobanteElectronico c where c.entidad=?1 and c.claveAcceso=?2");
+			Query qautorizado=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.claveAcceso=?2");
 			qautorizado.setParameter(1, entidad);
 			qautorizado.setParameter(2, claveAcceso);
 			List<ComprobanteElectronico>listadoComprobantes=qautorizado.getResultList();
@@ -76,7 +76,7 @@ public class ProcesoEnvioEJB {
 				}
 			}
 			if(enviarlo){
-				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidad=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4");
+				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4");
 				qnsecuencia.setParameter(1, entidad);
 				qnsecuencia.setParameter(2,utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso) );
 				qnsecuencia.setParameter(3, utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));

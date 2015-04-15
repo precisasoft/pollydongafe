@@ -11,7 +11,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 import ec.com.vipsoft.erp.abinadi.dominio.PuntoVenta;
 
 @Stateless
-//@WebService
+@WebService
 public class RegistrarEntidad {
 	
 	@PersistenceContext

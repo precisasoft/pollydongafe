@@ -50,65 +50,106 @@ public class VerificadorRespuestaIndividual {
 		}
 		return autorizacion;
 	}
-	
-	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public String verificarAutorizacionComprobante(String claveAcceso){
-		StringBuilder sb=new StringBuilder();
-		JAXBContext contexto=null;
-		Marshaller marshaller=null;
-		Query q=em.createQuery("select c from ComprobanteElectronico c where c.claveAcceso=?1");
-		q.setParameter(1, claveAcceso);
-		List<ComprobanteElectronico>listaComprobantes=q.getResultList();
+	public String verificarAutorizacionComprobante(String claveAcceso,Long idConProbante){
 		
+		String retorno=null;
 		try {
-			contexto=JAXBContext.newInstance(Autorizacion.class);
-			marshaller=contexto.createMarshaller();		
-			for(ComprobanteElectronico c:listaComprobantes){
-				RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(c.getClaveAcceso());
-				if(!respuesta.getAutorizaciones().isEmpty()){
-					for(Autorizacion a:respuesta.getAutorizaciones()){
-						ComprobanteElectronico elcomprobante=em.find(ComprobanteElectronico.class, c.getId());
-						elcomprobante.setAutorizacionConsultadoAlSRI(true);
-						if(a.getEstado().equalsIgnoreCase("AUTORIZADO")){
-							//aqui construir el pdf ... y xml ... 							
-							elcomprobante.setAutorizado(true);
-							elcomprobante.setNumeroAutorizacion(a.getNumeroAutorizacion());
-							sb.append(a.getNumeroAutorizacion());
-							ComprobanteAutorizado ca=new ComprobanteAutorizado();
-							StringWriter swriter=new StringWriter();
-							marshaller.marshal(respuesta.getAutorizaciones().get(0), swriter);		
-							ca.setEnXML(swriter.toString().getBytes());
-							elcomprobante.setComprobanteAutorizado(ca);
-							elcomprobante.setFechaAutorizacion(a.getFechaAutorizacion());
-							if((elcomprobante.getNumeroAutorizacion()==null)||(elcomprobante.getComprobanteAutorizado()==null)){
-								ComprobanteElectronico actualizador=em.find(ComprobanteElectronico.class, c.getId());
-								actualizador.setAutorizado(true);
-								actualizador.setNumeroAutorizacion(a.getNumeroAutorizacion());
-								actualizador.setComprobanteAutorizado(ca);
-							}
-							em.refresh(elcomprobante);
-							em.refresh(c);
-							c.setAutorizado(true);
-							
-							//notificador.equals(elcomprobante.getIdentificacionBeneficiario().)
-						}else{
-							elcomprobante.setAutorizado(false);
-							elcomprobante.setAutorizacionConsultadoAlSRI(true);
-						}
-					}
-				}else{
 					
-				}
-				
+			JAXBContext contexto=JAXBContext.newInstance(Autorizacion.class);
+			Marshaller marshaller=contexto.createMarshaller();		
+			Autorizacion autorizacion=null;
+			
+			autorizacion = verificarAutorizacion(claveAcceso);
+			if(autorizacion!=null){
+				retorno=autorizacion.getNumeroAutorizacion();
+				ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, idConProbante);
+				comprobante.setAutorizacionConsultadoAlSRI(true);
+				if(autorizacion.getEstado().equalsIgnoreCase("autorizado")){
+					comprobante.setAutorizado(true);
+					comprobante.setNumeroAutorizacion(retorno);
+					comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
+					ComprobanteAutorizado ca=new ComprobanteAutorizado();
+					StringWriter sw=new StringWriter();
+					marshaller.marshal(autorizacion, sw);
+					ca.setEnXML(sw.toString().getBytes());
+					comprobante.setComprobanteAutorizado(ca);					
+				}else{				
+					comprobante.setAutorizado(false);
+					if(autorizacion.getMensaje().getIdentificador()!=null){
+						comprobante.setAutorizacionConsultadoAlSRI(true);
+						comprobante.setCodigoError(autorizacion.getMensaje().getIdentificador());
+						comprobante.setMensajeError(autorizacion.getMensaje().getMensaje());
+					}		
+				}	
 			}
-		}catch(SOAPException | JAXBException e){
-			e.getMessage();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return sb.toString();
+		
+		
+		
+		return retorno;
 	}
+	
+//	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+//	public String verificarAutorizacionComprobante(String claveAcceso){
+//		StringBuilder sb=new StringBuilder();
+//		JAXBContext contexto=null;
+//		Marshaller marshaller=null;
+//		Query q=em.createQuery("select c from ComprobanteElectronico c where c.claveAcceso=?1");
+//		q.setParameter(1, claveAcceso);
+//		List<ComprobanteElectronico>listaComprobantes=q.getResultList();
+//		
+//		try {
+//			contexto=JAXBContext.newInstance(Autorizacion.class);
+//			marshaller=contexto.createMarshaller();		
+//			for(ComprobanteElectronico c:listaComprobantes){
+//				RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(c.getClaveAcceso());
+//				if(!respuesta.getAutorizaciones().isEmpty()){
+//					for(Autorizacion a:respuesta.getAutorizaciones()){
+//						ComprobanteElectronico elcomprobante=em.find(ComprobanteElectronico.class, c.getId());
+//						elcomprobante.setAutorizacionConsultadoAlSRI(true);
+//						if(a.getEstado().equalsIgnoreCase("AUTORIZADO")){
+//							//aqui construir el pdf ... y xml ... 							
+//							elcomprobante.setAutorizado(true);
+//							elcomprobante.setNumeroAutorizacion(a.getNumeroAutorizacion());
+//							sb.append(a.getNumeroAutorizacion());
+//							ComprobanteAutorizado ca=new ComprobanteAutorizado();
+//							StringWriter swriter=new StringWriter();
+//							marshaller.marshal(respuesta.getAutorizaciones().get(0), swriter);		
+//							ca.setEnXML(swriter.toString().getBytes());
+//							elcomprobante.setComprobanteAutorizado(ca);
+//							elcomprobante.setFechaAutorizacion(a.getFechaAutorizacion());
+//							if((elcomprobante.getNumeroAutorizacion()==null)||(elcomprobante.getComprobanteAutorizado()==null)){
+//								ComprobanteElectronico actualizador=em.find(ComprobanteElectronico.class, c.getId());
+//								actualizador.setAutorizado(true);
+//								actualizador.setNumeroAutorizacion(a.getNumeroAutorizacion());
+//								actualizador.setComprobanteAutorizado(ca);
+//							}
+//							em.refresh(elcomprobante);
+//							em.refresh(c);
+//							c.setAutorizado(true);
+//							
+//							//notificador.equals(elcomprobante.getIdentificacionBeneficiario().)
+//						}else{
+//							elcomprobante.setAutorizado(false);
+//							elcomprobante.setAutorizacionConsultadoAlSRI(true);
+//						}
+//					}
+//				}else{
+//					
+//				}
+//				
+//			}
+//		}catch(SOAPException | JAXBException e){
+//			e.getMessage();
+//			e.printStackTrace();
+//		}
+//
+//		return sb.toString();
+//	}
 //	public String verificarAutorizacionComprobante(String claveAcceso){
 //		StringBuilder sb=new StringBuilder();
 //		JAXBContext contexto=null;

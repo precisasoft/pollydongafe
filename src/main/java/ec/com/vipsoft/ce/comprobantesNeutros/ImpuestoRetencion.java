@@ -116,7 +116,9 @@ public class ImpuestoRetencion implements Comparable<ImpuestoRetencion>,Serializ
 		return retorno;
 	}
 	public String getFechaEmisionDocumentoSustentoTexTo() {
-		// TODO Auto-generated method stub
+		if(fechaEmisionDocumentoSustento==null){
+			fechaEmisionDocumentoSustento=new Date();
+		}
 		return sdf.format(fechaEmisionDocumentoSustento);
 	}
 	
