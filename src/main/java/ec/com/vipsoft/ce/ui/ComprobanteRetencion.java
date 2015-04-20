@@ -33,7 +33,7 @@ import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.ImpuestoRetencion;
-import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutra;
+import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutraRemote;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
@@ -77,7 +77,7 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 	private BotonRegistrar botonRegistrar;
 	private BotonCancelar botonCancelar;
 	@EJB
-	private ReceptorComprobanteRetencionNeutra receptorComprobanteRetencionNeutra;
+	private ReceptorComprobanteRetencionNeutraRemote receptorComprobanteRetencionNeutra;
 	@Inject
 	private UtilClaveAcceso utilClaveAcceso;
 	@EJB

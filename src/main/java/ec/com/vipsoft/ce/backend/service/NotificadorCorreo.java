@@ -36,7 +36,6 @@ public class NotificadorCorreo {
 	@Inject
 	 private UtilClaveAcceso utilClaveAcceso;
 
-	
 	private static String HOST = "smtp.gmail.com";
     private static String USER = "facturacion@rocarsystem.com";
     private static String PASSWORD = "rocarsystem2013";
@@ -50,6 +49,21 @@ public class NotificadorCorreo {
     private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
     private static String SUBJECT = "Comprobante electrónico nuevo";
     private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://comprobantes.rocarsystem.com  use su identificación (RUC/cédula) tanto como usuario y contraseña";
+	
+	
+//	private static String HOST = "smtp.gmail.com";
+//    private static String USER = "tesoreriahgiide@gmail.com";
+//    private static String PASSWORD = "hospital1234";
+//    private static String PORT = "465";
+//    private static String FROM = "tesoreriahgiide@gmail.com";
+//    private static String TO = "christian.valverde@gmail.com";
+// 
+//    private static String STARTTLS = "true";
+//    private static String AUTH = "true";
+//    private static String DEBUG = "true";
+//    private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
+//    private static String SUBJECT = "Comprobante electrónico nuevo";
+//    private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://hosptialmilitariide.comprobanteselectronicos.ec  use su identificación (RUC/cédula) tanto como usuario y contraseña";
  
     @Schedule(dayOfMonth="*",hour="*",minute="*",second="5,35",year="*",month="*")
     public  void send() {

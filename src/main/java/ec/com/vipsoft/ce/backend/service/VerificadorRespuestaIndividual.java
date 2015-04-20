@@ -1,16 +1,13 @@
 package ec.com.vipsoft.ce.backend.service;
 
 import java.io.StringWriter;
-import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -24,7 +21,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 
 @Stateless
 //@WebService
-public class VerificadorRespuestaIndividual {
+public class VerificadorRespuestaIndividual implements VerificadorRepuestaIndividualRemote {
 
 	@PersistenceContext
 	private EntityManager em;
@@ -64,32 +61,32 @@ public class VerificadorRespuestaIndividual {
 			if(autorizacion!=null){
 				retorno=autorizacion.getNumeroAutorizacion();
 				ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, idConProbante);
-				comprobante.setAutorizacionConsultadoAlSRI(true);
-				if(autorizacion.getEstado().equalsIgnoreCase("autorizado")){
-					comprobante.setAutorizado(true);
-					comprobante.setNumeroAutorizacion(retorno);
-					comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
-					ComprobanteAutorizado ca=new ComprobanteAutorizado();
-					StringWriter sw=new StringWriter();
-					marshaller.marshal(autorizacion, sw);
-					ca.setEnXML(sw.toString().getBytes());
-					comprobante.setComprobanteAutorizado(ca);					
-				}else{				
-					comprobante.setAutorizado(false);
-					if(autorizacion.getMensaje().getIdentificador()!=null){
-						comprobante.setAutorizacionConsultadoAlSRI(true);
-						comprobante.setCodigoError(autorizacion.getMensaje().getIdentificador());
-						comprobante.setMensajeError(autorizacion.getMensaje().getMensaje());
-					}		
-				}	
+				if(comprobante.getClaveAcceso().equalsIgnoreCase(claveAcceso)){
+					comprobante.setAutorizacionConsultadoAlSRI(true);
+					if(autorizacion.getEstado().equalsIgnoreCase("autorizado")){
+						comprobante.setAutorizado(true);
+						comprobante.setNumeroAutorizacion(retorno);
+						comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
+						ComprobanteAutorizado ca=new ComprobanteAutorizado();
+						StringWriter sw=new StringWriter();
+						marshaller.marshal(autorizacion, sw);
+						ca.setEnXML(sw.toString().getBytes());
+						comprobante.setComprobanteAutorizado(ca);					
+					}else{				
+						comprobante.setAutorizado(false);
+						if(autorizacion.getMensaje().getIdentificador()!=null){
+							comprobante.setAutorizacionConsultadoAlSRI(true);
+							comprobante.setCodigoError(autorizacion.getMensaje().getIdentificador());
+							comprobante.setMensajeError(autorizacion.getMensaje().getMensaje());
+						}		
+					}	
+				}
+					
 			}
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		
-		
+		}				
 		return retorno;
 	}
 	

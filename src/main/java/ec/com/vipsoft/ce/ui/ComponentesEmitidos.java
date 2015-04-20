@@ -1,5 +1,6 @@
 package ec.com.vipsoft.ce.ui;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -12,16 +13,23 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.ListarComprobantesEmitidos;
+import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
+import ec.com.vipsoft.erp.gui.componentesbasicos.CampoNumeroComprobante;
+import ec.com.vipsoft.erp.gui.componentesbasicos.HorizontalL;
 
 @CDIView("comprobantes")
 public class ComponentesEmitidos extends VerticalLayout implements View{
@@ -34,6 +42,15 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private Grid grid;
 	private BeanItemContainer<ComprobanteRideXmlBean>beanItemContainer;
 	private BotonCancelar botonCancelar;
+	private ComboBox tipoDocumento;
+	private DateField fechaInicial;
+	private DateField fechaFinal;
+	private TextField numeroComprobante;
+	private ComboBox aprobadosRechazadosCombo;
+	private CheckBox incluirFecha;
+	private BotonBuscar botonBuscar;
+	
+	
 	@Override
 	public void enter(ViewChangeEvent event) {
 	//	actualizarVista();
@@ -53,13 +70,37 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		setMargin(true);
 		setSpacing(true);
 		setSizeFull();
-		HorizontalLayout l1=new HorizontalLayout();
+		HorizontalL l1=new HorizontalL();
+		tipoDocumento=new ComboBox();
+		tipoDocumento.addItem("FACTURA");
+		tipoDocumento.addItem("NC");
+		tipoDocumento.addItem("GR");
+		tipoDocumento.addItem("CR");
+		tipoDocumento.setItemCaption("FACTURA", "FACTURA");
+		tipoDocumento.setItemCaption("NC","NOTA DE CRÉDITO");
+		tipoDocumento.setItemCaption("GR", "GUÍA DE REMISIÓN");
+		tipoDocumento.setItemCaption("CR","COMPROBANTE RETENCIÓN");
 		botonCancelar=new BotonCancelar();
 		botonCancelar.addClickListener(event->{
 			UI.getCurrent().getNavigator().navigateTo("menu");
 			
 		});
+		numeroComprobante=new CampoNumeroComprobante();
+		fechaInicial=new DateField();
+		fechaInicial.setDateFormat("dd-MM-yyyy");
+		fechaInicial.setValue(new Date());
+		fechaFinal=new DateField();
+		fechaFinal.setDateFormat("dd-MM-yyyy");
+		fechaFinal.setValue(new Date());
+		l1.addComponent(tipoDocumento,numeroComprobante);			
+		incluirFecha=new CheckBox("usar fecha");
+		l1.addComponent(incluirFecha);
+		l1.addComponent("desde",fechaInicial);
+		l1.addComponent("hasta",fechaFinal);
+		botonBuscar=new BotonBuscar();
+		l1.addComponent(botonBuscar);
 		l1.addComponent(botonCancelar);
+		
 		l1.setComponentAlignment(botonCancelar, Alignment.TOP_RIGHT);
 		addComponent(l1);
 		addComponent(grid);
@@ -97,12 +138,11 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
 			bean.setTipo(c.getTipo());
-			bean.setNota(c.getNota());
+			bean.setNota(c.getNota());			
 			if(c.getFechaAutorizacion()!=null)
-				bean.setFechaAprobacion(c.getFechaAutorizacion());
-			
-			
+				bean.setFechaAprobacion(c.getFechaAutorizacion());						
 			beanItemContainer.addBean(bean);
+			
 			grid.setContainerDataSource(beanItemContainer);
 		}
 	}

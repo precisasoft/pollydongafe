@@ -20,6 +20,9 @@ import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.event.ItemClickEvent;
+import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -40,11 +43,11 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
-import ec.com.vipsoft.ce.backend.service.ListadorBienEconomico;
+import ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote;
 import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
-import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorFacturaNeutra;
+import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorFacturaNeutraRemote;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.BienEconomico;
 import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
@@ -95,9 +98,9 @@ public class FacturaView extends VerticalLayout implements View{
     //private 
     //private 
 	@EJB
-	private ReceptorFacturaNeutra recepcionFactura;
+	private ReceptorFacturaNeutraRemote recepcionFactura;
 	@EJB
-	private ListadorBienEconomico listadorBienes;
+	private ListadorBienEconomicoRemote listadorBienes;
 	
 	@Inject
 	private UserInfo userInfo;
@@ -120,8 +123,9 @@ public class FacturaView extends VerticalLayout implements View{
     @Inject
     private UtilClaveAcceso utilClaveAcceso;
 	private Button botonSeleccionaDesdeVentanar;
-	private TextField tfiltro;
+	private TextField tfiltro=new TextField();
 	private Grid gridBusqueda;
+	
     protected void actualizarTablaTotales(){
     	BigDecimal _subtotal=BigDecimal.ZERO;
     	BigDecimal _iva12=BigDecimal.ZERO;
@@ -432,25 +436,30 @@ public class FacturaView extends VerticalLayout implements View{
         	 
         });
         botonBuscarDetalle.addClickListener(event->{
+        	final SimpleStringFilter filtro;
         	gridBusqueda=new Grid();
+        	gridBusqueda.setImmediate(true);
         	BeanItemContainer<BienEconomico>beaitem=new BeanItemContainer<BienEconomico>(BienEconomico.class);
         	
         	gridBusqueda.setContainerDataSource(beaitem);
         	
         	gridBusqueda.setSizeFull();
+        //	gridBusqueda.setVisibleColumns(new Object[]{"codigo","descripcion"});
         	gridBusqueda.removeColumn("id");
         	gridBusqueda.removeColumn("codigoIva");
         	gridBusqueda.removeColumn("codigoIce");
         	gridBusqueda.setColumnOrder("codigo","descripcion");
         	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
         	
-        	 tfiltro=new TextField();
+        	 
+        	 tfiltro.setImmediate(true);
         	botonSeleccionaDesdeVentanar = new Button("seleccionar");
         	
         	beaitem.addAll(listadorBienes.listarBienesDisponibles(userInfo.getRucEmisor()));
         	
         	HorizontalLayout lbus=new HorizontalLayout();
         	lbus.setSpacing(true);
+        	lbus.setMargin(true);
         	lbus.addComponent(new Label("código"));
         	lbus.addComponent(tfiltro);
         	lbus.addComponent(botonSeleccionaDesdeVentanar);
@@ -461,10 +470,27 @@ public class FacturaView extends VerticalLayout implements View{
         	VerticalLayout layoutventana=new VerticalLayout();
         	layoutventana.setSpacing(true);
         	layoutventana.setMargin(true);
+        	
         	layoutventana.addComponent(lbus);
         	layoutventana.addComponent(gridBusqueda);
         	ventana.setContent(layoutventana);
             ventana.center();
+//            gridBusqueda.setSelectable(true);
+//            gridBusqueda.setMultiSelect(false);
+//            gridBusqueda.setImmediate(true);
+//            gridBusqueda.setNullSelectionAllowed(false);
+            
+//            gridBusqueda.addItemClickListener(new ItemClickListener() {
+//				
+//				@Override
+//				public void itemClick(ItemClickEvent event) {
+//					 BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getValue());
+//					  codigoP.setValue(item.getBean().getCodigo());
+//		        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
+//		        	    ventana.close();
+//					
+//				}
+//			});
             gridBusqueda.addSelectionListener(e -> { // Java 8
         	    // Get the item of the selected row
         	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
@@ -475,6 +501,16 @@ public class FacturaView extends VerticalLayout implements View{
             botonSeleccionaDesdeVentanar.addClickListener(eventa->{
             	ventana.close();
         	});
+//            tfiltro.addTextChangeListener(event1 -> {
+//            	if(tfiltro.getValue().length()>3){
+//            		filtro=new SimpleStringFilter("codigo", tfiltro.getValue(), true,true);
+//    				beaitem.addContainerFilter(filtro);
+//    				
+//            	}else{
+//            		beaitem.removeContainerFilter(filtro);
+//            	}
+//									
+//			});
             UI.getCurrent().addWindow(ventana);
             
         	

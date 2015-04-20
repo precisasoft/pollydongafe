@@ -16,6 +16,7 @@ public class BaseComprobanteElectronicoBinding implements Serializable{
 	protected String infoAdicional4;
 	protected String infoAdicional5;
 	protected Date fechaSeleccionada;
+	protected String correoNotificacion;
 	private static final long serialVersionUID = 4041914625362290164L;
 	protected SimpleDateFormat sdf=new SimpleDateFormat("dd/MM/yyyy");
 	@NotNull(message="este campo no debe ser null")
@@ -237,6 +238,14 @@ public class BaseComprobanteElectronicoBinding implements Serializable{
 
 	public void setFechaSeleccionada(Date fechaSeleccionada) {
 		this.fechaSeleccionada = fechaSeleccionada;
+	}
+
+	public String getCorreoNotificacion() {
+		return correoNotificacion;
+	}
+
+	public void setCorreoNotificacion(String correoNotificacion) {
+		this.correoNotificacion = correoNotificacion;
 	}
     
 

@@ -17,8 +17,8 @@ import ec.com.vipsoft.erp.abinadi.dominio.Producto;
 import ec.com.vipsoft.erp.abinadi.dominio.Servicio;
 
 @Stateless
-@WebService
-public class ListadorBienEconomico implements Serializable{
+
+public class ListadorBienEconomico implements Serializable, ListadorBienEconomicoRemote{
 	
 	/**
 	 * 
@@ -26,6 +26,10 @@ public class ListadorBienEconomico implements Serializable{
 	private static final long serialVersionUID = 239601331385020277L;
 	@PersistenceContext
 	private EntityManager em;
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote#listarBienesDisponibles(java.lang.String)
+	 */
+	@Override
 	public Set<BienEconomico>listarBienesDisponibles(String rucEmisor){
 		Set<BienEconomico>retorno=new TreeSet<>();
 		Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");
@@ -42,6 +46,10 @@ public class ListadorBienEconomico implements Serializable{
 		}
 		return retorno;		
 	}
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote#listarBien(java.lang.String, java.lang.String)
+	 */
+	@Override
 	public BienEconomico listarBien(String rucEmisor,String codigo){
 		BienEconomico retorno=null;
 		Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");
@@ -59,6 +67,10 @@ public class ListadorBienEconomico implements Serializable{
 		}
 		return retorno;		
 	}
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote#registrarBienEconomico(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, boolean)
+	 */
+	@Override
 	public void registrarBienEconomico(String rucEmisor,String codigo,String descripcion,String codigoIva,String codigoPorcentajeIva,boolean esProducto){
 		BienEconomico nuevoBien=listarBien(rucEmisor,codigo);
 		if(nuevoBien==null){

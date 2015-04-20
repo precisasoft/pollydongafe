@@ -66,8 +66,8 @@ import es.mityc.javasign.xml.refs.ObjectToSign;
  * @author chrisvv
  */
 @Stateless
-//@WebService
-public class ReceptorComprobanteRetencionNeutra {            
+@WebService
+public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRetencionNeutraRemote {            
 	@EJB
 	private GeneradorClaveAccesoPorEntidad generadorClaveAcceso;
 	@Inject
@@ -78,6 +78,10 @@ public class ReceptorComprobanteRetencionNeutra {
 	private ProcesoEnvioEJB procesoEnvio;
 	@Inject 
 	private LlenadorNumeroComprobante LlenadorNumeroComprobante;
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutraRemote#receptarComprobanteRetencion(ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding)
+	 */
+	@Override
 	@WebMethod
 	@WebResult(name = "claveAcceso")
 	public String receptarComprobanteRetencion(	@WebParam(name = "retencion") ComprobanteRetencionBinding retencion) {

@@ -82,6 +82,7 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
 	private TipoComprobante tipo;
     @Column(name="acs")
     private boolean autorizacionConsultadoAlSRI;
+    private String correoElectronico;
     
     public boolean isAutorizacionConsultadoAlSRI() {
 		return autorizacionConsultadoAlSRI;
@@ -283,4 +284,17 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
 		int retorno=claveAcceso.compareTo(o.claveAcceso);
 		return retorno;
 	}
+	public Date getFechaRegistro() {
+		return fechaRegistro;
+	}
+	public void setFechaRegistro(Date fechaRegistro) {
+		this.fechaRegistro = fechaRegistro;
+	}
+	public String getCorreoElectronico() {
+		return correoElectronico;
+	}
+	public void setCorreoElectronico(String correoElectronico) {
+		this.correoElectronico = correoElectronico;
+	}
+	
 }

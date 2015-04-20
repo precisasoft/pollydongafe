@@ -8,16 +8,12 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.soap.SOAPException;
 
 import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.EnviadorSRIEJB;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
@@ -42,7 +38,7 @@ public class VerificadorRespuestaSRI {
 	@EJB
 	private VerificadorIndisponibilidad verificadorIndisponibilidad;
 	@EJB
-	private VerificadorRespuestaIndividual verificadorRespuestaIndividual;
+	private VerificadorRepuestaIndividualRemote verificadorRespuestaIndividual;
 
 	
 	@Schedule(dayOfMonth="*",hour="*",minute="*",second="0,20,40",year="*",month="*")	

@@ -12,7 +12,7 @@ import ec.com.vipsoft.ce.backend.model.Contingencia;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 
 @Stateless
-public class AdministradorAutorizacionContingencia {
+public class AdministradorAutorizacionContingencia implements AdministradorAutorizacionContingenciaRemote {
 	
 	@PersistenceContext
 	EntityManager em;
@@ -38,6 +38,10 @@ public class AdministradorAutorizacionContingencia {
 		return contingencia.getId();
 		
 	}
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.backend.service.AdministradorAutorizacionContingenciaRemote#registrarNumeroContingenciaDisponible(java.util.List, ec.com.vipsoft.erp.abinadi.dominio.Entidad)
+	 */
+	@Override
 	public void registrarNumeroContingenciaDisponible(List<String> numerosDisonibles,Entidad e){
 		for(String numeroDisponible:numerosDisonibles){
 			Contingencia numeroContingencia=new Contingencia();
@@ -48,6 +52,10 @@ public class AdministradorAutorizacionContingencia {
 		}
 		
 	}
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.backend.service.AdministradorAutorizacionContingenciaRemote#registrarNumeroContingenciaDisponible(java.lang.String, ec.com.vipsoft.erp.abinadi.dominio.Entidad)
+	 */
+	@Override
 	public void registrarNumeroContingenciaDisponible(String numeroDisonible,Entidad e){
 		Contingencia numeroContingencia=new Contingencia();
 		numeroContingencia.setId(numeroDisonible);

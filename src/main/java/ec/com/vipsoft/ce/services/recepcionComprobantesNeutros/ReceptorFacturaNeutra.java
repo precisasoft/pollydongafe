@@ -65,8 +65,8 @@ import es.mityc.javasign.xml.refs.ObjectToSign;
  *
  */
 @Stateless
-//@WebService
-public class ReceptorFacturaNeutra {
+@WebService
+public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 	@EJB
 	private GeneradorClaveAccesoPorEntidad generadorClaveAcceso;
 	@Inject
@@ -76,6 +76,10 @@ public class ReceptorFacturaNeutra {
 
 	@EJB
 	private ProcesoEnvioEJB procesoEnvio;
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorFacturaNeutraRemote#recibirFactura(ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding)
+	 */
+	@Override
 	@WebMethod
 	@WebResult(name = "claveAcceso")
 	public String recibirFactura(@WebParam(name = "factura") FacturaBinding factura) {
@@ -150,10 +154,14 @@ public class ReceptorFacturaNeutra {
 			facturaxml.getInfoFactura().setFechaEmision(factura.getFechaEmisionTexto());
 			if (factura.getGuiaRemision() != null) {
 				facturaxml.getInfoFactura().setGuiaRemision(factura.getGuiaRemision());
-			}
-			facturaxml.getInfoFactura().setIdentificacionComprador(factura.getIdentificacionBeneficiario());
+			}			
+			facturaxml.getInfoFactura().setIdentificacionComprador(factura.getIdentificacionBeneficiario());			
 			facturaxml.getInfoFactura().setTipoIdentificacionComprador(	factura.getCodigoTipoIdentificacionBeneficiario());
 			facturaxml.getInfoFactura().setRazonSocialComprador(factura.getRazonSocialBeneficiario());
+			if(factura.getIdentificacionBeneficiario().equalsIgnoreCase("9999999999999")){
+				facturaxml.getInfoFactura().setTipoIdentificacionComprador("07");
+				facturaxml.getInfoFactura().setRazonSocialComprador("USUARIO FINAL");
+			}
 			facturaxml.getInfoFactura().setMoneda("DOLAR");
 			facturaxml.getInfoFactura().setTotalSinImpuestos(factura.getSubtotalIva0());
 			facturaxml.getInfoFactura().setTotalDescuento(factura.calculaDescuento());	
@@ -403,6 +411,8 @@ public class ReceptorFacturaNeutra {
 				parametros.put("maxIntentos", 5);
 				parametros.put("idCliente", facturaxml.getInfoFactura().getIdentificacionComprador());
 				parametros.put("tipoComprobante", TipoComprobante.factura);
+				if(factura.getCorreoNotificacion()!=null)
+				parametros.put("correo", factura.getCorreoNotificacion());
 				procesoEnvio.lanzarProcesoEnvio(parametros);
 
 			} catch (Exception e) {

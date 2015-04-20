@@ -2,7 +2,9 @@ package ec.com.vipsoft.ce.backend.service;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -17,6 +19,23 @@ import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 @Stateless
 public class ListarComprobantesEmitidos {
+	public ListarComprobantesEmitidos() {
+		mapaErrores.put("45","secuencial registrado");
+		mapaErrores.put("46", "RUC no existe");
+		mapaErrores.put("43", "Clave de acceso registrada");
+		mapaErrores.put("35", "documento xml inválido");
+		mapaErrores.put("50", "Error general interno del sri");
+		mapaErrores.put("52", "Error en diferencias");
+		mapaErrores.put("56", "Establecimiento cerrado");
+		mapaErrores.put("70", "Clave de acceso en proceso");
+		mapaErrores.put("59", "Identificación del cliente no existe");
+	}
+	
+		
+	
+	
+	private  Map<String,String>mapaErrores=new HashMap<>();
+	
 	@PersistenceContext
 	private EntityManager em;
 	public Set<ComprobanteEmitido>listarSiguientes(String rucEmisor,Long idMinimo){		
@@ -30,7 +49,7 @@ public class ListarComprobantesEmitidos {
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
 			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.fechaRegistro>=?2 order by c.id desc");
-			q.setMaxResults(2000);
+			q.setMaxResults(4000);
 			//q.setParameter(1, idMinimo);
 			q.setParameter(1, entidad);
 			q.setParameter(2, ahora.getTime());
@@ -41,7 +60,17 @@ public class ListarComprobantesEmitidos {
 				bean.setClaveAcceso(c.getClaveAcceso());
 				bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 				if(c.getCodigoError()!=null){
-					bean.setNota(c.getCodigoError());
+					if(c.getCodigoError()!=null){
+						StringBuilder sberror=new StringBuilder("(");
+						sberror.append(c.getCodigoError());
+						sberror.append(") ");
+						if(mapaErrores.containsKey(String.valueOf(c.getCodigoError()))){
+							sberror.append(mapaErrores.get(c.getCodigoError()));	
+						}
+						bean.setNota(sberror.toString());
+						
+					}
+					
 				}
 				if(c.getFechaAutorizacion()!=null){
 					bean.setFechaAutorizacion(sdf.format(c.getFechaAutorizacion()));	
@@ -94,7 +123,17 @@ public class ListarComprobantesEmitidos {
 			bean.setClaveAcceso(c.getClaveAcceso());
 			bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 			if(c.getCodigoError()!=null){
-				bean.setNota(c.getCodigoError());
+				if(c.getCodigoError()!=null){
+					StringBuilder sberror=new StringBuilder("(");
+					sberror.append(c.getCodigoError());
+					sberror.append(") ");
+					if(mapaErrores.containsKey(String.valueOf(c.getCodigoError()))){
+						sberror.append(mapaErrores.get(c.getCodigoError()));	
+					}
+					bean.setNota(sberror.toString());
+					
+				}
+				
 			}
 			if(c.getFechaAutorizacion()!=null){
 				bean.setFechaAutorizacion(sdf.format(c.getFechaAutorizacion()));	

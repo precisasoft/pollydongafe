@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -64,7 +65,8 @@ import es.mityc.javasign.xml.refs.InternObjectToSign;
 import es.mityc.javasign.xml.refs.ObjectToSign;
 
 @Stateless
-public class ReceptorNotaCreditoNeutra {
+@WebService
+public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemote {
 
 	@PersistenceContext
 	private EntityManager em;
@@ -75,6 +77,10 @@ public class ReceptorNotaCreditoNeutra {
 	private UtilClaveAcceso utilClaveAccesl;
 	@EJB
 	private ProcesoEnvioEJB procesoEnvio;
+	/* (non-Javadoc)
+	 * @see ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorNotaCreditoNeutraRemote#procesarNotaCredito(ec.com.vipsoft.ce.comprobantesNeutros.NotaCreditoBinding)
+	 */
+	@Override
 	public String procesarNotaCredito(NotaCreditoBinding notaCredito){
 		StringBuilder sb=new StringBuilder();
 		String claveAcceso=generadorClaveAcceso.generarClaveAccesoNotaCredito(notaCredito.getRucEmisor(), notaCredito.getCodigoEstablecimiento(), notaCredito.getCodigoPuntoVenta());

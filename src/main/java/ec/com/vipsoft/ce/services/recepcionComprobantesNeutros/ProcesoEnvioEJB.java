@@ -112,6 +112,12 @@ public class ProcesoEnvioEJB {
 					comprobante.setSecuencia((String) parametros.get("secuenciaDocumento"));
 					comprobante.setIdentificacionBeneficiario((String) parametros.get("idCliente"));
 					comprobante.setTipo((TipoComprobante) parametros.get("tipoComprobante"));
+					
+					
+					if(parametros.get("correo")!=null){
+						comprobante.setCorreoElectronico((String)parametros.get("correo"));	
+					}
+					
 					DocumentoFirmado documentoFi = new DocumentoFirmado();			
 					documentoFi.setConvertidoEnXML(documentoFirmado);						
 					comprobante.setDocumentoFirmado(documentoFi);
@@ -137,6 +143,7 @@ public class ProcesoEnvioEJB {
 						comautorizado.setEnXML(swriter.toString().getBytes());								
 						comprobante.setComprobanteAutorizado(comautorizado);									
 					}	
+					registradorUsuario.registrarUsuario((String)parametros.get("idCliente"), (String)parametros.get("idCliente"), "", "");
 					em.persist(comprobante);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

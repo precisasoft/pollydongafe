@@ -24,7 +24,7 @@ import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.LectorDetallesFacturaAprobada;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.NotaCreditoBinding;
-import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorNotaCreditoNeutra;
+import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorNotaCreditoNeutraRemote;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
@@ -49,7 +49,7 @@ public class NotaCreditoView extends VerticalLayout implements View {
 	@EJB
 	private LectorDetallesFacturaAprobada lectorDatos;
 	@EJB
-	private ReceptorNotaCreditoNeutra receptorFactura;
+	private ReceptorNotaCreditoNeutraRemote receptorFactura;
 	
 
 	@Override

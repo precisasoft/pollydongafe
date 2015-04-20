@@ -19,7 +19,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
-import ec.com.vipsoft.ce.backend.service.ListadorBienEconomico;
+import ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote;
 import ec.com.vipsoft.erp.abinadi.dominio.BienEconomico;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonAnadir;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
@@ -41,7 +41,7 @@ public class BienEconomicView extends VerticalLayout implements View{
 	private BeanItemContainer<BienEconomico> beanItem;
 	private BotonCancelar botonCancelar;
 	@EJB
-	private ListadorBienEconomico listadorBienes;
+	private ListadorBienEconomicoRemote listadorBienes;
 	@Inject
 	private UserInfo userInfo;
 	private OptionGroup productoServicio;

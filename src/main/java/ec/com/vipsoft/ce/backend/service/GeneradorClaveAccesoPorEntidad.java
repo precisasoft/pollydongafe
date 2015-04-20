@@ -225,7 +225,7 @@ public class GeneradorClaveAccesoPorEntidad {
                 for (PuntoVenta ptoe : _Establecimiento.getPos()) {
                     if (ptoe.getCodigoPuntoVenta().equalsIgnoreCase(codigoPuntoVenta)) {
                         PuntoVenta elpuntoDeVenta = em.find(PuntoVenta.class, ptoe.getId());
-                        claveAcceso = generadorReal.generarClaveAccesoNotaCredito(rucEmisor, Integer.valueOf(codigoEstablecimiento), Integer.valueOf(codigoPuntoVenta), entidad.isNotaCreditoEnPruebas(), elpuntoDeVenta.siguienteSecuenciaFactura(), entidad.siguienteCAFactura());
+                        claveAcceso = generadorReal.generarClaveAccesoNotaCredito(rucEmisor, Integer.valueOf(codigoEstablecimiento), Integer.valueOf(codigoPuntoVenta), entidad.isNotaCreditoEnPruebas(), elpuntoDeVenta.siguienteSecuenciaNotaCredito(), entidad.siguienteCANotaCredito());
                         break;
                     }
                 }
@@ -254,7 +254,7 @@ public class GeneradorClaveAccesoPorEntidad {
                 for (PuntoVenta ptoe : _Establecimiento.getPos()) {
                     if (ptoe.getCodigoPuntoVenta().equalsIgnoreCase(codigoPuntoVenta)) {
                         PuntoVenta elpuntoDeVenta = em.find(PuntoVenta.class, ptoe.getId());
-                        claveAcceso = generadorReal.generarClaveAccesoNotaCredito(rucEmisor, Integer.valueOf(codigoEstablecimiento), Integer.valueOf(codigoPuntoVenta), entidad.isNotaCreditoEnPruebas(), Long.valueOf(secuenciaDoc), entidad.siguienteCAFactura());
+                        claveAcceso = generadorReal.generarClaveAccesoNotaCredito(rucEmisor, Integer.valueOf(codigoEstablecimiento), Integer.valueOf(codigoPuntoVenta), entidad.isNotaCreditoEnPruebas(), Long.valueOf(secuenciaDoc), entidad.siguienteCANotaCredito());
                         break;
                     }
                 }
