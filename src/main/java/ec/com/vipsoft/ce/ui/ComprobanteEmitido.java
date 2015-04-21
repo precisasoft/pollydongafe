@@ -12,8 +12,7 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 	private String numeroDocumento;
 	private String fechaEmision;
 	private String claveAcceso;
-	private String numeroAutorizacion;
-	private String fechaAutorizacion;
+	private String numeroAutorizacion;	
 	private String tipo;
 	private String nota;
 	
@@ -40,13 +39,7 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 	}
 	public void setNumeroAutorizacion(String numeroAutorizacion) {
 		this.numeroAutorizacion = numeroAutorizacion;
-	}
-	public String getFechaAutorizacion() {
-		return fechaAutorizacion;
-	}
-	public void setFechaAutorizacion(String fechaAutorizacion) {
-		this.fechaAutorizacion = fechaAutorizacion;
-	}
+	}	
 	public Long getId() {
 		return id;
 	}

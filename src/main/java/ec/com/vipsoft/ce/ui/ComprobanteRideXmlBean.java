@@ -8,7 +8,6 @@ public class ComprobanteRideXmlBean implements Serializable{
 	 */
 	private static final long serialVersionUID = 6882833204601880092L;
 	private String tipo;
-	private String fechaAprobacion;
 	private String autorizacion;
 	private String  claveAcceso;
 	private String numeroDocumento;
@@ -25,15 +24,7 @@ public class ComprobanteRideXmlBean implements Serializable{
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-	}
-	public String getFechaAprobacion() {
-		return fechaAprobacion;
-	}
-	public void setFechaAprobacion(String fechaAprobacion) {
-		this.fechaAprobacion = fechaAprobacion;
-	}
-	
-	
+	}	
 	public String getNumeroDocumento() {
 		return numeroDocumento;
 	}

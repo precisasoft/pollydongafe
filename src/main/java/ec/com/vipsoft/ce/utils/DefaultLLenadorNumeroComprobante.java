@@ -2,8 +2,7 @@ package ec.com.vipsoft.ce.utils;
 
 import java.util.StringTokenizer;
 
-public class DefaultLLenadorNumeroComprobante implements
-		LlenadorNumeroComprobante {
+public class DefaultLLenadorNumeroComprobante implements LlenadorNumeroComprobante {
 
 	/**
 	 * 
@@ -87,5 +86,26 @@ public class DefaultLLenadorNumeroComprobante implements
 		sb.append(primero).append("-").append(segundo).append("-")
 				.append(tercero);
 		return sb.toString();
+	}
+
+	@Override
+	public String obtenerSucursal(String numero) {
+		StringTokenizer st=new StringTokenizer(numero,"-");		
+		return st.nextToken();
+	}
+
+	@Override
+	public String obtenerPuntoEmision(String numero) {
+		StringTokenizer st=new StringTokenizer(numero,"-");
+		st.nextToken();		
+		return st.nextToken();
+	}
+
+	@Override
+	public String obtenerSecuencia(String numero) {
+		StringTokenizer st=new StringTokenizer(numero,"-");
+		st.nextToken();
+		st.nextToken();
+		return st.nextToken();
 	}
 }

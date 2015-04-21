@@ -101,11 +101,7 @@ public class PortalView extends VerticalLayout implements View{
 			sba.append(c.getNumeroAutorizacion());			
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
-			bean.setTipo(c.getTipo());
-			if(c.getFechaAutorizacion()!=null)
-				bean.setFechaAprobacion(c.getFechaAutorizacion());
-			
-			
+			bean.setTipo(c.getTipo());			
 			beanItemContainer.addBean(bean);
 			grid.setContainerDataSource(beanItemContainer);
 		}
