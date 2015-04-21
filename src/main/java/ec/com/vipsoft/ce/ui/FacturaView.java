@@ -17,10 +17,12 @@ import javax.inject.Inject;
 import org.apache.shiro.SecurityUtils;
 
 import com.vaadin.cdi.CDIView;
+import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.SimpleStringFilter;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.navigator.View;
@@ -123,8 +125,10 @@ public class FacturaView extends VerticalLayout implements View{
     @Inject
     private UtilClaveAcceso utilClaveAcceso;
 	private Button botonSeleccionaDesdeVentanar;
-	private TextField tfiltro=new TextField();
-	private Grid gridBusqueda;
+	private TextField campoBusquedaProducto=new TextField();
+	private Table gridBusqueda;
+	private BeanItemContainer<BienEconomico> beaitem;
+	private Window ventana = new Window();
 	
     protected void actualizarTablaTotales(){
     	BigDecimal _subtotal=BigDecimal.ZERO;
@@ -435,46 +439,26 @@ public class FacturaView extends VerticalLayout implements View{
         	 
         	 
         });
+        
+    	 
+       
+//        tfiltro.addTextChangeListener(event1 -> {
+//        	SimpleStringFilter filter = null;
+//        	Container.Filterable f=(Container.Filterable)gridBusqueda.getContainerDataSource();
+//        	if(filter!=null){
+//        		f.removeContainerFilter(filter);
+//        	}
+//        	filter=new SimpleStringFilter((Object)"codigo", tfiltro.getValue(), true, false);
+//        	f.addContainerFilter((Container.Filter)filter);
+//								
+//		});
+   	 botonSeleccionaDesdeVentanar.addClickListener(eventa->{
+     	ventana.close();
+ 	}); 	
         botonBuscarDetalle.addClickListener(event->{
-        	final SimpleStringFilter filtro;
-        	gridBusqueda=new Grid();
-        	gridBusqueda.setImmediate(true);
-        	BeanItemContainer<BienEconomico>beaitem=new BeanItemContainer<BienEconomico>(BienEconomico.class);
+	
+
         	
-        	gridBusqueda.setContainerDataSource(beaitem);
-        	
-        	gridBusqueda.setSizeFull();
-        //	gridBusqueda.setVisibleColumns(new Object[]{"codigo","descripcion"});
-        	gridBusqueda.removeColumn("id");
-        	gridBusqueda.removeColumn("codigoIva");
-        	gridBusqueda.removeColumn("codigoIce");
-        	gridBusqueda.setColumnOrder("codigo","descripcion");
-        	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
-        	
-        	 
-        	 tfiltro.setImmediate(true);
-        	botonSeleccionaDesdeVentanar = new Button("seleccionar");
-        	
-        	beaitem.addAll(listadorBienes.listarBienesDisponibles(userInfo.getRucEmisor()));
-        	
-        	HorizontalLayout lbus=new HorizontalLayout();
-        	lbus.setSpacing(true);
-        	lbus.setMargin(true);
-        	lbus.addComponent(new Label("código"));
-        	lbus.addComponent(tfiltro);
-        	lbus.addComponent(botonSeleccionaDesdeVentanar);
-        	
-        	
-        	
-        	Window ventana=new Window();
-        	VerticalLayout layoutventana=new VerticalLayout();
-        	layoutventana.setSpacing(true);
-        	layoutventana.setMargin(true);
-        	
-        	layoutventana.addComponent(lbus);
-        	layoutventana.addComponent(gridBusqueda);
-        	ventana.setContent(layoutventana);
-            ventana.center();
 //            gridBusqueda.setSelectable(true);
 //            gridBusqueda.setMultiSelect(false);
 //            gridBusqueda.setImmediate(true);
@@ -491,26 +475,16 @@ public class FacturaView extends VerticalLayout implements View{
 //					
 //				}
 //			});
-            gridBusqueda.addSelectionListener(e -> { // Java 8
-        	    // Get the item of the selected row
-        	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
-        	    codigoP.setValue(item.getBean().getCodigo());
-        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
-        	    ventana.close();
-        	});
-            botonSeleccionaDesdeVentanar.addClickListener(eventa->{
-            	ventana.close();
-        	});
-//            tfiltro.addTextChangeListener(event1 -> {
-//            	if(tfiltro.getValue().length()>3){
-//            		filtro=new SimpleStringFilter("codigo", tfiltro.getValue(), true,true);
-//    				beaitem.addContainerFilter(filtro);
-//    				
-//            	}else{
-//            		beaitem.removeContainerFilter(filtro);
-//            	}
-//									
-//			});
+//            gridBusqueda.addSelectionListener(e -> { // Java 8
+//        	    // Get the item of the selected row
+//        	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
+//        	    codigoP.setValue(item.getBean().getCodigo());
+//        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
+//        	    ventana.close();
+//        	});
+            
+            
+           
             UI.getCurrent().addWindow(ventana);
             
         	
@@ -566,6 +540,54 @@ public class FacturaView extends VerticalLayout implements View{
     public void postconstructor(){
        System.out.println("Hola");
         construirGui();
+        final SimpleStringFilter filtro;
+    	gridBusqueda=new Table();
+    	beaitem = new BeanItemContainer<BienEconomico>(BienEconomico.class);
+    	
+    	gridBusqueda.setContainerDataSource(beaitem);
+    	
+    	gridBusqueda.setSizeFull();
+    	gridBusqueda.setVisibleColumns(new Object[]{"codigo","descripcion"});
+//    	gridBusqueda.removeColumn("id");
+//    	gridBusqueda.removeColumn("codigoIva");
+//    	gridBusqueda.removeColumn("codigoIce");
+//    	gridBusqueda.setColumnOrder("codigo","descripcion");
+//    	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
+    	
+    	 
+    //	 tfiltro.setImmediate(true);
+    	botonSeleccionaDesdeVentanar = new Button("seleccionar");
+    	
+    	
+    	HorizontalLayout lbus=new HorizontalLayout();
+    	lbus.setSpacing(true);
+    	lbus.setMargin(true);
+    	lbus.addComponent(new Label("código"));
+    	lbus.addComponent(campoBusquedaProducto);
+    	lbus.addComponent(botonSeleccionaDesdeVentanar);
+    	beaitem.addAll(listadorBienes.listarBienesDisponibles(userInfo.getRucEmisor()));
+    	VerticalLayout layoutventana=new VerticalLayout();
+    	layoutventana.setSpacing(true);
+    	layoutventana.setMargin(true);
+    	
+    	layoutventana.addComponent(lbus);
+    	layoutventana.addComponent(gridBusqueda);
+    	ventana.setContent(layoutventana);
+        ventana.center();
         iniciarEventos();
+        this.campoBusquedaProducto.addTextChangeListener((FieldEvents.TextChangeListener)new FieldEvents.TextChangeListener(){
+            private static final long serialVersionUID = 5128049403423426140L;
+            SimpleStringFilter filter;
+
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                Container.Filterable f = (Container.Filterable)gridBusqueda.getContainerDataSource();
+                if (this.filter != null) {
+                    f.removeContainerFilter((Container.Filter)this.filter);
+                }
+                this.filter = new SimpleStringFilter((Object)"codigo", event.getText(), true, false);
+                f.addContainerFilter((Container.Filter)this.filter);
+            }
+        });
+
     }
 }
