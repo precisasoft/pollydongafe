@@ -47,7 +47,6 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private DateField fechaFinal;
 	private TextField numeroComprobante;
 	private ComboBox aprobadosRechazadosCombo;
-	private CheckBox incluirFecha;
 	private BotonBuscar botonBuscar;
 	
 	
@@ -92,9 +91,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		fechaFinal=new DateField();
 		fechaFinal.setDateFormat("dd-MM-yyyy");
 		fechaFinal.setValue(new Date());
-		l1.addComponent(tipoDocumento,numeroComprobante);			
-		incluirFecha=new CheckBox("usar fecha");
-		l1.addComponent(incluirFecha);
+		l1.addComponent(tipoDocumento,numeroComprobante);						
 		l1.addComponent("desde",fechaInicial);
 		l1.addComponent("hasta",fechaFinal);
 		botonBuscar=new BotonBuscar();

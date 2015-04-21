@@ -99,11 +99,42 @@ public class NotificadorCorreo {
     	 
     	            //Construct the mail message
     	            MimeMessage message = new MimeMessage(session);
+    	            StringBuilder sbsubject=new StringBuilder(SUBJECT);
+    	            String claveAcceso=rst.getString("claveacceso");
+    	            String tipoDocumento = utilClaveAcceso.obtenerTipoDocumento(claveAcceso);
+    	            String _tipoDocumento=null;
+    	            if(tipoDocumento.equalsIgnoreCase("01")){
+    	            	_tipoDocumento=" Factura";    	           
+    	            }
+    	            if(tipoDocumento.equalsIgnoreCase("04")){
+    	            	_tipoDocumento=" Nota de crédito";
+    	            }
+    	            if(tipoDocumento.equalsIgnoreCase("05")){
+    	            	_tipoDocumento=" Nota de dédito";
+    	            }
+    	            if(tipoDocumento.equalsIgnoreCase("06")){
+    	            	_tipoDocumento=" Guía de remisión";
+    	            }
+    	            if(tipoDocumento.equalsIgnoreCase("07")){
+    	            	_tipoDocumento=" Comprobante de renteción";
+    	            }    	            
+    	            StringBuilder sbNumeroDocumento=new StringBuilder(utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso));
+    	            sbNumeroDocumento.append("-");
+    	            sbNumeroDocumento.append(utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
+    	            sbNumeroDocumento.append("-");
+    	            sbNumeroDocumento.append(utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
     	            
-    	            message.setSubject(SUBJECT);
+    	            sbsubject.append(_tipoDocumento);
+    	            sbsubject.append(" ").append(sbNumeroDocumento.toString());
+    	            
+    	            message.setSubject(sbsubject.toString());
     	            message.setFrom(new InternetAddress(FROM));
-    	            message.setRecipient(Message.RecipientType.TO, new InternetAddress(rst.getString("correoelectronico")));                      
-    	            message.setText(TEXT);
+    	            message.setRecipient(Message.RecipientType.TO, new InternetAddress(rst.getString("correoelectronico"))); 
+    	            StringBuilder sbtext=new StringBuilder(TEXT);
+    	            sbtext.append(" "+_tipoDocumento).append(" N° "+sbNumeroDocumento.toString()+" con clave de acceso "+claveAcceso);
+    	            String numeroAutorizacion=rst.getString("autorizacion");
+    	            sbtext.append(" con código de autorización "+numeroAutorizacion);
+    	            message.setText(sbtext.toString());
 //    	            message.saveChanges();
     	            //message.saveChanges();
     	 

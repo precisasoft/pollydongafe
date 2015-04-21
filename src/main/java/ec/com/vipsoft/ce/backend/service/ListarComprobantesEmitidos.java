@@ -56,7 +56,8 @@ public class ListarComprobantesEmitidos {
 			List<ComprobanteElectronico>listadoComprobante=q.getResultList();
 			
 			for(ComprobanteElectronico c:listadoComprobante){
-				ComprobanteEmitido bean=new ComprobanteEmitido();			
+				ComprobanteEmitido bean=new ComprobanteEmitido();
+				bean.setId(c.getId());
 				bean.setClaveAcceso(c.getClaveAcceso());
 				bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 				if(c.getCodigoError()!=null){

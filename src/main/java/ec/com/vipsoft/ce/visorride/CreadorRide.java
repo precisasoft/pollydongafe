@@ -601,7 +601,7 @@ public class CreadorRide {
 			if (tieneLogo) {
 				reporte = contenedorRIDE.getRideFactura();
 			} else {
-				reporte = contenedorRIDE.getRideFactura(); //para pruebas
+				reporte = contenedorRIDE.getRideFacturaSinLogo(); //para pruebas
 				//reporte = contenedorRIDE.getRideFacturaSinLogo();  //correcto
 			}
 			break;
