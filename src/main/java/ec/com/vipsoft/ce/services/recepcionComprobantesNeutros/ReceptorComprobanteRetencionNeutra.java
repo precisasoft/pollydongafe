@@ -40,6 +40,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 
+import ec.com.vipsoft.ce.backend.remoteinterface.ReceptorComprobanteRetencionNeutraRemote;
 import ec.com.vipsoft.ce.backend.service.GeneradorClaveAccesoPorEntidad;
 import ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.ImpuestoRetencion;

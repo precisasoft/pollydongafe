@@ -1,4 +1,4 @@
-package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
+package ec.com.vipsoft.ce.backend.remoteinterface;
 
 import javax.ejb.Remote;
 

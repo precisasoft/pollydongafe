@@ -2,7 +2,6 @@ package ec.com.vipsoft.ce.ui;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -24,16 +23,15 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
+import ec.com.vipsoft.ce.backend.remoteinterface.ReceptorComprobanteRetencionNeutraRemote;
 import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.ImpuestoRetencion;
-import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutraRemote;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;

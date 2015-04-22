@@ -38,6 +38,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
+import ec.com.vipsoft.ce.backend.remoteinterface.ReceptorNotaCreditoNeutraRemote;
 import ec.com.vipsoft.ce.backend.service.GeneradorClaveAccesoPorEntidad;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.NotaCreditoBinding;

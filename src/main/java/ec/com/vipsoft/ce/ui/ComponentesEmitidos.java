@@ -14,13 +14,11 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -154,37 +152,33 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	public void actualizarVista(){
 		//System.out.println("llamado postconstruct");
 //		Long ultimo=0l;
-//		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.listarSiguientes(userInfo.getRucEmisor(),userInfo.getMinSearch());
-//		for(ComprobanteEmitido c:listarSiguientes){
-//			System.out.println(c.getId());
-//			ultimo=c.getId();
-//			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
-//			StringBuilder sbca=new StringBuilder("<a href='");
-//			sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
-//			sbca.append("/VisorRide?claveAcceso=");
-//			sbca.append(c.getClaveAcceso());
-//			sbca.append("' target='_blank'>");
-//			sbca.append(c.getClaveAcceso());
-//			sbca.append("</a>");
-//			bean.setClaveAcceso(sbca.toString());
-//			
-//			
-//			
-//			bean.setNumeroDocumento(c.getNumeroDocumento());
-//			StringBuilder sba=new StringBuilder("<a href='");
-//			sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
-//			sba.append("/VisorAutorizacion?claveAcceso=");
-//			sba.append(c.getClaveAcceso());
-//			sba.append("' download >");
-//			sba.append(c.getNumeroAutorizacion());			
-//			sba.append("</a>");
-//			bean.setAutorizacion(sba.toString());
-//			bean.setTipo(c.getTipo());
-//			bean.setNota(c.getNota());															
-//			beanItemContainer.addBean(bean);
-//			
-//			grid.setContainerDataSource(beanItemContainer);
-//		}
+		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),(String) tipoDocumento.getValue(), fechaInicial.getValue());
+		for(ComprobanteEmitido c:listarSiguientes){
+			System.out.println(c.getId());			
+			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
+			StringBuilder sbca=new StringBuilder("<a href='");
+			sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
+			sbca.append("/VisorRide?claveAcceso=");
+			sbca.append(c.getClaveAcceso());
+			sbca.append("' target='_blank'>");
+			sbca.append(c.getClaveAcceso());
+			sbca.append("</a>");
+			bean.setClaveAcceso(sbca.toString());			
+			bean.setNumeroDocumento(c.getNumeroDocumento());
+			StringBuilder sba=new StringBuilder("<a href='");
+			sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
+			sba.append("/VisorAutorizacion?claveAcceso=");
+			sba.append(c.getClaveAcceso());
+			sba.append("' download >");
+			sba.append(c.getNumeroAutorizacion());			
+			sba.append("</a>");
+			bean.setAutorizacion(sba.toString());
+			bean.setTipo(c.getTipo());
+			bean.setNota(c.getNota());															
+			beanItemContainer.addBean(bean);
+
+		}
+		grid.setContainerDataSource(beanItemContainer);
 	}
 	
 

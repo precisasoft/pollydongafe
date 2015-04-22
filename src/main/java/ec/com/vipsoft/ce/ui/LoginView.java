@@ -52,7 +52,7 @@ public class LoginView extends VerticalLayout implements View {
 		rememberMe = new CheckBox("registrame");
 		addComponent(usuario);
 		addComponent(password);
-		addComponent(rememberMe);
+	//	addComponent(rememberMe);
 		addComponent(botonLogIn);
 		// Sha256Hash hasher=new Sha256Hash();
 

@@ -1,4 +1,4 @@
-package ec.com.vipsoft.ce.backend.service;
+package ec.com.vipsoft.ce.backend.remoteinterface;
 
 import java.util.List;
 

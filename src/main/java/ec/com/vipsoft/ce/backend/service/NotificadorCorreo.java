@@ -3,7 +3,6 @@ package ec.com.vipsoft.ce.backend.service;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
@@ -21,7 +20,6 @@ import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
-import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 
 @Stateless

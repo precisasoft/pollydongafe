@@ -9,6 +9,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import ec.com.vipsoft.ce.backend.model.Contingencia;
+import ec.com.vipsoft.ce.backend.remoteinterface.AdministradorAutorizacionContingenciaRemote;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 
 @Stateless

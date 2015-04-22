@@ -2,11 +2,9 @@ package ec.com.vipsoft.ce.ui;
 
 import java.util.Set;
 
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Inject;
-
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.util.BeanItemContainer;
@@ -21,7 +19,6 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.HtmlRenderer;
-
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.ListarComprobantesEmitidos;

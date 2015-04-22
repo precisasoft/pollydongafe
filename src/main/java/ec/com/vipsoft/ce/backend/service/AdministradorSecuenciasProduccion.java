@@ -3,7 +3,6 @@ package ec.com.vipsoft.ce.backend.service;
 import java.util.List;
 
 import javax.ejb.Stateless;
-import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -11,6 +10,7 @@ import javax.persistence.Query;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 import ec.com.vipsoft.erp.abinadi.dominio.PuntoVenta;
+
 
 @Stateless
 //@WebService

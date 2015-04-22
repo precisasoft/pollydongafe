@@ -7,7 +7,6 @@ package ec.com.vipsoft.ce.ui;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collection;
 import java.util.StringTokenizer;
 
 import javax.annotation.PostConstruct;
@@ -23,8 +22,6 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.event.FieldEvents;
-import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.Alignment;
@@ -32,24 +29,21 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.Grid.SelectionModel;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.Window.CloseEvent;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
-import ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote;
+import ec.com.vipsoft.ce.backend.remoteinterface.ListadorBienEconomicoRemote;
+import ec.com.vipsoft.ce.backend.remoteinterface.ReceptorFacturaNeutraRemote;
 import ec.com.vipsoft.ce.backend.service.RegistradorDemografia;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
-import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorFacturaNeutraRemote;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.BienEconomico;
 import ec.com.vipsoft.erp.abinadi.dominio.DemografiaCliente;
@@ -126,7 +120,7 @@ public class FacturaView extends VerticalLayout implements View{
     private UtilClaveAcceso utilClaveAcceso;
 	private Button botonSeleccionaDesdeVentanar;
 	private TextField campoBusquedaProducto=new TextField();
-	private Table gridBusqueda;
+	private Grid gridBusqueda;
 	private BeanItemContainer<BienEconomico> beaitem;
 	private Window ventana = new Window();
 	
@@ -475,13 +469,13 @@ public class FacturaView extends VerticalLayout implements View{
 //					
 //				}
 //			});
-//            gridBusqueda.addSelectionListener(e -> { // Java 8
-//        	    // Get the item of the selected row
-//        	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
-//        	    codigoP.setValue(item.getBean().getCodigo());
-//        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
-//        	    ventana.close();
-//        	});
+            gridBusqueda.addSelectionListener(e -> { // Java 8
+        	    // Get the item of the selected row
+        	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
+        	    codigoP.setValue(item.getBean().getCodigo());
+        	    bienSeleccionado.setValue(item.getBean().getDescripcion());
+        	    ventana.close();
+        	});
             
             
            
@@ -541,18 +535,18 @@ public class FacturaView extends VerticalLayout implements View{
        System.out.println("Hola");
         construirGui();
         final SimpleStringFilter filtro;
-    	gridBusqueda=new Table();
+    	gridBusqueda=new Grid();
     	beaitem = new BeanItemContainer<BienEconomico>(BienEconomico.class);
     	
     	gridBusqueda.setContainerDataSource(beaitem);
     	
     	gridBusqueda.setSizeFull();
-    	gridBusqueda.setVisibleColumns(new Object[]{"codigo","descripcion"});
-//    	gridBusqueda.removeColumn("id");
-//    	gridBusqueda.removeColumn("codigoIva");
-//    	gridBusqueda.removeColumn("codigoIce");
-//    	gridBusqueda.setColumnOrder("codigo","descripcion");
-//    	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
+//    	gridBusqueda.setVisibleColumns(new Object[]{"codigo","descripcion"});
+    	gridBusqueda.removeColumn("id");
+    	gridBusqueda.removeColumn("codigoIva");
+    	gridBusqueda.removeColumn("codigoIce");
+    	gridBusqueda.setColumnOrder("codigo","descripcion");
+    	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
     	
     	 
     //	 tfiltro.setImmediate(true);

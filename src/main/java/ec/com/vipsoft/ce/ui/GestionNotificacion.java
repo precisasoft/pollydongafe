@@ -13,6 +13,7 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
@@ -122,7 +123,7 @@ public class GestionNotificacion extends VerticalLayout implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 	//	inicialiarNuevoDato();
-		llenarDatos();
+		//llenarDatos();
 	}
 //	private void inicialiarNuevoDato(){
 //		nuevoDato=new DemografiaCliente();
@@ -140,7 +141,7 @@ public class GestionNotificacion extends VerticalLayout implements View {
 	public void establecerEventos(){
 		llenarDatos();
 		botonCancelar.addClickListener(event->{
-			EventosComunes.alMenuPrincipal();
+			UI.getCurrent().getNavigator().navigateTo("menu");
 		});
 		botonAnadir.addClickListener(event->{
 			

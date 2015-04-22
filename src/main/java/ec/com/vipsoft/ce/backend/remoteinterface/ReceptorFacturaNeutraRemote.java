@@ -1,7 +1,10 @@
-package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
+package ec.com.vipsoft.ce.backend.remoteinterface;
 
 import javax.ejb.Remote;
+
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding;
+
+
 
 
 @Remote

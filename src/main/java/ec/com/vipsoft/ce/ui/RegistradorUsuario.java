@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -17,6 +18,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 import ec.com.vipsoft.erp.abinadi.dominio.PuntoVenta;
 
 @Stateless
+@WebService
 public class RegistradorUsuario {
 
 	@PersistenceContext

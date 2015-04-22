@@ -1,12 +1,9 @@
 package ec.com.vipsoft.ce.backend.service;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -21,11 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import org.easymock.internal.matchers.Find;
-
 import ec.com.vipsoft.ce.ui.ComprobanteEmitido;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
-import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;

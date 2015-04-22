@@ -19,7 +19,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
-import ec.com.vipsoft.ce.backend.service.ListadorBienEconomicoRemote;
+import ec.com.vipsoft.ce.backend.remoteinterface.ListadorBienEconomicoRemote;
 import ec.com.vipsoft.erp.abinadi.dominio.BienEconomico;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonAnadir;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
@@ -106,6 +106,9 @@ public class BienEconomicView extends VerticalLayout implements View{
 	}
 	@PostConstruct
 	public void registrarEventos(){
+		Set<BienEconomico> listardoinicial = listadorBienes.listarBienesDisponibles(userInfo.getRucEmisor());
+		beanItem.removeAllItems();
+		beanItem.addAll(listardoinicial);
 		botonAnadir.addClickListener(event->{
 			String escogido=(String) productoServicio.getValue();
 			boolean producto=false;
