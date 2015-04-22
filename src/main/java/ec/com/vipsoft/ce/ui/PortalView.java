@@ -45,7 +45,7 @@ public class PortalView extends VerticalLayout implements View{
 		
 		beanItemContainer=new BeanItemContainer<ComprobanteRideXmlBean>(ComprobanteRideXmlBean.class);	
 		grid=new Grid(beanItemContainer);	
-		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion","fechaAprobacion");
+		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion");		
 		grid.getColumn("claveAcceso").setRenderer(new HtmlRenderer());
 		grid.getColumn("autorizacion").setRenderer(new HtmlRenderer());
 		grid.setSizeFull();
