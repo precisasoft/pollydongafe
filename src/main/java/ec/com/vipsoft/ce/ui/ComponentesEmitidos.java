@@ -19,6 +19,7 @@ import com.vaadin.ui.DateField;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -44,7 +45,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private BotonCancelar botonCancelar;
 	private ComboBox tipoDocumento;
 	private DateField fechaInicial;
-	
+	private OptionGroup produccionoPruebas;
 	private TextField numeroComprobante;
 	private ComboBox aprobadosRechazadosCombo;
 	private BotonBuscar botonBuscar;
@@ -57,7 +58,14 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	}
 	public ComponentesEmitidos() {
 		super();
-		
+		produccionoPruebas=new OptionGroup();
+		produccionoPruebas.addItems("produccion");
+		produccionoPruebas.addItems("pruebas");
+		produccionoPruebas.setItemCaption("produccion", "PRODUCCION");
+		produccionoPruebas.setItemCaption("pruebas", "PRUEBAS");
+		produccionoPruebas.setMultiSelect(false);
+		produccionoPruebas.setValue("produccion");
+		produccionoPruebas.setStyleName("horizontal");
 		beanItemContainer=new BeanItemContainer<ComprobanteRideXmlBean>(ComprobanteRideXmlBean.class);	
 		grid=new Grid(beanItemContainer);	
 		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion");
@@ -95,6 +103,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	
 		l1.addComponent(tipoDocumento,numeroComprobante);						
 		l1.addComponent("fecha",fechaInicial);
+		l1.addComponent(produccionoPruebas);
 	
 		botonBuscar=new BotonBuscar();
 		botonBuscar.addClickListener(event->{
@@ -102,13 +111,19 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			String tipoComprobante=(String)tipoDocumento.getValue();
 			String numeroDocumento_buscar=numeroComprobante.getValue();
 			Set<ComprobanteEmitido>encontrados=new HashSet<>();
+			String seleccionado=(String)produccionoPruebas.getValue();
+			boolean enPruebas=false;
+			if(seleccionado.equalsIgnoreCase("pruebas")){
+				enPruebas=true;
+			}
 			if((numeroDocumento_buscar!=null)&&(numeroDocumento_buscar.length()>0)){
-				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),tipoComprobante,numeroDocumento_buscar));
+				
+				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),tipoComprobante,numeroDocumento_buscar,enPruebas));
 				if(encontrados.isEmpty()){
 					Notification.show("No Encontrado", "no se ha encontrado ningún comprobante ", Notification.Type.ERROR_MESSAGE);					
 				}
 			}else{
-				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue()));
+				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue(),enPruebas));
 			}
 			
 			for(ComprobanteEmitido c:encontrados){							
@@ -152,7 +167,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	public void actualizarVista(){
 		//System.out.println("llamado postconstruct");
 //		Long ultimo=0l;
-		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),(String) tipoDocumento.getValue(), fechaInicial.getValue());
+		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),(String) tipoDocumento.getValue(), fechaInicial.getValue(),false);
 		for(ComprobanteEmitido c:listarSiguientes){
 			System.out.println(c.getId());			
 			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();

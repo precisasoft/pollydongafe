@@ -18,34 +18,35 @@ public class RegistradorDemografia {
 	@PersistenceContext
 	private EntityManager em;
 	public void registrarActualizaCliente(DemografiaCliente demografia,String rucEmisor){
-		Query q=em.createQuery("select e from Entidad e where e.ruc=?1");
-		q.setParameter(1, rucEmisor);
-		List<Entidad>listaEntidad=q.getResultList();
-		if(!listaEntidad.isEmpty()){
-			Entidad e=em.find(Entidad.class, listaEntidad.get(0).getId());
-			Query qde=em.createQuery("select d from DemografiaCliente d where d.entidadEmisora=?1 and d.identificacion=?2");
-			qde.setParameter(1, e);
-			qde.setParameter(2, demografia.getIdentificacion());
-			List<DemografiaCliente>listaDemografia=qde.getResultList();
-			if(!listaDemografia.isEmpty()){
-				DemografiaCliente dem=em.find(DemografiaCliente.class, listaDemografia.get(0).getId());
-				dem.setCorreoElectronico(demografia.getCorreoElectronico());
-				dem.setDireccion(demografia.getDireccion());
-				dem.setRazonSocial(demografia.getRazonSocial());
-				dem.setTipoIdentificacion(demografia.getTipoIdentificacion());					
-			}else{
-				demografia.setEntidadEmisora(e);				
-				em.persist(demografia);
+		if((demografia.getIdentificacion()!=null)&&(demografia.getIdentificacion().length()>0)&&(demografia.getRazonSocial()!=null)&&(demografia.getRazonSocial().length()>0)){
+			Query q=em.createQuery("select e from Entidad e where e.ruc=?1");
+			q.setParameter(1, rucEmisor);
+			List<Entidad>listaEntidad=q.getResultList();
+			if(!listaEntidad.isEmpty()){
+				Entidad e=em.find(Entidad.class, listaEntidad.get(0).getId());
+				Query qde=em.createQuery("select d from DemografiaCliente d where d.entidadEmisora=?1 and d.identificacion=?2");
+				qde.setParameter(1, e);
+				qde.setParameter(2, demografia.getIdentificacion());
+				List<DemografiaCliente>listaDemografia=qde.getResultList();
+				if(!listaDemografia.isEmpty()){
+					DemografiaCliente dem=em.find(DemografiaCliente.class, listaDemografia.get(0).getId());
+					dem.setCorreoElectronico(demografia.getCorreoElectronico());
+					dem.setDireccion(demografia.getDireccion());
+					dem.setRazonSocial(demografia.getRazonSocial());
+					dem.setTipoIdentificacion(demografia.getTipoIdentificacion());					
+				}else{
+					demografia.setEntidadEmisora(e);				
+					em.persist(demografia);
+					
+				}
 				
-			}
-			
+			}	
 		}
-		
+				
 	}
 
 	public Set<DemografiaCliente>listarClientes(String rucEmisor){
-		Set<DemografiaCliente>retorno=new TreeSet<DemografiaCliente>();
-		
+		Set<DemografiaCliente>retorno=new TreeSet<DemografiaCliente>();		
 		Query q=em.createQuery("select e from Entidad e where e.ruc=?1");
 		q.setParameter(1, rucEmisor);
 		List<Entidad>listaEntidad=q.getResultList();

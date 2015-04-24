@@ -109,7 +109,7 @@ public class FacturaDetalleBinding implements Serializable{
 		if(valorTotal==null){
 			valorTotal=new BigDecimal("0.00");
 		}
-		return valorTotal.setScale(2, RoundingMode.HALF_UP);
+		return valorTotal;
 	}
 	public BigDecimal getValorUnitario() {
 		if(valorUnitario==null){
@@ -164,6 +164,7 @@ public class FacturaDetalleBinding implements Serializable{
 
     public void calcularValorTotal() {		
 		if((cantidad!=null)&&(valorUnitario!=null)){
+			calcularIva();
 			valorTotal=cantidad.multiply(valorUnitario);						
 			if(descuento!=null){
 				valorTotal=valorTotal.subtract(descuento);

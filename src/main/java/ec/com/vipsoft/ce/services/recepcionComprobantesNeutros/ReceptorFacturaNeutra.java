@@ -161,7 +161,8 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 			facturaxml.getInfoFactura().setRazonSocialComprador(factura.getRazonSocialBeneficiario());
 			if(factura.getIdentificacionBeneficiario().equalsIgnoreCase("9999999999999")){
 				facturaxml.getInfoFactura().setTipoIdentificacionComprador("07");
-				facturaxml.getInfoFactura().setRazonSocialComprador("USUARIO FINAL");
+				facturaxml.getInfoFactura().setRazonSocialComprador("Consumidor Final");
+				facturaxml.getInfoFactura().setDireccionComprador("N/A");
 			}
 			facturaxml.getInfoFactura().setMoneda("DOLAR");
 			facturaxml.getInfoFactura().setTotalSinImpuestos(factura.getSubtotalIva0());
@@ -187,7 +188,8 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 				detalle.setCodigoPrincipal(aliniarString(d.getCodigo(), 25));
 				detalle.setDescripcion(aliniarString(d.getDescripcion(), 300));
 				detalle.setPrecioUnitario(d.getValorUnitario());
-				detalle.setPrecioTotalSinImpuesto(d.getValorTotal());
+				detalle.setPrecioTotalSinImpuesto(d.getValorTotal().setScale(2,RoundingMode.HALF_UP));
+				
 				if (d.getDescuento().doubleValue() > 0d) {
 					detalle.setDescuento(d.getDescuento());
 				} else {
@@ -201,13 +203,12 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 					dead.setNombre("info");
 					dead.setValor(aliniarString(d.getInfoAdicional1(), 300));
 					if (d.getInfoAdicional1().length() > 0) {
-						detalle.getDetallesAdicionales().getDetAdicional()
-								.add(dead);
+						detalle.getDetallesAdicionales().getDetAdicional().add(dead);
 					}
 
 					// detalle.setDetallesAdicionales(dadicionales);
 				}
-
+				
 
 
 
@@ -215,13 +216,14 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 					Impuesto impuesto=new Impuesto();			    				    
 					impuesto.setBaseImponible(d.calculaBaeImponible());			    	
 					impuesto.setCodigo("2");			    					    	
-					impuesto.setCodigoPorcentaje(d.getCodigoIVA().trim());	
+					impuesto.setCodigoPorcentaje(d.getCodigoIVA().trim());
+					
 					if(factura.getTipoFactura().equalsIgnoreCase("regular")){
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("2")){			    	
 							impuesto.setTarifa(new BigDecimal("12"));			    		
 							impuesto.setValor(d.getIva12().setScale(2, RoundingMode.HALF_UP));			    		
 							baseIva12=baseIva12.add(impuesto.getBaseImponible());
-							totalIva12=totalIva12.add(impuesto.getValor());
+							totalIva12=totalIva12.add(d.calculaBaeImponible().multiply(new BigDecimal("0.12")));
 						}
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("0")){			    	
 							impuesto.setTarifa(new BigDecimal("0.00"));			    	
@@ -252,6 +254,7 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 					
 					detalle.getImpuestos().getImpuesto().add(impuesto);
 				}
+				
 				d.calcularValorTotal();
 				sumatoria = sumatoria.add(d.getValorTotal());
 				facturaxml.getDetalles().getDetalle().add(detalle);		
@@ -292,7 +295,7 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 				facturaxml.getInfoFactura().getTotalConImpuestos().getTotalImpuesto().add(nosujetoAImpuesto);
 			}
 
-			facturaxml.getInfoFactura().setImporteTotal(sumatoria);
+			facturaxml.getInfoFactura().setImporteTotal(sumatoria.setScale(2, RoundingMode.HALF_UP));
 			facturaxml.getInfoFactura().setTotalSinImpuestos(sumaSinImpuesto);
 			facturaxml.getInfoFactura().setFechaEmision(sdf2.format(factura.getFechaEmision()));
 
@@ -325,7 +328,7 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 
 			
 
-			facturaxml.getInfoFactura().setImporteTotal(sumatoria);
+			facturaxml.getInfoFactura().setImporteTotal(sumatoria.setScale(2, RoundingMode.HALF_UP));
 			facturaxml.getInfoFactura().setTotalDescuento(totalDescuento);		
 			facturaxml.getInfoFactura().setPropina(new BigDecimal("0.00"));
 			if(factura.getTipoFactura().equalsIgnoreCase("exportacion")){

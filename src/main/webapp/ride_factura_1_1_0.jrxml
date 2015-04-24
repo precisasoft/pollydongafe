@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-04-20T12:17:39 -->
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-04-23T23:08:43 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ride_factura_1_1_0" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c657c4f3-61fd-4627-a281-efbb7413152a">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="numeroDocumento" class="java.lang.String"/>
@@ -172,11 +172,11 @@
 				<text><![CDATA[CLAVE DE ACCESO]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="296" y="145" width="247" height="45" uuid="638e1c8b-3b93-4b64-8620-e8b4cd33431e">
+				<reportElement x="293" y="145" width="254" height="25" uuid="638e1c8b-3b93-4b64-8620-e8b4cd33431e">
 					<property name="local_mesure_unitheight" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 				</reportElement>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$P{claveAcceso}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -324,6 +324,16 @@
 					<font isBold="true" isItalic="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{rucEmisor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="293" y="170" width="254" height="15" uuid="87936100-5780-40ce-9ee7-a91fb1dc37b1">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{claveAcceso}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

@@ -17,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 
 import com.vaadin.cdi.CDIView;
 import com.vaadin.data.Container;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
@@ -130,10 +131,13 @@ public class FacturaView extends VerticalLayout implements View{
     	BigDecimal _ice=BigDecimal.ZERO;
     	BigDecimal _total=BigDecimal.ZERO;
     	 for (FacturaDetalleBinding itemIds : beanContainerDetalles.getItemIds()){
-    		 _iva12=_iva12.add(itemIds.getIva12());
+    		 _subtotal=_subtotal.add(itemIds.calculaBaeImponible());
+    		 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
     		 _ice=_ice.add(itemIds.getIce());
-    		 _total=_total.add(itemIds.getValorTotal());
+    		 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+    		 //_total=_total.add(itemIds.getValorTotal());
     	 }
+    	 subtotal.setValue("SUBTOTAL $"+_subtotal.setScale(2, RoundingMode.HALF_UP));
     	 iva12.setValue("IVA 12% $"+_iva12.setScale(2, RoundingMode.HALF_UP));
     	 ice.setValue("ICE $"+_ice.setScale(2, RoundingMode.HALF_UP));
     	 total.setValue("TOTAL $"+_total.setScale(2, RoundingMode.HALF_UP));
@@ -421,12 +425,21 @@ public class FacturaView extends VerticalLayout implements View{
         	BigDecimal _iva12=BigDecimal.ZERO;
         	BigDecimal _ice=BigDecimal.ZERO;
         	BigDecimal _total=BigDecimal.ZERO;
+//        	 for (FacturaDetalleBinding itemIds : beanContainerDetalles.getItemIds()){
+//        		 _subtotal=_subtotal.add(itemIds.calculaBaeImponible());
+//        		 _iva12=_iva12.add(itemIds.getIva12());
+//        		 _ice=_ice.add(itemIds.getIce());
+//        		 _total=_total.add(itemIds.getValorTotal());
+//        		 factura.getDetalles().add(itemIds);        		
+//        	 } 
         	 for (FacturaDetalleBinding itemIds : beanContainerDetalles.getItemIds()){
-        		 _iva12=_iva12.add(itemIds.getIva12());
+        		 _subtotal=_subtotal.add(itemIds.calculaBaeImponible());
+        		 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
         		 _ice=_ice.add(itemIds.getIce());
-        		 _total=_total.add(itemIds.getValorTotal());
-        		 factura.getDetalles().add(itemIds);        		
-        	 } 
+        		 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+        		 factura.getDetalles().add(itemIds);
+        		 //_total=_total.add(itemIds.getValorTotal());
+        	 }
         	 String numeroAcceso=recepcionFactura.recibirFactura(factura);
         	 String numeroDoc=utilClaveAcceso.obtenerCodigoEstablecimiento(numeroAcceso)+"-"+utilClaveAcceso.obtenerCodigoPuntoEmision(numeroAcceso)+"-"+utilClaveAcceso.obtenerSecuanciaDocumento(numeroAcceso);
         	 Notification.show(numeroDoc, numeroAcceso,Type.HUMANIZED_MESSAGE);
@@ -532,8 +545,25 @@ public class FacturaView extends VerticalLayout implements View{
     
     @PostConstruct
     public void postconstructor(){
-       System.out.println("Hola");
+       
         construirGui();
+        tipoIdentificacion.addValueChangeListener(event->{
+        	String seleccionado=(String)tipoIdentificacion.getValue();
+        	if(seleccionado.equalsIgnoreCase("07")){
+        		razonSocialBeneficiario.setValue("Consumidor Final");
+        		rucBeneficiario.setValue("9999999999999");
+        		direccion.setValue("Consumidor Final");
+        		razonSocialBeneficiario.setReadOnly(true);
+        		rucBeneficiario.setReadOnly(true);
+        		direccion.setReadOnly(true);
+        	}else{
+        		razonSocialBeneficiario.setReadOnly(false);
+        		rucBeneficiario.setReadOnly(false);
+        		direccion.setReadOnly(false);
+        	}
+        	
+        });
+        
         final SimpleStringFilter filtro;
     	gridBusqueda=new Grid();
     	beaitem = new BeanItemContainer<BienEconomico>(BienEconomico.class);

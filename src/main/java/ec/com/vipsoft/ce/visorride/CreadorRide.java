@@ -255,7 +255,8 @@ public class CreadorRide {
 					if(impuesto.getCodigo().equalsIgnoreCase("2")){
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("2")){
 							subtotal12=subtotal12.add(impuesto.getBaseImponible());
-							iva12=iva12.add(impuesto.getValor());
+							iva12=iva12.add(impuesto.getBaseImponible().multiply(new BigDecimal("0.12")));
+							//iva12=iva12.add(impuesto.getValor());
 						}
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("0")){
 							subtotalIva0=subtotalIva0.add(impuesto.getBaseImponible());
@@ -280,7 +281,7 @@ public class CreadorRide {
 				detalles.add(_detalle);
 			}
 		//totalDescuento=totalDescuento.add(detalle.getDescuento());
-		parametros.put("subtotal12",subtotal12);
+		parametros.put("subtotal12",subtotal12);		
 		parametros.put("subtotal0", subtotalIva0);
 		parametros.put("subtotalNoObjetoIVA", subtotalNoObjetoIVA);
 		parametros.put("subtotalExentoIVA", subtotalExentoIva);
@@ -288,11 +289,7 @@ public class CreadorRide {
 		totalSinImpuestos=totalSinImpuestos.add(subtotal12);
 		totalSinImpuestos=totalSinImpuestos.add(subtotalIva0);
 		totalSinImpuestos=totalSinImpuestos.add(subtotalNoObjetoIVA);
-		totalSinImpuestos=totalSinImpuestos.add(subtotalExentoIva);
-		
-		
-		
-		
+		totalSinImpuestos=totalSinImpuestos.add(subtotalExentoIva);				
 		parametros.put("subtotalSinImpuestos", totalSinImpuestos);
 		parametros.put("totalDescuento", totalDescuento);
 		parametros.put("ice",ice);

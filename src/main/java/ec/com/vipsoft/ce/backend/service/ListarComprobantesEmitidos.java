@@ -170,7 +170,7 @@ public class ListarComprobantesEmitidos {
 		}	
 		return listadoRetorno;
 	}
-	public Set<ComprobanteEmitido> buscarComprobnate(String rucEmisor,	String tipoComprobante, String numeroDocumento_buscar) {
+	public Set<ComprobanteEmitido> buscarComprobnate(String rucEmisor,	String tipoComprobante, String numeroDocumento_buscar,boolean enPruebas) {
 		TreeSet<ComprobanteEmitido>listadoRetorno=new TreeSet<>();
 		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");
@@ -178,8 +178,7 @@ public class ListarComprobantesEmitidos {
 		List<Entidad>listadoEntidad=qentidad.getResultList();
 		if(!listadoEntidad.isEmpty()){
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
-			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.establecimiento=?3 and c.puntoEMision=?4 and c.secuencia=?5");			
-			q.setMaxResults(4);
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.establecimiento=?3 and c.puntoEMision=?4 and c.secuencia=?5 and c.enPruebas=?6");						
 			//q.setParameter(1, idMinimo);
 			q.setParameter(1, entidad);
 			if(tipoComprobante.equalsIgnoreCase("factura")){
@@ -198,6 +197,7 @@ public class ListarComprobantesEmitidos {
 			q.setParameter(3,llenadorNumeroComprobante.obtenerPuntoEmision(numeroDocumento_buscar));
 			q.setParameter(4, llenadorNumeroComprobante.obtenerPuntoEmision(numeroDocumento_buscar));
 			q.setParameter(5, llenadorNumeroComprobante.obtenerSecuencia(numeroDocumento_buscar));
+			q.setParameter(6, new Boolean(enPruebas));
 			List<ComprobanteElectronico>listadoComprobante=q.getResultList();
 			if(!listadoComprobante.isEmpty()){
 				for(ComprobanteElectronico c:listadoComprobante){
@@ -247,7 +247,7 @@ public class ListarComprobantesEmitidos {
 		}
 		return listadoRetorno;
 	}
-	public Set<ComprobanteEmitido> buscarComprobnate(String rucEmisor, String tipoComprobante, Date fecha) {
+	public Set<ComprobanteEmitido> buscarComprobnate(String rucEmisor, String tipoComprobante, Date fecha,boolean enPruebas) {
 		TreeSet<ComprobanteEmitido>listadoRetorno=new TreeSet<>();
 		LocalTime time1=LocalTime.of(0, 0);
 		LocalTime time2=LocalTime.of(23, 59,59,999999);
@@ -258,8 +258,8 @@ public class ListarComprobantesEmitidos {
 		List<Entidad>listadoEntidad=qentidad.getResultList();
 		if(!listadoEntidad.isEmpty()){
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
-			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.fechaEnvio>=?3 and c.fechaEnvio<?4");			
-			q.setMaxResults(4);
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.fechaEnvio>=?3 and c.fechaEnvio<?4 and c.enPruebas=?5");			
+			
 			//q.setParameter(1, idMinimo);
 			q.setParameter(1, entidad);
 			if(tipoComprobante.equalsIgnoreCase("factura")){
@@ -281,6 +281,7 @@ public class ListarComprobantesEmitidos {
 			LocalDateTime finDia=LocalDateTime.ofInstant(fecha.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).withNano(999999998);
 			Date horaFina=Date.from(finDia.atZone(ZoneId.systemDefault()).toInstant());			
 			q.setParameter(4, horaFina);
+			q.setParameter(5, new Boolean(enPruebas));
 			List<ComprobanteElectronico>listadoComprobante=q.getResultList();
 			if(!listadoComprobante.isEmpty()){
 				for(ComprobanteElectronico c:listadoComprobante){

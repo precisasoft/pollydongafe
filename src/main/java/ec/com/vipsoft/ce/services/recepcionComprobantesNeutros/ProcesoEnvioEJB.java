@@ -93,7 +93,7 @@ public class ProcesoEnvioEJB {
 						GregorianCalendar ahora=new GregorianCalendar();
 						ahora.add(Calendar.MINUTE, -30);
 						Date fechaReceptada=comprobanteEncontrado.getFechaEnvio();
-						if(fechaReceptada.after(ahora.getTime())){
+						if((fechaReceptada.after(ahora.getTime()))&&(comprobanteEncontrado.getCodigoError()==null)){
 							enviarlo=false;
 						}
 					}

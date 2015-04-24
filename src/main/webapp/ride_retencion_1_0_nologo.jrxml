@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.3.final using JasperReports Library version 6.0.3  -->
-<!-- 2015-04-10T13:58:20 -->
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-04-23T23:08:58 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ride_retencion_1_0" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7e472716-0028-4617-8f75-618b30c95455">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="rucEmisor" class="java.lang.String"/>
@@ -103,7 +103,7 @@
 				<text><![CDATA[CLAVE DE ACCESO]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="330" y="190" width="214" height="30" uuid="b5c2e517-36ce-4ca3-872c-091651a90590"/>
+				<reportElement x="330" y="190" width="225" height="39" uuid="b5c2e517-36ce-4ca3-872c-091651a90590"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$P{claveAcceso}]]></jr:codeExpression>
 				</jr:barbecue>
