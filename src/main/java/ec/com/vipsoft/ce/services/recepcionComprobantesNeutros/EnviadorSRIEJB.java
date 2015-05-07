@@ -80,7 +80,7 @@ public class EnviadorSRIEJB {
 		return converToRespuestaRecepcionDocumento(s);
 	}
 	
-	private RespuestaRecepcionDocumento converToRespuestaRecepcionDocumento(	String xmlRespuesta) {
+	private RespuestaRecepcionDocumento converToRespuestaRecepcionDocumento(String xmlRespuesta) {
 		RespuestaRecepcionDocumento respuestaRecepcionDocumento = new RespuestaRecepcionDocumento();
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -111,7 +111,9 @@ public class EnviadorSRIEJB {
 					}
 
 					detalleRecepcion.setTipo(elementCompXml.getElementsByTagName("tipo").item(0).getFirstChild().getNodeValue());
-					detalleRecepcion.setInformacionAdicional(elementCompXml.getElementsByTagName("informacionAdicional").item(0).getFirstChild().getNodeValue());
+					if(elementCompXml.getElementsByTagName("informacionAdicional").item(0)!=null){
+						detalleRecepcion.setInformacionAdicional(elementCompXml.getElementsByTagName("informacionAdicional").item(0).getFirstChild().getNodeValue());	
+					}					
 					respuestaRecepcionDocumento.getDetalle().add(detalleRecepcion);
 				}
 			}

@@ -222,33 +222,38 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("2")){			    	
 							impuesto.setTarifa(new BigDecimal("12"));			    		
 							impuesto.setValor(d.getIva12().setScale(2, RoundingMode.HALF_UP));			    		
-							baseIva12=baseIva12.add(impuesto.getBaseImponible());
+							baseIva12=baseIva12.add(impuesto.getBaseImponible());							
 							totalIva12=totalIva12.add(d.calculaBaeImponible().multiply(new BigDecimal("0.12")));
 						}
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("0")){			    	
 							impuesto.setTarifa(new BigDecimal("0.00"));			    	
 							impuesto.setValor(new BigDecimal("0.00"));			    		
-							baseIva0=baseIva0.add(impuesto.getBaseImponible());			    		
+							baseIva0=baseIva0.add(impuesto.getBaseImponible());
+							
 						}			    		
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("6")){			    	
 							impuesto.setTarifa(new BigDecimal("0.00"));
 							impuesto.setValor(new BigDecimal("0.00"));			    			
-							baseNoSujeto=baseNoSujeto.add(impuesto.getBaseImponible());			    
+							baseNoSujeto=baseNoSujeto.add(impuesto.getBaseImponible());							
 						}
 
 						if(impuesto.getCodigoPorcentaje().equalsIgnoreCase("7")){
 							impuesto.setTarifa(new BigDecimal("0.00"));
 							impuesto.setValor(new BigDecimal("0.00"));
 							baseExepto=baseExepto.add(impuesto.getBaseImponible());
+							
 						}
-
+						d.calcularIva();
+						d.calcularValorTotal();
 						
 					}else{
 						impuesto.setCodigoPorcentaje("0");					
 						impuesto.setBaseImponible(d.calculaBaeImponible());
 						impuesto.setCodigoPorcentaje("0");						
 						impuesto.setTarifa(new BigDecimal("0.00"));			    							
-						impuesto.setValor(new BigDecimal("0.00"));			    							
+						impuesto.setValor(new BigDecimal("0.00"));
+						d.calcularIva();
+						d.calcularValorTotal();
 						baseIva0=baseIva0.add(impuesto.getBaseImponible());	
 					}
 					

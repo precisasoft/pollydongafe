@@ -263,6 +263,11 @@ public class FacturaView extends VerticalLayout implements View{
         tablaDetalles.setWidth("100%");
         tablaDetalles.setReadOnly(true);
         tablaDetalles.removeColumn("infoAdicional3");
+        tablaDetalles.removeColumn("infoAdicional2");
+        tablaDetalles.removeColumn("codigoAlterno");
+        tablaDetalles.removeColumn("codigoIVA");
+        tablaDetalles.removeColumn("ice");
+        tablaDetalles.setColumnOrder("cantidad","codigo","descripcion","infoAdicional1","valorUnitario","descuento","iva12","valorTotal");
         l4.addComponent(tablaDetalles);
         l4.setComponentAlignment(tablaDetalles, Alignment.MIDDLE_CENTER);
         ///////////////////////////////////////////////////////7
@@ -575,6 +580,7 @@ public class FacturaView extends VerticalLayout implements View{
     	gridBusqueda.removeColumn("id");
     	gridBusqueda.removeColumn("codigoIva");
     	gridBusqueda.removeColumn("codigoIce");
+    	gridBusqueda.removeColumn("entidad");
     	gridBusqueda.setColumnOrder("codigo","descripcion");
     	gridBusqueda.setSelectionMode(SelectionMode.SINGLE);
     	

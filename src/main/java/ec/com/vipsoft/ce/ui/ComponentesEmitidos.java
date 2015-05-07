@@ -29,6 +29,7 @@ import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.ListarComprobantesEmitidos;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
+import ec.com.vipsoft.erp.gui.componentesbasicos.BotonSpredSheet;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoNumeroComprobante;
 import ec.com.vipsoft.erp.gui.componentesbasicos.HorizontalL;
 
@@ -49,6 +50,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private TextField numeroComprobante;
 	private ComboBox aprobadosRechazadosCombo;
 	private BotonBuscar botonBuscar;
+	private BotonSpredSheet botonReporteXLS;
 	
 	
 	@Override
@@ -154,6 +156,8 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			
 		});
 		l1.addComponent(botonBuscar);
+		botonReporteXLS=new BotonSpredSheet();
+		l1.addComponent(botonReporteXLS);
 		l1.addComponent(botonCancelar);
 		
 		l1.setComponentAlignment(botonCancelar, Alignment.TOP_RIGHT);
@@ -168,8 +172,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		//System.out.println("llamado postconstruct");
 //		Long ultimo=0l;
 		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),(String) tipoDocumento.getValue(), fechaInicial.getValue(),false);
-		for(ComprobanteEmitido c:listarSiguientes){
-			System.out.println(c.getId());			
+		for(ComprobanteEmitido c:listarSiguientes){			
 			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
 			StringBuilder sbca=new StringBuilder("<a href='");
 			sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
