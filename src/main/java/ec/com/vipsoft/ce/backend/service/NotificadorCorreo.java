@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.GregorianCalendar;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 import javax.ejb.Schedule;
@@ -25,35 +27,43 @@ import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 @Stateless
 public class NotificadorCorreo {
 
+	
 
-	 @Resource(name="jdbc/abinadi")
+	 public NotificadorCorreo() {
+		super();
+		pattern = Pattern.compile(EMAIL_PATTERN);
+	}
+
+	public boolean esEmailValido(final String hex) {
+
+		if ((hex != null)) {
+			matcher = pattern.matcher(hex);
+			return matcher.matches();
+		} else {
+			return false;
+		}
+
+	}
+
+	@Resource(name="jdbc/abinadi")
 	 private DataSource dataSource;
 	 @PersistenceContext
 	 private EntityManager em;
+	 
+	 private static final String EMAIL_PATTERN = 
+				"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+				+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
 	@Inject
 	 private UtilClaveAcceso utilClaveAcceso;
-
-//	private static String HOST = "smtp.gmail.com";
-//    private static String USER = "facturacion@rocarsystem.com";
-//    private static String PASSWORD = "rocarsystem2013";
-//    private static String PORT = "465";
-//    private static String FROM = "facturacion@rocarsystem.com";
-//    private static String TO = "christian.valverde@gmail.com";
-// 
-//    private static String STARTTLS = "true";
-//    private static String AUTH = "true";
-//    private static String DEBUG = "true";
-//    private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
-//    private static String SUBJECT = "Comprobante electrónico nuevo";
-//    private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://comprobantes.rocarsystem.com  use su identificación (RUC/cédula) tanto como usuario y contraseña";
-	
+	private Pattern pattern;
+	private Matcher matcher;
 	
 	private static String HOST = "smtp.gmail.com";
-    private static String USER = "tesoreriahgiide@gmail.com";
-    private static String PASSWORD = "hospital1234";
+    private static String USER = "facturacion@rocarsystem.com";
+    private static String PASSWORD = "rocarsystem2013";
     private static String PORT = "465";
-    private static String FROM = "tesoreriahgiide@gmail.com";
+    private static String FROM = "facturacion@rocarsystem.com";
     private static String TO = "christian.valverde@gmail.com";
  
     private static String STARTTLS = "true";
@@ -61,7 +71,22 @@ public class NotificadorCorreo {
     private static String DEBUG = "true";
     private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
     private static String SUBJECT = "Comprobante electrónico nuevo";
-    private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://hosptialmilitariide.comprobanteselectronicos.ec  use su identificación (RUC/cédula) tanto como usuario y contraseña";
+    private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://comprobantes.rocarsystem.com  use su identificación (RUC/cédula) tanto como usuario y contraseña";
+	
+	
+//	private static String HOST = "smtp.gmail.com";
+//    private static String USER = "tesoreriahgiide@gmail.com";
+//    private static String PASSWORD = "hospital1234";
+//    private static String PORT = "465";
+//    private static String FROM = "tesoreriahgiide@gmail.com";
+//    private static String TO = "christian.valverde@gmail.com";
+// 
+//    private static String STARTTLS = "true";
+//    private static String AUTH = "true";
+//    private static String DEBUG = "true";
+//    private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
+//    private static String SUBJECT = "Comprobante electrónico nuevo";
+//    private static String TEXT = "Ud. ha recibido un comprobante electrónico nuevo . Puede visualizarlo en http://hosptialmilitariide.comprobanteselectronicos.ec  use su identificación (RUC/cédula) tanto como usuario y contraseña";
  
     @Schedule(dayOfMonth="*",hour="*",minute="*",second="5,35",year="*",month="*")
     public  void send() {
@@ -91,58 +116,63 @@ public class NotificadorCorreo {
     			String servidorLei="0000000";
     			Session sesion=null;    				
     			while(rst.next()){
+    				String correoDestino=rst.getString("correoelectronico");
+    				
+    				if(esEmailValido(correoDestino)){
+    					Session session = Session.getInstance(props, null);
+        	            session.setDebug(true);
+        	 
+        	            //Construct the mail message
+        	            MimeMessage message = new MimeMessage(session);
+        	            StringBuilder sbsubject=new StringBuilder(SUBJECT);
+        	            String claveAcceso=rst.getString("claveacceso");
+        	            String tipoDocumento = utilClaveAcceso.obtenerTipoDocumento(claveAcceso);
+        	            String _tipoDocumento=null;
+        	            if(tipoDocumento.equalsIgnoreCase("01")){
+        	            	_tipoDocumento=" Factura";    	           
+        	            }
+        	            if(tipoDocumento.equalsIgnoreCase("04")){
+        	            	_tipoDocumento=" Nota de crédito";
+        	            }
+        	            if(tipoDocumento.equalsIgnoreCase("05")){
+        	            	_tipoDocumento=" Nota de dédito";
+        	            }
+        	            if(tipoDocumento.equalsIgnoreCase("06")){
+        	            	_tipoDocumento=" Guía de remisión";
+        	            }
+        	            if(tipoDocumento.equalsIgnoreCase("07")){
+        	            	_tipoDocumento=" Comprobante de renteción";
+        	            }    	            
+        	            StringBuilder sbNumeroDocumento=new StringBuilder(utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso));
+        	            sbNumeroDocumento.append("-");
+        	            sbNumeroDocumento.append(utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
+        	            sbNumeroDocumento.append("-");
+        	            sbNumeroDocumento.append(utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
+        	            
+        	            sbsubject.append(_tipoDocumento);
+        	            sbsubject.append(" ").append(sbNumeroDocumento.toString());
+        	            
+        	            message.setSubject(sbsubject.toString());
+        	            message.setFrom(new InternetAddress(FROM));
+        	            message.setRecipient(Message.RecipientType.TO, new InternetAddress(correoDestino)); 
+        	            StringBuilder sbtext=new StringBuilder(TEXT);
+        	            sbtext.append(" "+_tipoDocumento).append(" N° "+sbNumeroDocumento.toString()+" con clave de acceso "+claveAcceso);
+        	            String numeroAutorizacion=rst.getString("autorizacion");
+        	            sbtext.append(" con código de autorización "+numeroAutorizacion);
+        	            message.setText(sbtext.toString());
+//        	            message.saveChanges();
+        	            //message.saveChanges();
+        	 
+        	            //Use Transport to deliver the message
+        	            Transport transport = session.getTransport("smtp");
+        	            transport.connect(HOST, USER, PASSWORD);
+        	            transport.sendMessage(message, message.getAllRecipients());
+        	            transport.close();   	
+        	            ComprobanteElectronico ce=em.find(ComprobanteElectronico.class, rst.getLong("id"));
+        	            ce.setNotificadoBeneficiario(true);
+    				}
     		           //Obtain the default mail session
-    	            Session session = Session.getInstance(props, null);
-    	            session.setDebug(true);
-    	 
-    	            //Construct the mail message
-    	            MimeMessage message = new MimeMessage(session);
-    	            StringBuilder sbsubject=new StringBuilder(SUBJECT);
-    	            String claveAcceso=rst.getString("claveacceso");
-    	            String tipoDocumento = utilClaveAcceso.obtenerTipoDocumento(claveAcceso);
-    	            String _tipoDocumento=null;
-    	            if(tipoDocumento.equalsIgnoreCase("01")){
-    	            	_tipoDocumento=" Factura";    	           
-    	            }
-    	            if(tipoDocumento.equalsIgnoreCase("04")){
-    	            	_tipoDocumento=" Nota de crédito";
-    	            }
-    	            if(tipoDocumento.equalsIgnoreCase("05")){
-    	            	_tipoDocumento=" Nota de dédito";
-    	            }
-    	            if(tipoDocumento.equalsIgnoreCase("06")){
-    	            	_tipoDocumento=" Guía de remisión";
-    	            }
-    	            if(tipoDocumento.equalsIgnoreCase("07")){
-    	            	_tipoDocumento=" Comprobante de renteción";
-    	            }    	            
-    	            StringBuilder sbNumeroDocumento=new StringBuilder(utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso));
-    	            sbNumeroDocumento.append("-");
-    	            sbNumeroDocumento.append(utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
-    	            sbNumeroDocumento.append("-");
-    	            sbNumeroDocumento.append(utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
     	            
-    	            sbsubject.append(_tipoDocumento);
-    	            sbsubject.append(" ").append(sbNumeroDocumento.toString());
-    	            
-    	            message.setSubject(sbsubject.toString());
-    	            message.setFrom(new InternetAddress(FROM));
-    	            message.setRecipient(Message.RecipientType.TO, new InternetAddress(rst.getString("correoelectronico"))); 
-    	            StringBuilder sbtext=new StringBuilder(TEXT);
-    	            sbtext.append(" "+_tipoDocumento).append(" N° "+sbNumeroDocumento.toString()+" con clave de acceso "+claveAcceso);
-    	            String numeroAutorizacion=rst.getString("autorizacion");
-    	            sbtext.append(" con código de autorización "+numeroAutorizacion);
-    	            message.setText(sbtext.toString());
-//    	            message.saveChanges();
-    	            //message.saveChanges();
-    	 
-    	            //Use Transport to deliver the message
-    	            Transport transport = session.getTransport("smtp");
-    	            transport.connect(HOST, USER, PASSWORD);
-    	            transport.sendMessage(message, message.getAllRecipients());
-    	            transport.close();   	
-    	            ComprobanteElectronico ce=em.find(ComprobanteElectronico.class, rst.getLong("id"));
-    	            ce.setNotificadoBeneficiario(true);
     			}
     			conexion.close();
  
@@ -152,6 +182,15 @@ public class NotificadorCorreo {
  
     }
  
+    
+    
+    
+    public String limpiarDireccion(String direccion){
+    	String sincomillas=direccion.replace("'", "");
+    	
+    	
+    	return sincomillas;
+    }
 	 
 //	 @Schedule(dayOfMonth="*",hour="*",minute="*",second="0",year="*",month="*")
 //	public void enviarNotificacionCE(){

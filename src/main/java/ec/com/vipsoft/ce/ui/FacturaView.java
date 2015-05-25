@@ -111,6 +111,7 @@ public class FacturaView extends VerticalLayout implements View{
     private Grid tablaDetalles;
     private ComboBox tipoFactura;
     private ComboBox tipoIdentificacion;
+    private ComboBox codigoIVA;
     private CampoDinero valorUnitario;
     private ComboBox comboPaisDestino;
     private Label subtotal;
@@ -132,9 +133,16 @@ public class FacturaView extends VerticalLayout implements View{
     	BigDecimal _total=BigDecimal.ZERO;
     	 for (FacturaDetalleBinding itemIds : beanContainerDetalles.getItemIds()){
     		 _subtotal=_subtotal.add(itemIds.calculaBaeImponible());
-    		 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
+    		 if(itemIds.getCodigoIVA().equalsIgnoreCase("2")){
+    			 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
+    			 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+    		 }else{
+    			 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.0")));
+    			 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.0"))).add(itemIds.getIce()));
+    		 }
+    		 
     		 _ice=_ice.add(itemIds.getIce());
-    		 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+    		// _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
     		 //_total=_total.add(itemIds.getValorTotal());
     	 }
     	 subtotal.setValue("SUBTOTAL $"+_subtotal.setScale(2, RoundingMode.HALF_UP));
@@ -211,6 +219,14 @@ public class FacturaView extends VerticalLayout implements View{
         
         
         ////////////////////////////////
+        codigoIVA=new ComboBox();
+        codigoIVA.addItem("0");
+        codigoIVA.addItem("2");
+        codigoIVA.setNullSelectionAllowed(false);
+        codigoIVA.setValue("2");
+        codigoIVA.setItemCaption("0", "0%");
+        codigoIVA.setItemCaption("2", "12%");
+        codigoIVA.setWidth("80px");
         HorizontalLayout l3=new HorizontalLayout();
         l3.setSpacing(true);
         botonBuscarDetalle=new BotonBuscar();
@@ -221,6 +237,8 @@ public class FacturaView extends VerticalLayout implements View{
         bienSeleccionado=new TextField();
         bienSeleccionado.setWidth("150px");
         l3.addComponent(bienSeleccionado);
+        l3.addComponent(new Label("IVA"));
+        l3.addComponent(codigoIVA);
         Label lcantidad=new Label("Cant.");
         l3.addComponent(lcantidad);
         cantidad=new CampoCantidad();
@@ -383,6 +401,7 @@ public class FacturaView extends VerticalLayout implements View{
         	}else{
         		fd.setCodigoIVA("2");        	        		
         	}
+        	fd.setCodigoIVA((String)codigoIVA.getValue());
         	fd.calcularIva();
         	fd.calcularValorTotal();
         	beanContainerDetalles.addBean(fd);
@@ -439,9 +458,15 @@ public class FacturaView extends VerticalLayout implements View{
 //        	 } 
         	 for (FacturaDetalleBinding itemIds : beanContainerDetalles.getItemIds()){
         		 _subtotal=_subtotal.add(itemIds.calculaBaeImponible());
-        		 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
+        		 if(itemIds.getCodigoIVA().equalsIgnoreCase("2")){
+        			 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12")));
+        			 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+        		 }else{
+        			 _iva12=_iva12.add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.0")));	 
+        			 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.0"))).add(itemIds.getIce()));
+        		 }        		 
         		 _ice=_ice.add(itemIds.getIce());
-        		 _total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
+        		 //_total=_total.add(itemIds.calculaBaeImponible().add(itemIds.calculaBaeImponible().multiply(new BigDecimal("0.12"))).add(itemIds.getIce()));
         		 factura.getDetalles().add(itemIds);
         		 //_total=_total.add(itemIds.getValorTotal());
         	 }
@@ -492,6 +517,12 @@ public class FacturaView extends VerticalLayout implements View{
         	    BeanItem<BienEconomico> item = beaitem.getItem(gridBusqueda.getSelectedRow());
         	    codigoP.setValue(item.getBean().getCodigo());
         	    bienSeleccionado.setValue(item.getBean().getDescripcion());
+        	    if(item.getBean().getCodigoIva().equalsIgnoreCase("2")){
+        	    	codigoIVA.setValue("2");	
+        	    }
+        	    if(item.getBean().getCodigoIva().equalsIgnoreCase("0")){
+        	    	codigoIVA.setValue("0");	
+        	    }
         	    ventana.close();
         	});
             

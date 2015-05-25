@@ -104,6 +104,8 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 			qFactura.setParameter(4, stt.nextToken());
 			qFactura.setParameter(5, stt.nextToken());
 			qFactura.setParameter(6, Boolean.TRUE);
+			BigDecimal montoAModificar=BigDecimal.ZERO;
+			BigDecimal totalConImpuestos=BigDecimal.ZERO;
 			List<ComprobanteElectronico>listadoComprobante=qFactura.getResultList();
 			if(!listadoComprobante.isEmpty()){
 				
@@ -159,6 +161,7 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 					comprobante.getInfoNotaCredito().setNumDocModificado(notaCredito.getNumeroFacturaAModificar());
 					comprobante.getInfoNotaCredito().setRazonSocialComprador(factura.getInfoFactura().getRazonSocialComprador());
 					comprobante.getInfoNotaCredito().setTipoIdentificacionComprador(factura.getInfoFactura().getTipoIdentificacionComprador());
+					
 					
 					///////////////////////////////////////////////////////////////////////////////////////////////
 					
@@ -218,16 +221,26 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 					}
 					BigDecimal sumaBases=baseExcento.add(baseIva0.add(baseIva12).add(baseNoSujeto));
 					comprobante.getInfoNotaCredito().setTotalSinImpuestos(sumaBases);
+					montoAModificar=montoAModificar.add(sumaBases);
 					if(baseIva12.doubleValue()>0){
 						TotalImpuesto totali=new TotalImpuesto();
 						totali.setBaseImponible(baseIva12);
 						totali.setCodigo("2");
 						totali.setCodigoPorcentaje("2");						
 						totali.setValor(iva12);
-						comprobante.getInfoNotaCredito().getTotalConImpuestos().getTotalImpuesto().add(totali);
-						comprobante.getInfoNotaCredito().setValorModificacion(totali.getValor());
 						
+						comprobante.getInfoNotaCredito().getTotalConImpuestos().getTotalImpuesto().add(totali);
+						comprobante.getInfoNotaCredito().setValorModificacion(totali.getValor()); 
+						montoAModificar=montoAModificar.add(iva12);
+					}else{
+						TotalImpuesto totali=new TotalImpuesto();
+						totali.setBaseImponible(baseIva12);
+						totali.setCodigo("2");
+						totali.setCodigoPorcentaje("0");						
+						totali.setValor(new BigDecimal("0.00"));						
+						comprobante.getInfoNotaCredito().getTotalConImpuestos().getTotalImpuesto().add(totali);
 					}
+					comprobante.getInfoNotaCredito().setValorModificacion(montoAModificar.setScale(2,RoundingMode.HALF_UP));
 					
 //					/////////////////////////////////////////////////////////////////////////////////////////////////////////////////     
 //					

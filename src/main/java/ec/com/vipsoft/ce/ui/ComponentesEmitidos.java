@@ -46,6 +46,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private BotonCancelar botonCancelar;
 	private ComboBox tipoDocumento;
 	private DateField fechaInicial;
+	private DateField fechaFinal;
 	private OptionGroup produccionoPruebas;
 	private TextField numeroComprobante;
 	private ComboBox aprobadosRechazadosCombo;
@@ -67,7 +68,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		produccionoPruebas.setItemCaption("pruebas", "PRUEBAS");
 		produccionoPruebas.setMultiSelect(false);
 		produccionoPruebas.setValue("produccion");
-		produccionoPruebas.setStyleName("horizontal");
+		//produccionoPruebas.setStyleName("horizontal");
 		beanItemContainer=new BeanItemContainer<ComprobanteRideXmlBean>(ComprobanteRideXmlBean.class);	
 		grid=new Grid(beanItemContainer);	
 		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion");
@@ -102,9 +103,12 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		fechaInicial=new DateField();
 		fechaInicial.setDateFormat("dd-MM-yyyy");
 		fechaInicial.setValue(new Date());
-	
+		fechaFinal=new DateField();
+		fechaFinal.setDateFormat("dd-MM-yyyy");
+		fechaFinal.setValue(new Date());
 		l1.addComponent(tipoDocumento,numeroComprobante);						
 		l1.addComponent("fecha",fechaInicial);
+		l1.addComponent(fechaFinal);
 		l1.addComponent(produccionoPruebas);
 	
 		botonBuscar=new BotonBuscar();
@@ -125,7 +129,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 					Notification.show("No Encontrado", "no se ha encontrado ningún comprobante ", Notification.Type.ERROR_MESSAGE);					
 				}
 			}else{
-				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue(),enPruebas));
+				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),enPruebas));
 			}
 			
 			for(ComprobanteEmitido c:encontrados){							

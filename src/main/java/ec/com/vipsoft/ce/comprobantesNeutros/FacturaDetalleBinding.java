@@ -161,6 +161,12 @@ public class FacturaDetalleBinding implements Serializable{
 //		}
 //		
 //	}
+	
+	public BigDecimal calcularValorTotalSinImpuestos(){
+		BigDecimal retorno=cantidad.multiply(valorUnitario);
+		retorno=retorno.subtract(descuento);		
+		return retorno.setScale(2, RoundingMode.HALF_UP);
+	}
 
     public void calcularValorTotal() {		
 		if((cantidad!=null)&&(valorUnitario!=null)){

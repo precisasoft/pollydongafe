@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class ListarComprobantesEmitidos {
 				ComprobanteEmitido bean=new ComprobanteEmitido();
 				bean.setId(c.getId());
 				bean.setClaveAcceso(c.getClaveAcceso());
-				bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+				bean.setNumeroDocumento(c.getEstablecimiento()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 				if(c.getCodigoError()!=null){
 					if(c.getCodigoError()!=null){
 						StringBuilder sberror=new StringBuilder("(");
@@ -194,7 +195,7 @@ public class ListarComprobantesEmitidos {
 			if(tipoComprobante.equalsIgnoreCase("CR")){
 				q.setParameter(2, TipoComprobante.retencion);			
 			}
-			q.setParameter(3,llenadorNumeroComprobante.obtenerPuntoEmision(numeroDocumento_buscar));
+			q.setParameter(3,llenadorNumeroComprobante.obtenerSucursal(numeroDocumento_buscar));
 			q.setParameter(4, llenadorNumeroComprobante.obtenerPuntoEmision(numeroDocumento_buscar));
 			q.setParameter(5, llenadorNumeroComprobante.obtenerSecuencia(numeroDocumento_buscar));
 			q.setParameter(6, new Boolean(enPruebas));
@@ -203,7 +204,7 @@ public class ListarComprobantesEmitidos {
 				for(ComprobanteElectronico c:listadoComprobante){
 					ComprobanteEmitido bean=new ComprobanteEmitido();							
 					bean.setClaveAcceso(c.getClaveAcceso());
-					bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+					bean.setNumeroDocumento(c.getEstablecimiento()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 					if(c.getCodigoError()!=null){
 						if(c.getCodigoError()!=null){
 							StringBuilder sberror=new StringBuilder("(");
@@ -258,7 +259,7 @@ public class ListarComprobantesEmitidos {
 		List<Entidad>listadoEntidad=qentidad.getResultList();
 		if(!listadoEntidad.isEmpty()){
 			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
-			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.fechaEnvio>=?3 and c.fechaEnvio<?4 and c.enPruebas=?5");			
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.fechaEnvio>=?3 and c.fechaEnvio<=?4 and c.enPruebas=?5");			
 			
 			//q.setParameter(1, idMinimo);
 			q.setParameter(1, entidad);
@@ -287,7 +288,7 @@ public class ListarComprobantesEmitidos {
 				for(ComprobanteElectronico c:listadoComprobante){
 					ComprobanteEmitido bean=new ComprobanteEmitido();							
 					bean.setClaveAcceso(c.getClaveAcceso());
-					bean.setNumeroDocumento(c.getPuntoEMision()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+					bean.setNumeroDocumento(c.getEstablecimiento()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
 					if(c.getCodigoError()!=null){
 						if(c.getCodigoError()!=null){
 							StringBuilder sberror=new StringBuilder("(");
@@ -332,6 +333,89 @@ public class ListarComprobantesEmitidos {
 		}
 		return listadoRetorno;
 	}
-
-
+	public Collection<? extends ComprobanteEmitido> buscarComprobnate(String rucEmisor, String tipoComprobante, Date fechaI, Date fechaF,boolean enPruebas) {
+		TreeSet<ComprobanteEmitido>listadoRetorno=new TreeSet<>();
+		LocalTime time1=LocalTime.of(0, 0);
+		LocalTime time2=LocalTime.of(23, 59,59,999999);
+		
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");
+		qentidad.setParameter(1, rucEmisor);
+		List<Entidad>listadoEntidad=qentidad.getResultList();
+		if(!listadoEntidad.isEmpty()){
+			Entidad entidad=em.getReference(Entidad.class, listadoEntidad.get(0).getId());
+			Query q=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1   and c.tipo=?2 and c.fechaEnvio>=?3 and c.fechaEnvio<=?4 and c.enPruebas=?5");			
+			
+			//q.setParameter(1, idMinimo);
+			q.setParameter(1, entidad);
+			if(tipoComprobante.equalsIgnoreCase("factura")){
+				q.setParameter(2, TipoComprobante.factura);
+				//factura, guiaRemision, notaCredito, notaDebito, retencion;
+			}
+			if(tipoComprobante.equalsIgnoreCase("NC")){
+				q.setParameter(2, TipoComprobante.notaCredito);			
+			}
+			if(tipoComprobante.equalsIgnoreCase("GR")){
+				q.setParameter(2, TipoComprobante.guiaRemision);			
+			}
+			if(tipoComprobante.equalsIgnoreCase("CR")){
+				q.setParameter(2, TipoComprobante.retencion);			
+			}
+			LocalDateTime inicioDia=LocalDateTime.ofInstant(fechaI.toInstant(), ZoneId.systemDefault()).withHour(0).withMinute(0).withSecond(0);
+			Date horaInicio=Date.from(inicioDia.atZone(ZoneId.systemDefault()).toInstant());			
+			q.setParameter(3, horaInicio);
+			LocalDateTime finDia=LocalDateTime.ofInstant(fechaF.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).withNano(999999998);
+			Date horaFina=Date.from(finDia.atZone(ZoneId.systemDefault()).toInstant());			
+			q.setParameter(4, horaFina);
+			q.setParameter(5, new Boolean(enPruebas));
+			List<ComprobanteElectronico>listadoComprobante=q.getResultList();
+			if(!listadoComprobante.isEmpty()){
+				for(ComprobanteElectronico c:listadoComprobante){
+					ComprobanteEmitido bean=new ComprobanteEmitido();							
+					bean.setClaveAcceso(c.getClaveAcceso());
+					bean.setNumeroDocumento(c.getEstablecimiento()+"-"+c.getPuntoEMision()+"-"+c.getSecuencia());
+					if(c.getCodigoError()!=null){
+						if(c.getCodigoError()!=null){
+							StringBuilder sberror=new StringBuilder("(");
+							sberror.append(c.getCodigoError());
+							sberror.append(") ");
+							if(mapaErrores.containsKey(String.valueOf(c.getCodigoError()))){
+								sberror.append(mapaErrores.get(c.getCodigoError()));	
+							}
+							bean.setNota(sberror.toString());
+							
+						}
+						
+					}
+					
+					if(c.getFechaEnvio()!=null){
+						bean.setFechaEmision(sdf.format(c.getFechaEnvio()));	
+					}
+					
+					bean.setId(c.getId());
+					if(c.getNumeroAutorizacion()!=null){
+						bean.setNumeroAutorizacion(c.getNumeroAutorizacion());	
+					}
+					if(c.getTipo().equals(TipoComprobante.factura)){
+						bean.setTipo("FACTURA");
+					}
+					if(c.getTipo().equals(TipoComprobante.notaCredito)){
+						bean.setTipo("N/C");
+					}
+					if(c.getTipo().equals(TipoComprobante.notaDebito)){
+						bean.setTipo("N/D");
+					}
+					if(c.getTipo().equals(TipoComprobante.guiaRemision)){
+						bean.setTipo("GR");
+					}
+					if(c.getTipo().equals(TipoComprobante.retencion)){
+						bean.setTipo("RETENCION");
+					}
+					listadoRetorno.add(bean);
+				}
+			}
+			
+		}
+		return listadoRetorno;
+	}
 }

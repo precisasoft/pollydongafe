@@ -188,7 +188,7 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 				detalle.setCodigoPrincipal(aliniarString(d.getCodigo(), 25));
 				detalle.setDescripcion(aliniarString(d.getDescripcion(), 300));
 				detalle.setPrecioUnitario(d.getValorUnitario());
-				detalle.setPrecioTotalSinImpuesto(d.getValorTotal().setScale(2,RoundingMode.HALF_UP));
+				detalle.setPrecioTotalSinImpuesto(d.calcularValorTotalSinImpuestos());
 				
 				if (d.getDescuento().doubleValue() > 0d) {
 					detalle.setDescuento(d.getDescuento());
@@ -440,7 +440,8 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 		dataToSign.setEnveloped(true);
 		return dataToSign;
 	}
-	public String aliniarString(String texto,int longitudmax){
+	public String aliniarString(String _texto,int longitudmax){
+	 	String texto=_texto.trim();
 		String reeemplazdo=texto.replaceAll("\r","");
 		String reemplazo2=reeemplazdo.replaceAll("\n", "");
 		if(reemplazo2.length()>longitudmax){

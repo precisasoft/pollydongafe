@@ -141,7 +141,16 @@ public class GeneradorGuiaRemisionFacturaCompleta {
 					comprobante.getInfoGuiaRemision().setPlaca(placa);
 					comprobante.getInfoGuiaRemision().setRazonSocialTransportista(razonSocialTransportista);
 					comprobante.getInfoGuiaRemision().setRucTransportista(identificacionTransportista);
-					comprobante.getInfoGuiaRemision().setTipoIdentificacionTransportista(tipoIdentificacionTransportista);
+					if(identificacionTransportista.length()==13){
+						comprobante.getInfoGuiaRemision().setTipoIdentificacionTransportista("04");	
+					}
+					if(identificacionTransportista.length()==10){
+						comprobante.getInfoGuiaRemision().setTipoIdentificacionTransportista("05");
+					}
+					if((!(identificacionTransportista.length()==10))&&(!(identificacionTransportista.length()==13))){
+						comprobante.getInfoGuiaRemision().setTipoIdentificacionTransportista(tipoIdentificacionTransportista);	
+					}
+					
 					/////////////////////////////////////////////////////////////////////////////////////////////////////////7
 				}
 				////////////////////////cargar la factura y usar beneficiacrio como destinatarios ... y los detalles
@@ -250,6 +259,7 @@ public class GeneradorGuiaRemisionFacturaCompleta {
 						parametros.put("rucEmisor", rucEmisor);
 						parametros.put("establecimiento",comprobante.getInfoTributaria().getEstab());
 						parametros.put("codigoPuntoVenta",comprobante.getInfoTributaria().getPtoEmi());	
+						boolean esEnPruebas=utilClaveAcceso.esEnPruebas(claveAcceso);
 						parametros.put("enPruebas",utilClaveAcceso.esEnPruebas(claveAcceso));
 						parametros.put("claveAcceso", claveAcceso);
 						parametros.put("secuenciaDocumento", utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));

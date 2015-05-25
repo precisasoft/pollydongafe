@@ -62,12 +62,12 @@ public class GuiaRemisionView extends VerticalLayout implements View {
 		tipoIdentificacionTransportista.addItem("04");
 		tipoIdentificacionTransportista.addItem("05");
 		tipoIdentificacionTransportista.addItem("06");
-		tipoIdentificacionTransportista.addItem("07");
+		//tipoIdentificacionTransportista.addItem("07");
 		tipoIdentificacionTransportista.addItem("08");
 		tipoIdentificacionTransportista.setItemCaption("04", "RUC");
 		tipoIdentificacionTransportista.setItemCaption("05", "CEDULA");
 		tipoIdentificacionTransportista.setItemCaption("06", "PASAPORTE");
-		tipoIdentificacionTransportista.setItemCaption("07", "CONSUMIDOR FINAL");
+		//tipoIdentificacionTransportista.setItemCaption("07", "CONSUMIDOR FINAL");
 		tipoIdentificacionTransportista.setItemCaption("08", "IDENTIFICADOR EXTERIOR");		
 		tipoIdentificacionTransportista.setNullSelectionAllowed(false);
 		tipoIdentificacionTransportista.setValue("04");
@@ -87,7 +87,7 @@ public class GuiaRemisionView extends VerticalLayout implements View {
 		HorizontalLayout l1=new HorizontalLayout();
 		l1.setSpacing(true);
 		l1.addComponent(tipoIdentificacionTransportista);
-		l1.addComponent(new Label("ID/RUC"));
+		//l1.addComponent(new Label("ID/RUC"));
 		l1.addComponent(identificacionTransportista);
 		l1.addComponent(new Label("Razón Social"));
 		l1.addComponent(razonSocialTransportista);

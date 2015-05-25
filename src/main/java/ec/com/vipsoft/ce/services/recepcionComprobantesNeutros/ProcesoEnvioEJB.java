@@ -76,13 +76,29 @@ public class ProcesoEnvioEJB {
 				}
 			}
 			if(enviarlo){
-				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4");
+				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4 and c.tipo=?5 and c.autorizado=?6" );
 				qnsecuencia.setParameter(1, entidad);
 				qnsecuencia.setParameter(2,utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso) );
 				qnsecuencia.setParameter(3, utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
 				qnsecuencia.setParameter(4, utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
+				String tipo=utilClaveAcceso.obtenerTipoDocumento(claveAcceso);
+				if(tipo.equalsIgnoreCase("01")){
+					qnsecuencia.setParameter(5,TipoComprobante.factura );	
+				}
+				if(tipo.equalsIgnoreCase("04")){
+					qnsecuencia.setParameter(5,TipoComprobante.notaCredito );	
+				}
+				if(tipo.equalsIgnoreCase("06")){
+					qnsecuencia.setParameter(5,TipoComprobante.guiaRemision );	
+				}
+				if(tipo.equalsIgnoreCase("05")){
+					qnsecuencia.setParameter(5,TipoComprobante.notaDebito );	
+				}
+				if(tipo.equalsIgnoreCase("07")){
+					qnsecuencia.setParameter(5,TipoComprobante.retencion );	
+				}
 				
-				
+				qnsecuencia.setParameter(6, Boolean.TRUE);
 				List<ComprobanteElectronico>qporSecuencia=qnsecuencia.getResultList();
 				if(!qporSecuencia.isEmpty()){
 					ComprobanteElectronico comprobanteEncontrado=em.find(ComprobanteElectronico.class, qporSecuencia.get(0).getId());

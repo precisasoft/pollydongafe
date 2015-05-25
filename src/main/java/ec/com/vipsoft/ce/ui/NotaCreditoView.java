@@ -116,9 +116,14 @@ public class NotaCreditoView extends VerticalLayout implements View {
 				FacturaDetalleBinding fdb=(FacturaDetalleBinding)row;
 				notaCreditoBinding.getDetallesAModficar().add(fdb);
 			}
-			String claveAcceso = receptorFactura.procesarNotaCredito(notaCreditoBinding);
-			Notification.show(claveAcceso, Notification.Type.HUMANIZED_MESSAGE);
-			UI.getCurrent().getNavigator().navigateTo("comprobantes");
+			if(notaCreditoBinding.getDetallesAModficar().isEmpty()){
+				Notification.show("error", "se solicita nc sin detalles seleccionados", Notification.Type.ERROR_MESSAGE);
+			}else{
+				String claveAcceso = receptorFactura.procesarNotaCredito(notaCreditoBinding);
+				Notification.show(claveAcceso, Notification.Type.HUMANIZED_MESSAGE);
+				UI.getCurrent().getNavigator().navigateTo("comprobantes");	
+			}
+			
 			
 			
 		});
