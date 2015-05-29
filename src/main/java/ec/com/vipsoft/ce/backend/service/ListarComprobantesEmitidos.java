@@ -416,6 +416,8 @@ public class ListarComprobantesEmitidos {
 								Unmarshaller unmarshaller=contexto.createUnmarshaller();
 								Factura lafactura=(Factura) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
 								bean.setMonto(String.valueOf(lafactura.getInfoFactura().getImporteTotal()));
+								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
+								comprobante.setMonto(lafactura.getInfoFactura().getImporteTotal());
 							} catch (JAXBException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
@@ -434,6 +436,8 @@ public class ListarComprobantesEmitidos {
 								Unmarshaller unmarshaller=contexto.createUnmarshaller();
 								NotaCredito lanc=(NotaCredito) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
 								bean.setMonto(String.valueOf(lanc.getInfoNotaCredito().getValorModificacion()));
+								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
+								comprobante.setMonto(lanc.getInfoNotaCredito().getValorModificacion());
 							} catch (JAXBException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
