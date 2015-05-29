@@ -261,6 +261,7 @@ public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRe
 					parametros.put("maxIntentos", 5);
 					parametros.put("idCliente", comprobanteRetencion.getInfoCompRetencion().getIdentificacionSujetoRetenido());
 					parametros.put("tipoComprobante", TipoComprobante.retencion);
+					parametros.put("monto",totalRetenido);
 					procesoEnvio.lanzarProcesoEnvio(parametros);
 					retorno=claveAcceso;
 				} catch (Exception e) {

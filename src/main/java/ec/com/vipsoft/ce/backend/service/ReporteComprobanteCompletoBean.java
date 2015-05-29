@@ -35,6 +35,14 @@ public class ReporteComprobanteCompletoBean implements NotificadorSecuenciaFalta
 		
 		return null;
 	}
+
+//	@Override
+//	public List<ReporteComprobanteElectronico> listarSecuenciasFaltantes(
+//			String rucEmisor, String sucursal, String ptoVenta, Long inicio,
+//			Long fin, TipoComprobante tipo) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 
 }

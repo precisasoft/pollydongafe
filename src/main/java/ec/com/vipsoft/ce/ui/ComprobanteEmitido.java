@@ -15,6 +15,7 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 	private String numeroAutorizacion;	
 	private String tipo;
 	private String nota;
+	private String monto;
 	
 	public String getNota() {
 		return nota;
@@ -89,5 +90,12 @@ public class ComprobanteEmitido implements Serializable,Comparable<ComprobanteEm
 		}
 		return retorno;
 	}
+	public String getMonto() {
+		return monto;
+	}
+	public void setMonto(String monto) {
+		this.monto = monto;
+	}
+	
 	
 }

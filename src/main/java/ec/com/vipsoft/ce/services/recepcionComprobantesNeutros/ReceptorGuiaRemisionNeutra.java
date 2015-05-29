@@ -1,6 +1,7 @@
 package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -158,6 +159,7 @@ public class ReceptorGuiaRemisionNeutra implements Serializable{
 				parametros.put("contrasena",entidad.getPasswordp12());
 				parametros.put("documentoAFirmar", convertidoEnDOM);
 				parametros.put("enPruebas", utilClaveAccesl.esEnPruebas(claveAcceso));
+				parametros.put("monto", BigDecimal.ZERO);
 				ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 				RuntimeService runtimeService = processEngine.getRuntimeService();
 				ProcessInstance proccessInstance = runtimeService.startProcessInstanceByKey("procesoEnvio", parametros);

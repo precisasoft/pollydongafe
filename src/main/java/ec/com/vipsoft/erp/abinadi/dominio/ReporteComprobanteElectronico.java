@@ -2,7 +2,7 @@ package ec.com.vipsoft.erp.abinadi.dominio;
 
 import java.io.Serializable;
 
-public class ReporteComprobanteElectronico implements Serializable{
+public class ReporteComprobanteElectronico implements Serializable,Comparable<ReporteComprobanteElectronico>{
 
 	/**
 	 * 
@@ -64,6 +64,29 @@ public class ReporteComprobanteElectronico implements Serializable{
 	}
 	public void setSecuencia(String secuencia) {
 		this.secuencia = secuencia;
+	}
+	@Override
+	public int compareTo(ReporteComprobanteElectronico o) {
+		int retorno=0;
+		if((claveAcceso!=null)&&(o.claveAcceso==null)){
+			retorno="A".compareTo("B");
+		}
+		if(retorno==0){
+			if((claveAcceso!=null)&&(o.claveAcceso==null)){
+				retorno="A".compareTo("B");
+			}
+		}
+		if(retorno==0){
+			retorno=codigoSucursal.compareTo(o.codigoSucursal);
+			if(retorno==0){
+				retorno=codigoPuntoVenta.compareTo(o.codigoPuntoVenta);
+				if(retorno==0){
+					retorno=secuencia.compareTo(o.secuencia);
+				}
+			}
+		}
+		
+		return retorno;
 	}
 	
 }

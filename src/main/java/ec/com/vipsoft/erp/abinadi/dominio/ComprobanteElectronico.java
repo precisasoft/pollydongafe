@@ -1,6 +1,7 @@
 package ec.com.vipsoft.erp.abinadi.dominio;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -83,7 +84,8 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
     @Column(name="acs")
     private boolean autorizacionConsultadoAlSRI;
     private String correoElectronico;
-    
+    @Column(columnDefinition="decimal(20,2) default 0")
+    private BigDecimal monto;
     public boolean isAutorizacionConsultadoAlSRI() {
 		return autorizacionConsultadoAlSRI;
 	}
@@ -295,6 +297,12 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
 	}
 	public void setCorreoElectronico(String correoElectronico) {
 		this.correoElectronico = correoElectronico;
+	}
+	public BigDecimal getMonto() {
+		return monto;
+	}
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
 	}
 	
 }

@@ -1,6 +1,7 @@
 package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
 import java.io.StringWriter;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -128,6 +129,13 @@ public class ProcesoEnvioEJB {
 					comprobante.setSecuencia((String) parametros.get("secuenciaDocumento"));
 					comprobante.setIdentificacionBeneficiario((String) parametros.get("idCliente"));
 					comprobante.setTipo((TipoComprobante) parametros.get("tipoComprobante"));
+					BigDecimal monto=(BigDecimal)parametros.get("monto");
+					if(monto!=null){
+						comprobante.setMonto(monto);	
+					}else{
+						comprobante.setMonto(BigDecimal.ZERO);
+					}
+					
 					
 					
 					if(parametros.get("correo")!=null){

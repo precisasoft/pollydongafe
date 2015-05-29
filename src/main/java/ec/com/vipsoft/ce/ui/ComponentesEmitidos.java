@@ -71,11 +71,25 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		//produccionoPruebas.setStyleName("horizontal");
 		beanItemContainer=new BeanItemContainer<ComprobanteRideXmlBean>(ComprobanteRideXmlBean.class);	
 		grid=new Grid(beanItemContainer);	
-		grid.setColumnOrder("tipo","numeroDocumento","claveAcceso","autorizacion");
-		grid.getColumn("claveAcceso").setRenderer(new HtmlRenderer());
+		grid.setColumnOrder("fecha","numeroDocumento","autorizacion","monto","nota");
+		grid.removeColumn("tipo");
+		grid.removeColumn("claveAcceso");
+		grid.getColumn("numeroDocumento").setRenderer(new HtmlRenderer());		
 		grid.getColumn("autorizacion").setRenderer(new HtmlRenderer());
 		grid.getColumn("numeroDocumento").setHeaderCaption("Número");
 		grid.getColumn("autorizacion").setHeaderCaption("Autorización");
+		//Grid.Column columnaClaveAcceso=grid.getColumn("claveAcceso");
+		Grid.Column columnaNumero=grid.getColumn("numeroDocumento");
+		Grid.Column columnautorizacion=grid.getColumn("autorizacion");
+		Grid.Column columnanota=grid.getColumn("nota");
+		Grid.Column colunafecha=grid.getColumn("fecha");
+		Grid.Column columnaMonto=grid.getColumn("monto");
+		//columnaClaveAcceso.setExpandRatio(2);
+		columnautorizacion.setExpandRatio(2);
+		columnaNumero.setExpandRatio(1);
+		columnanota.setExpandRatio(1);
+		colunafecha.setExpandRatio(1);
+		columnaMonto.setExpandRatio(1);
 		grid.setSizeFull();
 		grid.setSelectionMode(SelectionMode.NONE);
 		
@@ -132,18 +146,17 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),enPruebas));
 			}
 			
-			for(ComprobanteEmitido c:encontrados){							
+			for(ComprobanteEmitido c:encontrados){											
 				ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
 				StringBuilder sbca=new StringBuilder("<a href='");
 				sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
 				sbca.append("/VisorRide?claveAcceso=");
 				sbca.append(c.getClaveAcceso());
 				sbca.append("' target='_blank'>");
-				sbca.append(c.getClaveAcceso());
+				sbca.append(c.getNumeroDocumento());
 				sbca.append("</a>");
-				bean.setClaveAcceso(sbca.toString());
-
-				bean.setNumeroDocumento(c.getNumeroDocumento());
+				//bean.setClaveAcceso(sbca.toString());			
+				bean.setNumeroDocumento(sbca.toString());
 				StringBuilder sba=new StringBuilder("<a href='");
 				sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
 				sba.append("/VisorAutorizacion?claveAcceso=");
@@ -152,8 +165,9 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 				sba.append(c.getNumeroAutorizacion());			
 				sba.append("</a>");
 				bean.setAutorizacion(sba.toString());
-				bean.setTipo(c.getTipo());
-				bean.setNota(c.getNota());															
+				bean.setFecha(c.getFechaEmision());
+				bean.setNota(c.getNota());					
+				bean.setMonto(c.getMonto());
 				beanItemContainer.addBean(bean);
 			}
 			grid.setContainerDataSource(beanItemContainer);
@@ -183,10 +197,10 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			sbca.append("/VisorRide?claveAcceso=");
 			sbca.append(c.getClaveAcceso());
 			sbca.append("' target='_blank'>");
-			sbca.append(c.getClaveAcceso());
+			sbca.append(c.getNumeroDocumento());
 			sbca.append("</a>");
-			bean.setClaveAcceso(sbca.toString());			
-			bean.setNumeroDocumento(c.getNumeroDocumento());
+			//bean.setClaveAcceso(sbca.toString());			
+			bean.setNumeroDocumento(sbca.toString());
 			StringBuilder sba=new StringBuilder("<a href='");
 			sba.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
 			sba.append("/VisorAutorizacion?claveAcceso=");
@@ -195,7 +209,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			sba.append(c.getNumeroAutorizacion());			
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
-			bean.setTipo(c.getTipo());
+			bean.setFecha(c.getFechaEmision());
 			bean.setNota(c.getNota());															
 			beanItemContainer.addBean(bean);
 

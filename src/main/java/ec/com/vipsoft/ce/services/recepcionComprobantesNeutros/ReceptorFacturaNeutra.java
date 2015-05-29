@@ -416,12 +416,13 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 				parametros.put("enPruebas",utilClaveAccesl.esEnPruebas(claveAcceso));
 				parametros.put("claveAcceso", claveAcceso);
 				parametros.put("secuenciaDocumento", secuenciaDocumento);
-				parametros.put("intentos", 0);
+				parametros.put("intentos", 0);				
 				parametros.put("maxIntentos", 5);
 				parametros.put("idCliente", facturaxml.getInfoFactura().getIdentificacionComprador());
 				parametros.put("tipoComprobante", TipoComprobante.factura);
 				if(factura.getCorreoNotificacion()!=null)
 				parametros.put("correo", factura.getCorreoNotificacion());
+				parametros.put("monto", facturaxml.getInfoFactura().getImporteTotal());
 				procesoEnvio.lanzarProcesoEnvio(parametros);
 
 			} catch (Exception e) {

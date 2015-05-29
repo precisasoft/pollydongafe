@@ -13,5 +13,4 @@ public enum TipoComprobante {
 		@Override public String toString(){return "07";}
 	}
 	
-	
 }

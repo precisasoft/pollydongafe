@@ -110,10 +110,13 @@ public class ComprobanteRetencion extends VerticalLayout implements View {
 		tipoDocumento.setNullSelectionAllowed(false);
 		tipoDocumento.addItem("01");
 		tipoDocumento.addItem("04");
-		tipoDocumento.addItem("05");		
+		tipoDocumento.addItem("05");
+		//tipoDocumento.addItem("99");
 		tipoDocumento.setItemCaption("01", "FACTURA");
 		tipoDocumento.setItemCaption("04", "NOTA CREDITO");
-		tipoDocumento.setItemCaption("05", "NOTA DEBITO");	
+		tipoDocumento.setItemCaption("05", "NOTA DEBITO");
+		//tipoDocumento.setItemCaption("99", "LIQ. COMPRA");
+		
 		tipoDocumento.setWidth("130px");
 		identificacionBeneficiario=new CampoNumeroIdentificacion();
 		Label lidentificacion=new Label("RUC/ID");

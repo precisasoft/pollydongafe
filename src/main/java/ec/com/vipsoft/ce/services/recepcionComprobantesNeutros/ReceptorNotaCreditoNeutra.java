@@ -311,7 +311,7 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 						parametros.put("intentos", 0);
 						parametros.put("maxIntentos", 5);
 						parametros.put("idCliente", factura.getInfoFactura().getIdentificacionComprador());
-					
+						parametros.put("monto", montoAModificar);
 						parametros.put("tipoComprobante",TipoComprobante.notaCredito );
 						procesoEnvio.lanzarProcesoEnvio(parametros);
 

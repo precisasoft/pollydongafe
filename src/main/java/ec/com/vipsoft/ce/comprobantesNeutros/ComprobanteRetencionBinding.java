@@ -68,6 +68,7 @@ public class ComprobanteRetencionBinding extends BaseComprobanteElectronicoBindi
 			if (codigoDocumento.equalsIgnoreCase("05")) {
 				nimpuesto.setTipoComprobante(TipoComprobante.Nd);
 			}
+			
 			if (codigoImpuesto.equalsIgnoreCase("1")) {
 				nimpuesto.setPorcentajeRetencion(new BigDecimal(30));
 			}

@@ -1,5 +1,7 @@
 package ec.com.vipsoft.ce.backend.service;
 
+import java.io.StringReader;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,12 +20,18 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import ec.com.vipsoft.ce.ui.ComprobanteEmitido;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
+import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
+import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
+import ec.com.vipsoft.sri.notacredito._v1_1_0.NotaCredito;
 @Stateless
 public class ListarComprobantesEmitidos {
 	
@@ -391,16 +399,47 @@ public class ListarComprobantesEmitidos {
 					if(c.getFechaEnvio()!=null){
 						bean.setFechaEmision(sdf.format(c.getFechaEnvio()));	
 					}
-					
+					if(c.getMonto().doubleValue()>0){
+						bean.setMonto(String.valueOf(c.getMonto().setScale(2, RoundingMode.HALF_UP)));	
+					}
 					bean.setId(c.getId());
 					if(c.getNumeroAutorizacion()!=null){
 						bean.setNumeroAutorizacion(c.getNumeroAutorizacion());	
 					}
+					
 					if(c.getTipo().equals(TipoComprobante.factura)){
 						bean.setTipo("FACTURA");
+						if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){
+							DocumentoFirmado documentoFirmado = c.getDocumentoFirmado();
+							try {
+								JAXBContext contexto=JAXBContext.newInstance(Factura.class);
+								Unmarshaller unmarshaller=contexto.createUnmarshaller();
+								Factura lafactura=(Factura) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
+								bean.setMonto(String.valueOf(lafactura.getInfoFactura().getImporteTotal()));
+							} catch (JAXBException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
+						
+				//		bean.setMonto(c.getDocumentoFirmado());
 					}
 					if(c.getTipo().equals(TipoComprobante.notaCredito)){
 						bean.setTipo("N/C");
+						if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){
+							DocumentoFirmado documentoFirmado = c.getDocumentoFirmado();
+							try {
+								JAXBContext contexto=JAXBContext.newInstance(NotaCredito.class);
+								Unmarshaller unmarshaller=contexto.createUnmarshaller();
+								NotaCredito lanc=(NotaCredito) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
+								bean.setMonto(String.valueOf(lanc.getInfoNotaCredito().getValorModificacion()));
+							} catch (JAXBException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
 					}
 					if(c.getTipo().equals(TipoComprobante.notaDebito)){
 						bean.setTipo("N/D");
@@ -410,7 +449,9 @@ public class ListarComprobantesEmitidos {
 					}
 					if(c.getTipo().equals(TipoComprobante.retencion)){
 						bean.setTipo("RETENCION");
+						
 					}
+					
 					listadoRetorno.add(bean);
 				}
 			}
