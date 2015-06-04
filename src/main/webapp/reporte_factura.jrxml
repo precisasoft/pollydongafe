@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-05-30T08:19:58 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reporte_factura" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f49ac934-102c-41df-91f5-43460d13b02e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="fecha" class="java.lang.String"/>
+	<field name="establecimiento" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="puntoEmision" class="java.lang.String"/>
+	<field name="secuencia" class="java.lang.String"/>
+	<field name="autorizado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identificacionBeneficiario" class="java.lang.String"/>
+	<field name="subtotal0" class="java.math.BigDecimal"/>
+	<field name="subtotal12" class="java.math.BigDecimal"/>
+	<field name="iva" class="java.math.BigDecimal"/>
+	<field name="total" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="autorizado">
+		<groupExpression><![CDATA[$F{autorizado}]]></groupExpression>
+		<groupHeader>
+			<band height="5"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<group name="fecha">
+		<groupExpression><![CDATA[$F{fecha}]]></groupExpression>
+		<groupHeader>
+			<band height="6"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="0" width="46" height="20" uuid="9dd2d243-5fdf-42a9-b012-c973c612d7fe"/>
+				<text><![CDATA[FECHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="83" y="0" width="17" height="20" uuid="449f4fae-5d58-4bdd-8622-736608aa63b6"/>
+				<textElement rotation="None">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Est.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="110" y="0" width="26" height="20" uuid="f6b8f238-f1b3-4647-b8c8-4319ada84e30"/>
+				<textElement rotation="None">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Pto.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="141" y="0" width="100" height="20" uuid="edd82618-2805-426b-8ea6-7f3d1084806e"/>
+				<textElement textAlignment="Left" rotation="None"/>
+				<text><![CDATA[secuencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="0" width="60" height="20" uuid="4a868146-c1e0-4353-a21c-bfc2d0d9e925"/>
+				<text><![CDATA[RUC/ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="718" y="0" width="100" height="20" uuid="f7c77661-3558-466a-bd6b-815c910df4a8"/>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="606" y="0" width="100" height="20" uuid="5e13a7f3-43ed-4df5-bfe1-c3c9d219096b"/>
+				<text><![CDATA[iva]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="499" y="0" width="100" height="20" uuid="3f43efd4-4ffc-49ad-b506-d0d7730888b9"/>
+				<text><![CDATA[subtotal12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="423" y="0" width="70" height="20" uuid="bd930cac-bd6f-4925-b7b3-31ddaf4cf915"/>
+				<text><![CDATA[subtotal0]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="2" width="66" height="17" uuid="4c6c1d2a-fb83-4a2b-92ea-d99a7f7b31bc"/>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="80" y="2" width="20" height="17" uuid="ea8c5216-9dd2-4a44-8db3-df8fe2f3b34f"/>
+				<textFieldExpression><![CDATA[$F{establecimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="110" y="2" width="20" height="17" uuid="642d6342-f0d1-4e28-ad30-6416b9fe498f"/>
+				<textFieldExpression><![CDATA[$F{puntoEmision}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="3" width="100" height="16" uuid="ebd02e80-f917-4471-b387-2c382236c36c"/>
+				<textFieldExpression><![CDATA[$F{secuencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="1" width="40" height="18" uuid="782e038b-b533-49c4-bc81-2bd74c092395"/>
+				<textFieldExpression><![CDATA[$F{autorizado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="291" y="2" width="158" height="16" uuid="1d73f062-236e-4cf6-9f6c-29dd3102ad4d"/>
+				<textFieldExpression><![CDATA[$F{identificacionBeneficiario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$#0.00;$-#0.00">
+				<reportElement x="740" y="3" width="70" height="16" uuid="07838ff7-f221-465b-b070-2294429711f6"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$#,##0.00;$-#,##0.00">
+				<reportElement x="660" y="4" width="80" height="14" uuid="cab53388-c8e7-4c8d-be3c-65aab6f07794">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{iva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$#,##0.00;$-#,##0.00">
+				<reportElement x="576" y="3" width="80" height="16" uuid="cede0c2f-f8cf-4700-8d99-4f4d5c3ea346">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{subtotal12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="493" y="3" width="80" height="16" uuid="20267503-a54b-416a-8e20-1d21eec07400">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{subtotal0}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

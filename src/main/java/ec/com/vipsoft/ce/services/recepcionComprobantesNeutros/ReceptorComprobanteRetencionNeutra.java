@@ -7,17 +7,25 @@ package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -46,6 +54,7 @@ import ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.ImpuestoRetencion;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.sri.comprobanteRetencion._v1_0.ComprobanteRetencion;
@@ -79,6 +88,8 @@ public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRe
 	private ProcesoEnvioEJB procesoEnvio;
 	@Inject 
 	private LlenadorNumeroComprobante LlenadorNumeroComprobante;
+	@Inject
+	private CryptoUtil cryptoUtil;
 	/* (non-Javadoc)
 	 * @see ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorComprobanteRetencionNeutraRemote#receptarComprobanteRetencion(ec.com.vipsoft.ce.comprobantesNeutros.ComprobanteRetencionBinding)
 	 */
@@ -86,11 +97,22 @@ public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRe
 	@WebMethod
 	@WebResult(name = "claveAcceso")
 	public String receptarComprobanteRetencion(	@WebParam(name = "retencion") ComprobanteRetencionBinding retencion) {
+		
+		String rucEmisor=null;
+		try {
+			rucEmisor = cryptoUtil.decrypt("palidonga", retencion.getRucEmisor());
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		String motivoRechazo = null;
 		boolean correcto=true;
 		String retorno=null;
-		//continuar porque se ha validado inicialmente
-		String rucEmisor = retencion.getRucEmisor();
+		//continuar porque se ha validado inicialmente		
 		String puntoEmision = retencion.getCodigoPuntoVenta();
 		String establecimiento = retencion.getCodigoEstablecimiento();		
 		Query q = em.createQuery("select e from Entidad e where e.ruc=?1 and e.habilitado=?2");
@@ -168,9 +190,9 @@ public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRe
 				
 				String claveAcceso=null;
 				if(retencion.getSecuenciaDocumento()!=null){
-					claveAcceso=generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(retencion.getRucEmisor(),retencion.getCodigoEstablecimiento(),	retencion.getCodigoPuntoVenta(),retencion.getSecuenciaDocumento());
+					claveAcceso=generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(rucEmisor,retencion.getCodigoEstablecimiento(),	retencion.getCodigoPuntoVenta(),retencion.getSecuenciaDocumento());
 				}else{
-					claveAcceso = generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(retencion.getRucEmisor(),retencion.getCodigoEstablecimiento(),	retencion.getCodigoPuntoVenta());	
+					claveAcceso = generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(rucEmisor,retencion.getCodigoEstablecimiento(),	retencion.getCodigoPuntoVenta());	
 				}
 				String secuenciaDocumento = utilClaveAccesl.obtenerSecuanciaDocumento(claveAcceso);
 				String ambiente = utilClaveAccesl.obtenerAmbiente(claveAcceso);

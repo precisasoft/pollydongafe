@@ -24,6 +24,7 @@ public class MenuView extends VerticalLayout implements View{
 	private Button secuencias;
 	private Button botonNotificaciones;
 	private Button productos;
+	private Button botonReporte;
 
 	public MenuView() {
 		super();
@@ -73,6 +74,9 @@ public class MenuView extends VerticalLayout implements View{
 			UI.getCurrent().getNavigator().navigateTo("bien");
 		});
 		addComponent(productos);
+		botonReporte=new Button("reporte");
+		botonReporte.addClickListener(event->UI.getCurrent().getNavigator().navigateTo("reportecomprobantesemitidos"));
+		addComponent(botonReporte);
 		addComponent(botonSalir);	
 	}
 

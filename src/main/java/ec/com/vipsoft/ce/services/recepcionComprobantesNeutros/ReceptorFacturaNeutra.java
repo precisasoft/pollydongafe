@@ -2,18 +2,26 @@ package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -41,6 +49,7 @@ import ec.com.vipsoft.ce.backend.service.GeneradorClaveAccesoPorEntidad;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
@@ -74,6 +83,8 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 	private UtilClaveAcceso utilClaveAccesl;
 	@PersistenceContext
 	private EntityManager em;
+	@Inject
+	private CryptoUtil cryptoUtil;
 
 	@EJB
 	private ProcesoEnvioEJB procesoEnvio;
@@ -84,6 +95,16 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 	@WebMethod
 	@WebResult(name = "claveAcceso")
 	public String recibirFactura(@WebParam(name = "factura") FacturaBinding factura) {
+		String rucEmisor=null;
+		try {
+			rucEmisor = cryptoUtil.decrypt("palidonga", factura.getRucEmisor());
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		/**
 		 * autocompletar para usuario final cuando no se determine quien es
 		 */
@@ -101,11 +122,12 @@ public class ReceptorFacturaNeutra implements ReceptorFacturaNeutraRemote {
 		SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
 		String claveAcceso=null;
 		if(factura.getSecuenciaDocumento()!=null){
-			claveAcceso = generadorClaveAcceso.generarClaveAccesoFactura(factura.getRucEmisor(), factura.getCodigoEstablecimiento(),	factura.getCodigoPuntoVenta(),factura.getSecuenciaDocumento());
+			claveAcceso = generadorClaveAcceso.generarClaveAccesoFactura(rucEmisor, factura.getCodigoEstablecimiento(),	factura.getCodigoPuntoVenta(),factura.getSecuenciaDocumento());
 		}else{
-			claveAcceso = generadorClaveAcceso.generarClaveAccesoFactura(factura.getRucEmisor(), factura.getCodigoEstablecimiento(),	factura.getCodigoPuntoVenta());
+			claveAcceso = generadorClaveAcceso.generarClaveAccesoFactura(rucEmisor, factura.getCodigoEstablecimiento(),	factura.getCodigoPuntoVenta());
 		}			
-		String rucEmisor = factura.getRucEmisor();
+		
+		
 		String puntoEmision = utilClaveAccesl.obtenerCodigoPuntoEmision(claveAcceso);
 		String establecimiento = utilClaveAccesl.obtenerCodigoEstablecimiento(claveAcceso);
 		String secuenciaDocumento = utilClaveAccesl	.obtenerSecuanciaDocumento(claveAcceso);

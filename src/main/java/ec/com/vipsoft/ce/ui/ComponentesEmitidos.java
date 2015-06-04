@@ -1,10 +1,18 @@
 package ec.com.vipsoft.ce.ui;
 
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
 import javax.inject.Inject;
 
@@ -27,6 +35,7 @@ import com.vaadin.ui.renderers.HtmlRenderer;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
 import ec.com.vipsoft.ce.backend.service.ListarComprobantesEmitidos;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonBuscar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonSpredSheet;
@@ -53,7 +62,8 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	private BotonBuscar botonBuscar;
 	private BotonSpredSheet botonReporteXLS;
 	
-	
+	@Inject
+	private CryptoUtil cryptoUtil;
 	@Override
 	public void enter(ViewChangeEvent event) {
 	//	actualizarVista();
@@ -61,6 +71,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	}
 	public ComponentesEmitidos() {
 		super();
+		
 		produccionoPruebas=new OptionGroup();
 		produccionoPruebas.addItems("produccion");
 		produccionoPruebas.addItems("pruebas");
@@ -127,6 +138,16 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	
 		botonBuscar=new BotonBuscar();
 		botonBuscar.addClickListener(event->{
+			String rucEmisor=null;
+			try {
+				rucEmisor = cryptoUtil.decrypt("palidonga", userInfo.getRucEmisor());
+			} catch (InvalidKeyException | NoSuchAlgorithmException
+					| InvalidKeySpecException | NoSuchPaddingException
+					| InvalidAlgorithmParameterException
+					| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			beanItemContainer.removeAllItems();
 			String tipoComprobante=(String)tipoDocumento.getValue();
 			String numeroDocumento_buscar=numeroComprobante.getValue();
@@ -137,13 +158,12 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 				enPruebas=true;
 			}
 			if((numeroDocumento_buscar!=null)&&(numeroDocumento_buscar.length()>0)){
-				
-				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),tipoComprobante,numeroDocumento_buscar,enPruebas));
+				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(rucEmisor,tipoComprobante,numeroDocumento_buscar,enPruebas));
 				if(encontrados.isEmpty()){
 					Notification.show("No Encontrado", "no se ha encontrado ningún comprobante ", Notification.Type.ERROR_MESSAGE);					
 				}
 			}else{
-				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(), tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),enPruebas));
+				encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(rucEmisor, tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),enPruebas));
 			}
 			
 			for(ComprobanteEmitido c:encontrados){											
@@ -189,8 +209,22 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 	public void actualizarVista(){
 		//System.out.println("llamado postconstruct");
 //		Long ultimo=0l;
-		Set<ComprobanteEmitido> listarSiguientes = listadoComprobantesEmitidos.buscarComprobnate(userInfo.getRucEmisor(),(String) tipoDocumento.getValue(), fechaInicial.getValue(),false);
-		for(ComprobanteEmitido c:listarSiguientes){			
+		
+		String tipoComprobante="FACTURA";
+		Set<ComprobanteEmitido>encontrados=new HashSet<>();
+		String rucEmisor=null;
+		try {
+			rucEmisor = cryptoUtil.decrypt("palidonga", userInfo.getRucEmisor());
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(rucEmisor, tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),false));
+					
+		for(ComprobanteEmitido c:encontrados){											
 			ComprobanteRideXmlBean bean=new ComprobanteRideXmlBean();
 			StringBuilder sbca=new StringBuilder("<a href='");
 			sbca.append(VaadinServlet.getCurrent().getServletContext().getContextPath());
@@ -210,9 +244,9 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			sba.append("</a>");
 			bean.setAutorizacion(sba.toString());
 			bean.setFecha(c.getFechaEmision());
-			bean.setNota(c.getNota());															
+			bean.setNota(c.getNota());					
+			bean.setMonto(c.getMonto());
 			beanItemContainer.addBean(bean);
-
 		}
 		grid.setContainerDataSource(beanItemContainer);
 	}

@@ -1,6 +1,7 @@
 package ec.com.vipsoft.ce.backend.service;
 
 import java.io.StringReader;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ import javax.xml.bind.Unmarshaller;
 
 import ec.com.vipsoft.ce.ui.ComprobanteEmitido;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
@@ -50,7 +52,8 @@ public class ListarComprobantesEmitidos {
 	@Inject
 	private LlenadorNumeroComprobante llenadorNumeroComprobante;	
 	
-	
+	@Inject
+	private CryptoUtil cryptoUtil;
 	private  Map<String,String>mapaErrores=new HashMap<>();
 	
 	@PersistenceContext
@@ -120,6 +123,7 @@ public class ListarComprobantesEmitidos {
 		
 		return listadoRetorno;		
 	}
+	//no usar encryptacion de ruc.
 	public Set<ComprobanteEmitido> listarCompronbantesDeBeneficiario(String name) {
 		TreeSet<ComprobanteEmitido>listadoRetorno=new TreeSet<>();
 		GregorianCalendar ahora=new GregorianCalendar();
@@ -399,6 +403,10 @@ public class ListarComprobantesEmitidos {
 					if(c.getFechaEnvio()!=null){
 						bean.setFechaEmision(sdf.format(c.getFechaEnvio()));	
 					}
+					if(c.getMonto()==null){
+						c.setMonto(BigDecimal.ZERO);
+					}
+					
 					if(c.getMonto().doubleValue()>0){
 						bean.setMonto(String.valueOf(c.getMonto().setScale(2, RoundingMode.HALF_UP)));	
 					}

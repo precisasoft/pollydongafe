@@ -1,71 +1,68 @@
 package ec.com.vipsoft.erp.abinadi.dominio;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ReporteComprobanteElectronico implements Serializable,Comparable<ReporteComprobanteElectronico>{
 
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = -972303187702583592L;
-	private boolean autorizado;
+	private String fecha;
+	private String autorizacion;
 	private String claveAcceso;
-	private String codigoPuntoVenta;
-	private String codigoSucursal;
-	private boolean enviado;
-	private String motivoRechazo;
-	private String numeroAutorizacion;
-	private String secuencia;
+	private String numeroDocumento;
+	private String nota;
+	private BigDecimal monto;
 	
+public String getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
+	}
+
+	public String getAutorizacion() {
+		return autorizacion;
+	}
+
+	public void setAutorizacion(String autorizacion) {
+		this.autorizacion = autorizacion;
+	}
+
 	public String getClaveAcceso() {
 		return claveAcceso;
 	}
-	public String getCodigoPuntoVenta() {
-		return codigoPuntoVenta;
-	}
-	public String getCodigoSucursal() {
-		return codigoSucursal;
-	}
-	public String getMotivoRechazo() {
-		return motivoRechazo;
-	}
-	public String getNumeroAutorizacion() {
-		return numeroAutorizacion;
-	}
-	public String getSecuencia() {
-		return secuencia;
-	}
-	public boolean isAutorizado() {
-		return autorizado;
-	}
-	public boolean isEnviado() {
-		return enviado;
-	}
-	public void setAutorizado(boolean autorizado) {
-		this.autorizado = autorizado;
-	}
+
 	public void setClaveAcceso(String claveAcceso) {
 		this.claveAcceso = claveAcceso;
 	}
-	public void setCodigoPuntoVenta(String codigoPuntoVenta) {
-		this.codigoPuntoVenta = codigoPuntoVenta;
+
+	public String getNumeroDocumento() {
+		return numeroDocumento;
 	}
-	public void setCodigoSucursal(String codigoSucursal) {
-		this.codigoSucursal = codigoSucursal;
+
+	public void setNumeroDocumento(String numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
 	}
-	public void setEnviado(boolean enviado) {
-		this.enviado = enviado;
+
+	public String getNota() {
+		return nota;
 	}
-	public void setMotivoRechazo(String motivoRechazo) {
-		this.motivoRechazo = motivoRechazo;
+
+	public void setNota(String nota) {
+		this.nota = nota;
 	}
-	public void setNumeroAutorizacion(String numeroAutorizacion) {
-		this.numeroAutorizacion = numeroAutorizacion;
+
+	public BigDecimal getMonto() {
+		return monto;
 	}
-	public void setSecuencia(String secuencia) {
-		this.secuencia = secuencia;
+
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
 	}
-	@Override
+
+		@Override
 	public int compareTo(ReporteComprobanteElectronico o) {
 		int retorno=0;
 		if((claveAcceso!=null)&&(o.claveAcceso==null)){
@@ -77,16 +74,15 @@ public class ReporteComprobanteElectronico implements Serializable,Comparable<Re
 			}
 		}
 		if(retorno==0){
-			retorno=codigoSucursal.compareTo(o.codigoSucursal);
-			if(retorno==0){
-				retorno=codigoPuntoVenta.compareTo(o.codigoPuntoVenta);
-				if(retorno==0){
-					retorno=secuencia.compareTo(o.secuencia);
-				}
-			}
+			retorno=numeroDocumento.compareTo(o.numeroDocumento);
 		}
 		
 		return retorno;
 	}
+//	@Override
+//	public int compareTo(ReporteComprobanteElectronico o) {
+//		// TODO Auto-generated method stub
+//		return 0;
+//	}
 	
 }

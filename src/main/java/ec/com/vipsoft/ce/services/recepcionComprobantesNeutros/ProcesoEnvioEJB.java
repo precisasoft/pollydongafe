@@ -77,7 +77,7 @@ public class ProcesoEnvioEJB {
 				}
 			}
 			if(enviarlo){
-				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4 and c.tipo=?5 and c.autorizado=?6" );
+				Query qnsecuencia=em.createQuery("select c from ComprobanteElectronico c where c.entidadEmisora=?1 and c.establecimiento=?2 and c.puntoEMision=?3 and c.secuencia=?4 and c.tipo=?5 and c.autorizado=?6 and c.enPruebas=?7" );
 				qnsecuencia.setParameter(1, entidad);
 				qnsecuencia.setParameter(2,utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso) );
 				qnsecuencia.setParameter(3, utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso));
@@ -100,6 +100,7 @@ public class ProcesoEnvioEJB {
 				}
 				
 				qnsecuencia.setParameter(6, Boolean.TRUE);
+				qnsecuencia.setParameter(7, Boolean.FALSE);
 				List<ComprobanteElectronico>qporSecuencia=qnsecuencia.getResultList();
 				if(!qporSecuencia.isEmpty()){
 					ComprobanteElectronico comprobanteEncontrado=em.find(ComprobanteElectronico.class, qporSecuencia.get(0).getId());

@@ -14,6 +14,7 @@ import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 
 @Stateless
 public class AdministradorAutorizacionContingencia implements AdministradorAutorizacionContingenciaRemote {
+
 	
 	@PersistenceContext
 	EntityManager em;
@@ -29,6 +30,8 @@ public class AdministradorAutorizacionContingencia implements AdministradorAutor
 		
 	}
 	public String siguienteClaveContingencia(String rucEmisor){
+		
+		
 		Query q=em.createQuery("select c.id from Contingencia c where c.entidad.ruc=?1 and  c.usado=?1 order by c.id");
 		q.setMaxResults(1);
 		q.setParameter(1, rucEmisor);

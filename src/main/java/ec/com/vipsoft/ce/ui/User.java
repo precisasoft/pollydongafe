@@ -30,7 +30,7 @@ public class User implements Serializable {
 	private String password;
 
 	private String tenant;
-	private String correoElectronico;
+	private String correoElectronico;	
 	
 	public String getCorreoElectronico() {
 		return correoElectronico;

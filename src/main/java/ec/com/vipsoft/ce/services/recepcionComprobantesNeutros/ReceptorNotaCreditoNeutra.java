@@ -2,14 +2,19 @@ package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Provider;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -17,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -44,6 +52,7 @@ import ec.com.vipsoft.ce.comprobantesNeutros.FacturaDetalleBinding;
 import ec.com.vipsoft.ce.comprobantesNeutros.NotaCreditoBinding;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
@@ -78,15 +87,27 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 	private UtilClaveAcceso utilClaveAccesl;
 	@EJB
 	private ProcesoEnvioEJB procesoEnvio;
+	@Inject
+	private CryptoUtil cryptoUtil;
 	/* (non-Javadoc)
 	 * @see ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.ReceptorNotaCreditoNeutraRemote#procesarNotaCredito(ec.com.vipsoft.ce.comprobantesNeutros.NotaCreditoBinding)
 	 */
 	@Override
 	public String procesarNotaCredito(NotaCreditoBinding notaCredito){
+		String rucEmisor=null;
+		try {
+			rucEmisor = cryptoUtil.decrypt("palidonga", notaCredito.getRucEmisor());
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		StringBuilder sb=new StringBuilder();
-		String claveAcceso=generadorClaveAcceso.generarClaveAccesoNotaCredito(notaCredito.getRucEmisor(), notaCredito.getCodigoEstablecimiento(), notaCredito.getCodigoPuntoVenta());
+		String claveAcceso=generadorClaveAcceso.generarClaveAccesoNotaCredito(rucEmisor, notaCredito.getCodigoEstablecimiento(), notaCredito.getCodigoPuntoVenta());
 		sb.append(claveAcceso);
-		String rucEmisor = notaCredito.getRucEmisor();
+	
 		
 		Query q = em.createQuery("select e from Entidad e where e.ruc=?1 and e.habilitado=?2");
 		q.setParameter(1, rucEmisor);

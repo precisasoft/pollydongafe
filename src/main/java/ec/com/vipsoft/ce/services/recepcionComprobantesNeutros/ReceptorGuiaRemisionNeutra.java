@@ -1,7 +1,12 @@
 package ec.com.vipsoft.ce.services.recepcionComprobantesNeutros;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +15,9 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -34,6 +42,7 @@ import ec.com.vipsoft.ce.backend.service.GeneradorClaveAccesoPorEntidad;
 import ec.com.vipsoft.ce.comprobantesNeutros.DetalleGuiaRemision;
 import ec.com.vipsoft.ce.comprobantesNeutros.GuiaRemisionBinding;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
@@ -56,12 +65,23 @@ public class ReceptorGuiaRemisionNeutra implements Serializable{
 	private UtilClaveAcceso utilClaveAccesl;
 	@PersistenceContext
 	private EntityManager em;
+	@Inject
+	private CryptoUtil cryptoUtil;
 	@WebMethod
 	@WebResult(name = "claveAcceso")
 	public String receptarGuiaRemision(GuiaRemisionBinding guiaBinding){
 
-		String claveAcceso = generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(guiaBinding.getRucEmisor(), guiaBinding.getCodigoEstablecimiento(), guiaBinding.getCodigoPuntoVenta());        
-		String rucEmisor = guiaBinding.getRucEmisor();
+		String rucEmisor=null;
+		try {
+			rucEmisor = cryptoUtil.decrypt("palidonga", guiaBinding.getRucEmisor());
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		String claveAcceso = generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(rucEmisor, guiaBinding.getCodigoEstablecimiento(), guiaBinding.getCodigoPuntoVenta());        		
 		String puntoEmision=utilClaveAccesl.obtenerCodigoPuntoEmision(claveAcceso);
 		String establecimiento=utilClaveAccesl.obtenerCodigoEstablecimiento(claveAcceso);
 		String secuenciaDocumento=utilClaveAccesl.obtenerSecuanciaDocumento(claveAcceso);
