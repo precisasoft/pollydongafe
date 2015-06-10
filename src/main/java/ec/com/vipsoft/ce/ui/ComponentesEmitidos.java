@@ -141,7 +141,8 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 			String rucEmisor=null;
 			
 			
-			rucEmisor = cryptoUtil.decrypt(userInfo.getRucEmisor());
+			//rucEmisor = cryptoUtil.decrypt(userInfo.getRucEmisor());
+			rucEmisor=userInfo.getRucEmisor();
 			
 			beanItemContainer.removeAllItems();
 			String tipoComprobante=(String)tipoDocumento.getValue();
@@ -209,7 +210,7 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		Set<ComprobanteEmitido>encontrados=new HashSet<>();
 		String rucEmisor=null;
 	
-			rucEmisor = cryptoUtil.decrypt( userInfo.getRucEmisor());
+			rucEmisor = userInfo.getRucEmisor();
 	
 		encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(rucEmisor, tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),false));
 					
