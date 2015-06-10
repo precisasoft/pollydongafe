@@ -1,10 +1,8 @@
 package ec.com.vipsoft.ce.backend.service;
 
 import java.io.Serializable;
-
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-
 import net.sf.jasperreports.engine.JasperReport;
 
 @Singleton
@@ -78,6 +76,7 @@ public class ContenedorReportesRide implements Serializable{
 	public JasperReport getRideNotaDebitoSinLogo() {
 		return rideNotaDebitoSinLogo;
 	}
+	
 	public void setRideNotaDebitoSinLogo(JasperReport rideNotaDebitoSinLogo) {
 		this.rideNotaDebitoSinLogo = rideNotaDebitoSinLogo;
 	}

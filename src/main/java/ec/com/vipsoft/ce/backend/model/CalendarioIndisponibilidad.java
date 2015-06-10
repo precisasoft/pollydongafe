@@ -8,7 +8,9 @@ package ec.com.vipsoft.ce.backend.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +37,7 @@ public class CalendarioIndisponibilidad implements Serializable {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date fechaFinal;
     private int terminado;
-    @ManyToOne
+    @ManyToOne(cascade=CascadeType.REFRESH,fetch=FetchType.EAGER)
     private Entidad entidad;
 
     public Entidad getEntidad() {

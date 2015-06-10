@@ -82,9 +82,34 @@ public class Entidad implements Serializable, Comparable<Entidad> {
     private boolean habilitarNotificacionCorreo;
     private String textoMensajeCorreo;
     private String subjectMensajeCorreo;
+    private Boolean encriptado;
     
     
-    public boolean isHabilitarNotificacionCorreo() {
+    public String getTextoMensajeCorreo() {
+		return textoMensajeCorreo;
+	}
+
+	public void setTextoMensajeCorreo(String textoMensajeCorreo) {
+		this.textoMensajeCorreo = textoMensajeCorreo;
+	}
+
+	public String getSubjectMensajeCorreo() {
+		return subjectMensajeCorreo;
+	}
+
+	public void setSubjectMensajeCorreo(String subjectMensajeCorreo) {
+		this.subjectMensajeCorreo = subjectMensajeCorreo;
+	}
+
+	public Boolean getEncriptado() {
+		return encriptado;
+	}
+
+	public void setEncriptado(Boolean encriptado) {
+		this.encriptado = encriptado;
+	}
+
+	public boolean isHabilitarNotificacionCorreo() {
 		return habilitarNotificacionCorreo;
 	}
 

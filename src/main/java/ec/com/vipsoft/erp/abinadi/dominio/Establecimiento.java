@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Size;
 
 
 
@@ -25,6 +26,7 @@ public class Establecimiento implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private static final long serialVersionUID = 1L;
+	@Size(min=3,max=3)
 	private String codigo;
 	private String direccion;
 	private String placaVehiculo;

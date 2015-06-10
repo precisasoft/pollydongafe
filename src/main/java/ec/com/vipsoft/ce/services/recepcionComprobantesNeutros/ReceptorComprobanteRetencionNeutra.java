@@ -99,15 +99,9 @@ public class ReceptorComprobanteRetencionNeutra implements ReceptorComprobanteRe
 	public String receptarComprobanteRetencion(	@WebParam(name = "retencion") ComprobanteRetencionBinding retencion) {
 		
 		String rucEmisor=null;
-		try {
-			rucEmisor = cryptoUtil.decrypt("palidonga", retencion.getRucEmisor());
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| InvalidKeySpecException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException
-				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
+			rucEmisor = cryptoUtil.decrypt(retencion.getRucEmisor());
+		
 		
 		String motivoRechazo = null;
 		boolean correcto=true;

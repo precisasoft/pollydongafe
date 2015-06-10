@@ -11,7 +11,12 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
-import javax.crypto.*;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 /** 
@@ -21,7 +26,11 @@ import javax.crypto.spec.PBEParameterSpec;
 
 public class CryptoUtil implements Serializable{
 
-    Cipher ecipher;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -6976198055835096344L;
+	Cipher ecipher;
     Cipher dcipher;
     // 8-byte Salt
     byte[] salt = {
@@ -33,7 +42,54 @@ public class CryptoUtil implements Serializable{
     public CryptoUtil() { 
 
     }
+    
+    public String decrypt(String plainText){
+    	String retorno=null;
+    	try {
+			retorno=decrypt("palidonga",plainText);
+		} catch (InvalidKeyException | NoSuchAlgorithmException
+				| InvalidKeySpecException | NoSuchPaddingException
+				| InvalidAlgorithmParameterException
+				| IllegalBlockSizeException | BadPaddingException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return retorno;
+    }
 
+    public String encrypt(String planiText){
+    	String retorno=null;
+    	try {
+			retorno= encrypt("palidonga",planiText);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidAlgorithmParameterException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return retorno;
+    }
+    
+    
     /**
      * 
      * @param secretKey Key used to encrypt data
@@ -41,7 +97,7 @@ public class CryptoUtil implements Serializable{
      * @return Returns encrypted text
      * 
      */
-    public String encrypt(String secretKey, String plainText) 
+     String encrypt(String secretKey, String plainText) 
             throws NoSuchAlgorithmException, 
             InvalidKeySpecException, 
             NoSuchPaddingException, 
@@ -81,59 +137,36 @@ public class CryptoUtil implements Serializable{
      * @throws IOException
      */
     
-    public String decrypt(String secretKey, String encryptedText)
-    	     throws NoSuchAlgorithmException, 
-    	            InvalidKeySpecException, 
-    	            NoSuchPaddingException, 
-    	            InvalidKeyException,
-    	            InvalidAlgorithmParameterException, 
-    	            UnsupportedEncodingException, 
-    	            IllegalBlockSizeException, 
-    	            BadPaddingException, 
-    	            IOException{
-    	         //Key generation for enc and desc
-    	        KeySpec keySpec = new PBEKeySpec(secretKey.toCharArray(), salt, iterationCount);
-    	        SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);        
-    	         // Prepare the parameter to the ciphers
-    	        AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
-    	        //Decryption process; same key will be used for decr
-    	        dcipher=Cipher.getInstance(key.getAlgorithm());
-    	        dcipher.init(Cipher.DECRYPT_MODE, key,paramSpec);
-    	        byte[] enc = new sun.misc.BASE64Decoder().decodeBuffer(encryptedText);
-    	        byte[] utf8 = dcipher.doFinal(enc);
-    	        String charSet="UTF-8";     
-    	        String plainStr = new String(utf8, charSet);
-    	        return encryptedText;
-    	    }    
+   
 //     /**     
 //     * @param secretKey Key used to decrypt data
 //     * @param encryptedText encrypted text input to decrypt
 //     * @return Returns plain text after decryption
 //     */
-//    public String decrypt(String secretKey, String encryptedText)
-//     throws NoSuchAlgorithmException, 
-//            InvalidKeySpecException, 
-//            NoSuchPaddingException, 
-//            InvalidKeyException,
-//            InvalidAlgorithmParameterException, 
-//            UnsupportedEncodingException, 
-//            IllegalBlockSizeException, 
-//            BadPaddingException, 
-//            IOException{
-//         //Key generation for enc and desc
-//        KeySpec keySpec = new PBEKeySpec(secretKey.toCharArray(), salt, iterationCount);
-//        SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);        
-//         // Prepare the parameter to the ciphers
-//        AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
-//        //Decryption process; same key will be used for decr
-//        dcipher=Cipher.getInstance(key.getAlgorithm());
-//        dcipher.init(Cipher.DECRYPT_MODE, key,paramSpec);
-//        byte[] enc = new sun.misc.BASE64Decoder().decodeBuffer(encryptedText);
-//        byte[] utf8 = dcipher.doFinal(enc);
-//        String charSet="UTF-8";     
-//        String plainStr = new String(utf8, charSet);
-//        return plainStr;
-//    }
+     String decrypt(String secretKey, String encryptedText)
+     throws NoSuchAlgorithmException, 
+            InvalidKeySpecException, 
+            NoSuchPaddingException, 
+            InvalidKeyException,
+            InvalidAlgorithmParameterException, 
+            UnsupportedEncodingException, 
+            IllegalBlockSizeException, 
+            BadPaddingException, 
+            IOException{
+         //Key generation for enc and desc
+        KeySpec keySpec = new PBEKeySpec(secretKey.toCharArray(), salt, iterationCount);
+        SecretKey key = SecretKeyFactory.getInstance("PBEWithMD5AndDES").generateSecret(keySpec);        
+         // Prepare the parameter to the ciphers
+        AlgorithmParameterSpec paramSpec = new PBEParameterSpec(salt, iterationCount);
+        //Decryption process; same key will be used for decr
+        dcipher=Cipher.getInstance(key.getAlgorithm());
+        dcipher.init(Cipher.DECRYPT_MODE, key,paramSpec);
+        byte[] enc = new sun.misc.BASE64Decoder().decodeBuffer(encryptedText);
+        byte[] utf8 = dcipher.doFinal(enc);
+        String charSet="UTF-8";     
+        String plainStr = new String(utf8, charSet);
+        return plainStr;
+    }
     
     
     

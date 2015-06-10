@@ -3,6 +3,7 @@ package ec.com.vipsoft.ce.backend.model;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -38,7 +39,7 @@ public class Contingencia implements Serializable
    private boolean usado;
    @Temporal(TemporalType.TIMESTAMP)	
    private Date fechaUso;
-   @ManyToOne
+   @ManyToOne(cascade=CascadeType.MERGE)
    private Entidad entidad;
    public boolean isUsado() {
 	return usado;

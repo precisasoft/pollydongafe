@@ -18,15 +18,18 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 
 import ec.com.vipsoft.ce.backend.service.AdministradorAutorizacionContingencia;
+import ec.com.vipsoft.ce.backend.service.RegistradorDocumentoSinFirmar;
 import ec.com.vipsoft.ce.backend.service.VerificadorIndisponibilidad;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
-import ec.com.vipsoft.ce.ui.RegistradorUsuario;
+import ec.com.vipsoft.ce.ui.RegistradorUsuarioBean;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
+import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
 
 @Stateless
 public class ProcesoEnvioEJB {
@@ -44,14 +47,18 @@ public class ProcesoEnvioEJB {
 	@Inject
 	private UtilClaveAcceso utilClaveAcceso;
 	@EJB
-	private RegistradorUsuario registradorUsuario;
+	private RegistradorUsuarioBean registradorUsuario;
+	@Inject
+	private CryptoUtil cryptoUtil;
+	@EJB
+	private RegistradorDocumentoSinFirmar registradorDocumentoSinFirmar;
 	public void lanzarProcesoEnvio(Map<String,Object> parametros){
 		
 		String rucEntidad=(String) parametros.get("rucEmisor");
 		String claveAcceso=(String) parametros.get("claveAcceso");
 		String documentoFirmado=(String) parametros.get("documentoFirmado");
 		Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");
-		qentidad.setParameter(1, rucEntidad);
+		qentidad.setParameter(1, cryptoUtil.encrypt(rucEntidad));
 		List<Entidad>listadoEntidad=qentidad.getResultList();
 		
 		if(!listadoEntidad.isEmpty()){
@@ -146,6 +153,18 @@ public class ProcesoEnvioEJB {
 					DocumentoFirmado documentoFi = new DocumentoFirmado();			
 					documentoFi.setConvertidoEnXML(documentoFirmado);						
 					comprobante.setDocumentoFirmado(documentoFi);
+					
+					
+					//añado registro de documento sin firmar para poder usarlo en y modificar el tipo de emisión y la clave de acceso en caso de ser necesario usar contingencia.
+					Object documentoSinFirmar=parametros.get("documentoOriginal");
+					if(documentoSinFirmar instanceof Factura){
+						Factura facturaOriginal=(Factura) documentoSinFirmar;
+						registradorDocumentoSinFirmar.registrarFactura(facturaOriginal);
+					}
+					
+					
+					
+					
 					if(verificadorIndisponibilidad.estamosEnContingencia()){					
 						Autorizacion autorizacion=new Autorizacion();
 						autorizacion.setAmbiente("2");

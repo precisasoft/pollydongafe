@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Size;
 
 
 /**
@@ -39,6 +40,7 @@ public class PuntoVenta implements Serializable {
     protected Long secuenciaNotaCredito;
     protected Long secuenciaGuiaRemision;
     protected Long secuenciaRetencion;
+    @Size(min=3,max=3)
     protected String codigoPuntoVenta;
     protected boolean defaultPuntoVentaElectronico;
     @ManyToOne

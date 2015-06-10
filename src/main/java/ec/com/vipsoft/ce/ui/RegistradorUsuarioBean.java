@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jws.WebService;
 import javax.persistence.EntityManager;
@@ -13,17 +14,18 @@ import javax.persistence.Query;
 
 import org.apache.shiro.authc.credential.DefaultPasswordService;
 
+import ec.com.vipsoft.ce.backend.remoteinterface.RegistradorUsuarioRemote;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 import ec.com.vipsoft.erp.abinadi.dominio.PuntoVenta;
-
+@LocalBean
 @Stateless
-@WebService
-public class RegistradorUsuario {
+public class RegistradorUsuarioBean implements RegistradorUsuarioRemote {
 
 	@PersistenceContext
 	private EntityManager em;
 
+	@Override
 	public boolean registrarUsuario(String userName, String password,
 			String nombres, String apellidos) {
 		boolean retorno = false;

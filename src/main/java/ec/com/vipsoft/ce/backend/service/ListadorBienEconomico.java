@@ -86,15 +86,10 @@ public class ListadorBienEconomico implements Serializable, ListadorBienEconomic
 	@Override
 	public void registrarBienEconomico(String _rucEmisor,String codigo,String descripcion,String codigoIva,String codigoPorcentajeIva,boolean esProducto){
 		String rucEmisor=null;
-		try {
-			rucEmisor = cryptoUtil.decrypt("palidonga", _rucEmisor);
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| InvalidKeySpecException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException
-				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
+		
+		rucEmisor = cryptoUtil.decrypt( _rucEmisor);
+		
 		BienEconomico nuevoBien=listarBien(rucEmisor,codigo);
 		if(nuevoBien==null){
 			Query qentidad=em.createQuery("select e from Entidad e where e.ruc=?1");

@@ -139,15 +139,10 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		botonBuscar=new BotonBuscar();
 		botonBuscar.addClickListener(event->{
 			String rucEmisor=null;
-			try {
-				rucEmisor = cryptoUtil.decrypt("palidonga", userInfo.getRucEmisor());
-			} catch (InvalidKeyException | NoSuchAlgorithmException
-					| InvalidKeySpecException | NoSuchPaddingException
-					| InvalidAlgorithmParameterException
-					| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			
+			
+			rucEmisor = cryptoUtil.decrypt(userInfo.getRucEmisor());
+			
 			beanItemContainer.removeAllItems();
 			String tipoComprobante=(String)tipoDocumento.getValue();
 			String numeroDocumento_buscar=numeroComprobante.getValue();
@@ -213,15 +208,9 @@ public class ComponentesEmitidos extends VerticalLayout implements View{
 		String tipoComprobante="FACTURA";
 		Set<ComprobanteEmitido>encontrados=new HashSet<>();
 		String rucEmisor=null;
-		try {
-			rucEmisor = cryptoUtil.decrypt("palidonga", userInfo.getRucEmisor());
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| InvalidKeySpecException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException
-				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	
+			rucEmisor = cryptoUtil.decrypt( userInfo.getRucEmisor());
+	
 		encontrados.addAll(listadoComprobantesEmitidos.buscarComprobnate(rucEmisor, tipoComprobante, fechaInicial.getValue(),fechaFinal.getValue(),false));
 					
 		for(ComprobanteEmitido c:encontrados){											

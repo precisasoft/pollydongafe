@@ -94,16 +94,7 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 	 */
 	@Override
 	public String procesarNotaCredito(NotaCreditoBinding notaCredito){
-		String rucEmisor=null;
-		try {
-			rucEmisor = cryptoUtil.decrypt("palidonga", notaCredito.getRucEmisor());
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| InvalidKeySpecException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException
-				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		String 	rucEmisor = cryptoUtil.decrypt( notaCredito.getRucEmisor());		
 		StringBuilder sb=new StringBuilder();
 		String claveAcceso=generadorClaveAcceso.generarClaveAccesoNotaCredito(rucEmisor, notaCredito.getCodigoEstablecimiento(), notaCredito.getCodigoPuntoVenta());
 		sb.append(claveAcceso);

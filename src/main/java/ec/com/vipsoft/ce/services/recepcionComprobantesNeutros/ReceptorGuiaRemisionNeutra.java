@@ -71,16 +71,7 @@ public class ReceptorGuiaRemisionNeutra implements Serializable{
 	@WebResult(name = "claveAcceso")
 	public String receptarGuiaRemision(GuiaRemisionBinding guiaBinding){
 
-		String rucEmisor=null;
-		try {
-			rucEmisor = cryptoUtil.decrypt("palidonga", guiaBinding.getRucEmisor());
-		} catch (InvalidKeyException | NoSuchAlgorithmException
-				| InvalidKeySpecException | NoSuchPaddingException
-				| InvalidAlgorithmParameterException
-				| IllegalBlockSizeException | BadPaddingException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		String rucEmisor = cryptoUtil.decrypt(guiaBinding.getRucEmisor());		
 		String claveAcceso = generadorClaveAcceso.generarClaveAccesoComprobanteRetencion(rucEmisor, guiaBinding.getCodigoEstablecimiento(), guiaBinding.getCodigoPuntoVenta());        		
 		String puntoEmision=utilClaveAccesl.obtenerCodigoPuntoEmision(claveAcceso);
 		String establecimiento=utilClaveAccesl.obtenerCodigoEstablecimiento(claveAcceso);

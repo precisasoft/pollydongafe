@@ -9,6 +9,6 @@ import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 public interface RegistrarEntidadRemote {
 
 	//@RolesAllowed(value="administrador")
-	public abstract boolean registrarEntidad(Entidad entidad,Establecimiento establecimiento);
+	public abstract boolean registrarEntidad(Entidad entidad,Establecimiento establecimiento,String usuario,String pass);
 
 }

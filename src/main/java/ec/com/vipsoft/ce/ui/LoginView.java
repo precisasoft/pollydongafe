@@ -3,6 +3,7 @@ package ec.com.vipsoft.ce.ui;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.inject.Inject;
 
 import org.apache.shiro.SecurityUtils;
@@ -35,8 +36,8 @@ public class LoginView extends VerticalLayout implements View {
 	private PasswordField password;
 	private Button botonLogIn;
 	private CheckBox rememberMe;
-	@Inject
-	private RegistradorUsuario registradorUsuario;
+	@EJB
+	private RegistradorUsuarioBean registradorUsuario;
 	
 	@Inject 
 	private UserInfo userInfo;

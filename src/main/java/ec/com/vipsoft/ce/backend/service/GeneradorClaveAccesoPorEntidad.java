@@ -4,10 +4,12 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.erp.abinadi.dominio.Establecimiento;
 import ec.com.vipsoft.erp.abinadi.dominio.PuntoVenta;
@@ -21,11 +23,13 @@ public class GeneradorClaveAccesoPorEntidad {
     private GeneradorClaveAcceso generadorReal;
     @EJB
     private VerificadorIndisponibilidad verificadorDisponibilidad;
+    @Inject
+    private CryptoUtil cryptoUtil;
 
     public String generarClaveAccesoFactura(String rucEmisor,  String codigoEstablecimiento, String codigoPuntoVenta,String secuenciaDocumento) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -55,7 +59,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoFactura(String rucEmisor,  String codigoEstablecimiento, String codigoPuntoVenta) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -86,7 +90,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoComprobanteRetencion( String rucEmisor,  String codigoEstablecimiento,  String codigoPuntoVenta) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -118,7 +122,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoComprobanteRetencion( String rucEmisor,  String codigoEstablecimiento,  String codigoPuntoVenta,String secuenciaDocumento) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -151,7 +155,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoGuiaRemision(String rucEmisor, String codigoEstablecimiento, String codigoPuntoVenta) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -180,7 +184,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoGuiaRemision(String rucEmisor, String codigoEstablecimiento, String codigoPuntoVenta,String secuenciaDoc) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -210,7 +214,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoNotaCredito( String rucEmisor,  String codigoEstablecimiento, String codigoPuntoVenta) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -239,7 +243,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoNotaCredito( String rucEmisor,  String codigoEstablecimiento, String codigoPuntoVenta,String secuenciaDoc) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -269,7 +273,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoNotaDebito( String rucEmisor,  String codigoEstablecimiento,  String codigoPuntoVenta) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";
@@ -299,7 +303,7 @@ public class GeneradorClaveAccesoPorEntidad {
     public String generarClaveAccesoNotaDebito( String rucEmisor,  String codigoEstablecimiento,  String codigoPuntoVenta,String secuencaDoc) {
         String claveAcceso = null;
         Query q = em.createQuery("select e from Entidad e where e.ruc=?1");
-        q.setParameter(1, rucEmisor);
+        q.setParameter(1, cryptoUtil.encrypt(rucEmisor));
         List<Entidad> listadoEntidad = q.getResultList();
         if (listadoEntidad.isEmpty()) {
             claveAcceso = "entidad o ruc no registrado";

@@ -86,7 +86,15 @@ public class ComprobanteElectronico implements Serializable,Comparable<Comproban
     private String correoElectronico;
     @Column(columnDefinition="decimal(20,2) default 0")
     private BigDecimal monto;
-    public boolean isAutorizacionConsultadoAlSRI() {
+    private Boolean encriptado;
+    
+    public Boolean getEncriptado() {
+		return encriptado;
+	}
+	public void setEncriptado(Boolean encriptado) {
+		this.encriptado = encriptado;
+	}
+	public boolean isAutorizacionConsultadoAlSRI() {
 		return autorizacionConsultadoAlSRI;
 	}
 	public void setAutorizacionConsultadoAlSRI(boolean autorizacionConsultadoAlSRI) {
