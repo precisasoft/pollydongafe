@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,14 +17,42 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 
 import redis.clients.jedis.Jedis;
+import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.sri.comprobanteRetencion._v1_0.ComprobanteRetencion;
 import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
 import ec.com.vipsoft.sri.guiaremision._v1_1_0.GuiaRemision;
 import ec.com.vipsoft.sri.notacredito._v1_1_0.NotaCredito;
 
 @Stateless
-public class RegistradorDocumentoSinFirmar implements Serializable{
-	Logger loger=Logger.getLogger(RegistradorDocumentoSinFirmar.class.getCanonicalName());
+public class AdministradorRegistrosREDIS implements Serializable{
+	Logger loger=Logger.getLogger(AdministradorRegistrosREDIS.class.getCanonicalName());
+	@Inject
+	private UtilClaveAcceso utilClaveAcceso;
+	public void registrarIntentoEnvio(String claveAcceso){
+		StringBuilder sb=new StringBuilder();
+		sb.append("E");
+		if(utilClaveAcceso.esEnPruebas(claveAcceso)){
+			sb.append("U");
+		}else{
+			sb.append("P");
+		}
+		sb.append(claveAcceso);
+		Jedis jedis=new Jedis("localhost");
+		jedis.set(sb.toString(), "1");
+		jedis.expire(sb.toString(), 1800);		
+	}
+	public boolean estaEnviadoOEspera(String claveAcceso){
+		StringBuilder sb=new StringBuilder();
+		sb.append("E");
+		if(utilClaveAcceso.esEnPruebas(claveAcceso)){
+			sb.append("U");
+		}else{
+			sb.append("P");
+		}
+		sb.append(claveAcceso);
+		Jedis jedis=new Jedis("localhost");
+		return jedis.exists(sb.toString());
+	}
 	
 	private static final long serialVersionUID = 6963060065091149909L;
 	public String generarCadenaFactura(Factura f){

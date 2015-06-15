@@ -2,11 +2,14 @@ package ec.com.vipsoft.erp.abinadi.dominio;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 @Entity
 
 public class DocumentoFirmado implements Serializable {
@@ -16,6 +19,8 @@ public class DocumentoFirmado implements Serializable {
 	private Long id;
 	@Column(columnDefinition = "varchar(16384)")
 	private String convertidoEnXML;
+	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE)
+	private Entidad entidad;
 	public Long getId() {
 		return id;
 	}
@@ -28,5 +33,11 @@ public class DocumentoFirmado implements Serializable {
 	public void setConvertidoEnXML(String convertidoEnXML) {
 		this.convertidoEnXML = convertidoEnXML;
 	}
-
+	public Entidad getEntidad() {
+		return entidad;
+	}
+	public void setEntidad(Entidad entidad) {
+		this.entidad = entidad;
+	}
+ 
 }

@@ -25,11 +25,13 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
 import ec.com.vipsoft.ce.ui.ComprobanteEmitido;
 import ec.com.vipsoft.ce.utils.LlenadorNumeroComprobante;
 import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
+import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
@@ -418,11 +420,18 @@ public class ListarComprobantesEmitidos {
 					if(c.getTipo().equals(TipoComprobante.factura)){
 						bean.setTipo("FACTURA");
 						if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){
-							DocumentoFirmado documentoFirmado = c.getDocumentoFirmado();
+							
+							//DocumentoFirmado documentoFirmado = c.getDocumentoFirmado();
 							try {
+								ComprobanteAutorizado documentoFirmado=c.getComprobanteAutorizado();
+								JAXBContext contextoAutorizacion=JAXBContext.newInstance(Autorizacion.class);
+								Unmarshaller unmarshalerAutorizacion=contextoAutorizacion.createUnmarshaller();																								
+								Autorizacion autorizacion=(Autorizacion)unmarshalerAutorizacion.unmarshal(new StringReader(new String(documentoFirmado.getEnXML())));
+								
+								
 								JAXBContext contexto=JAXBContext.newInstance(Factura.class);
 								Unmarshaller unmarshaller=contexto.createUnmarshaller();
-								Factura lafactura=(Factura) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
+								Factura lafactura=(Factura) unmarshaller.unmarshal(new StringReader(autorizacion.getComprobante()));
 								bean.setMonto(String.valueOf(lafactura.getInfoFactura().getImporteTotal()));
 								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
 								comprobante.setMonto(lafactura.getInfoFactura().getImporteTotal());

@@ -77,6 +77,9 @@ public class MenuView extends VerticalLayout implements View{
 		botonReporte=new Button("reporte");
 		botonReporte.addClickListener(event->UI.getCurrent().getNavigator().navigateTo("reportecomprobantesemitidos"));
 		addComponent(botonReporte);
+		Button botonImportar=new Button("importar");
+		addComponent(botonImportar);
+		botonImportar.addClickListener(event->UI.getCurrent().getNavigator().navigateTo("importar"));
 		addComponent(botonSalir);	
 	}
 

@@ -39,8 +39,8 @@ public class VerificadorRespuestaSRI {
 	private VerificadorIndisponibilidad verificadorIndisponibilidad;
 	@EJB
 	private VerificadorRepuestaIndividualRemote verificadorRespuestaIndividual;
-
-	
+	@EJB
+	private AdministradorRegistrosREDIS administradorRegistroRedis;
 	@Schedule(dayOfMonth="*",hour="*",minute="*",second="0,20,40",year="*",month="*")	
 	public void verificarAutorizacionesPendientes(){
 		if(!verificadorIndisponibilidad.estamosEnContingencia()){
@@ -66,33 +66,37 @@ public class VerificadorRespuestaSRI {
 						Marshaller marshaller=null;		
 						contexto=JAXBContext.newInstance(Autorizacion.class);
 						marshaller=contexto.createMarshaller();		
-						RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(claveAcceso);
-						if(!respuesta.getAutorizaciones().isEmpty()){
-							autorizacion=respuesta.getAutorizaciones().get(0);
-							if(autorizacion!=null){
-							//retorno=autorizacion.getNumeroAutorizacion();
-								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, idComprobante);
-								comprobante.setAutorizacionConsultadoAlSRI(true);
-								if(autorizacion.getEstado().equalsIgnoreCase("autorizado")){
-									comprobante.setAutorizado(true);
-									comprobante.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
-									comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
-									ComprobanteAutorizado ca=new ComprobanteAutorizado();
-									StringWriter sw=new StringWriter();
-									marshaller.marshal(autorizacion, sw);
-									ca.setEnXML(sw.toString().getBytes());
-									comprobante.setComprobanteAutorizado(ca);					
-								}else{				
-									comprobante.setAutorizado(false);
+					
+							
+							RespuestaAutorizacionComprobante respuesta = consultorAutorizacion.consultarAutorizacion(claveAcceso);
+							if(!respuesta.getAutorizaciones().isEmpty()){
+								autorizacion=respuesta.getAutorizaciones().get(0);
+								if(autorizacion!=null){
+								//retorno=autorizacion.getNumeroAutorizacion();
+									ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, idComprobante);
 									comprobante.setAutorizacionConsultadoAlSRI(true);
-									if(autorizacion.getMensaje().getIdentificador()!=null){										
-										comprobante.setCodigoError(autorizacion.getMensaje().getIdentificador());
-										comprobante.setMensajeError(autorizacion.getMensaje().getMensaje());
-									}		
-								}	
-							//	em.refresh(comprobante);
+									if(autorizacion.getEstado().equalsIgnoreCase("autorizado")){
+										comprobante.setAutorizado(true);
+										comprobante.setNumeroAutorizacion(autorizacion.getNumeroAutorizacion());
+										comprobante.setFechaAutorizacion(autorizacion.getFechaAutorizacion());
+										ComprobanteAutorizado ca=new ComprobanteAutorizado();
+										StringWriter sw=new StringWriter();
+										marshaller.marshal(autorizacion, sw);
+										ca.setEnXML(sw.toString().getBytes());
+										comprobante.setComprobanteAutorizado(ca);					
+									}else{				
+										comprobante.setAutorizado(false);
+										comprobante.setAutorizacionConsultadoAlSRI(true);
+										if(autorizacion.getMensaje().getIdentificador()!=null){										
+											comprobante.setCodigoError(autorizacion.getMensaje().getIdentificador());
+											comprobante.setMensajeError(autorizacion.getMensaje().getMensaje());
+										}		
+									}	
+								//	em.refresh(comprobante);
+								}
 							}
-						}
+						
+						
 						
 					} catch (Exception e) {
 						// TODO Auto-generated catch block

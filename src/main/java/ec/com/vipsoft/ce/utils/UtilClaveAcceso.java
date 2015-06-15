@@ -12,5 +12,6 @@ public interface UtilClaveAcceso extends Serializable{
 	public abstract String obtenerSecuanciaDocumento(String claveACceso);
 	public abstract String obtenerAmbiente(String claveAcceso);
 	public abstract String obtenerTipoDocumento(String claveAcceso);
+	public abstract boolean esValida(String claveAcceso);
 
 }
