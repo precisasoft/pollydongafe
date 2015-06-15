@@ -21,6 +21,7 @@ import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.ConsultaAutorizacion;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.RespuestaAutorizacionComprobante;
 import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
+import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
@@ -35,11 +36,13 @@ public class AutorizacionEnArchivoXML {
 	private ConsultaAutorizacion consultaAutorizacion;
 	@EJB
 	private VerificadorRespuestaIndividual verificadorRespuestaIndividual;
+	@Inject
+	private CryptoUtil cryptoUtil;
 
 	public Autorizacion obtenerAutorizacion(String claveAcceso){
 		Autorizacion autorizacion=null;
 		String ca = utilClaveAcceso.obtenerTipoDocumento(claveAcceso);
-		String ruc = utilClaveAcceso.obtemerRucEmisor(claveAcceso);
+		String ruc = cryptoUtil.encrypt(utilClaveAcceso.obtemerRucEmisor(claveAcceso));
 		Query qEntidad = em.createQuery("select e from Entidad e where e.ruc=?1");
 		qEntidad.setParameter(1, ruc);
 		List<Entidad> listadoEntidad = qEntidad.getResultList();
@@ -89,5 +92,4 @@ public class AutorizacionEnArchivoXML {
 		}
 		return autorizacion;
 	}
-
 }
