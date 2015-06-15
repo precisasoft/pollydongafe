@@ -32,9 +32,10 @@ import ec.com.vipsoft.cryptografia.CryptoUtil;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico.TipoComprobante;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
-import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 import ec.com.vipsoft.sri.factura._v1_1_0.Factura;
+import ec.com.vipsoft.sri.factura._v1_1_0.Factura.Retenciones.Retencion;
+import ec.com.vipsoft.sri.guiaremision._v1_1_0.GuiaRemision;
 import ec.com.vipsoft.sri.notacredito._v1_1_0.NotaCredito;
 @Stateless
 public class ListarComprobantesEmitidos {
@@ -447,11 +448,15 @@ public class ListarComprobantesEmitidos {
 					if(c.getTipo().equals(TipoComprobante.notaCredito)){
 						bean.setTipo("N/C");
 						if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){
-							DocumentoFirmado documentoFirmado = c.getDocumentoFirmado();
+							
 							try {
+								ComprobanteAutorizado documentoFirmado=c.getComprobanteAutorizado();
+								JAXBContext contextoAutorizacion=JAXBContext.newInstance(Autorizacion.class);
+								Unmarshaller unmarshalerAutorizacion=contextoAutorizacion.createUnmarshaller();																								
+								Autorizacion autorizacion=(Autorizacion)unmarshalerAutorizacion.unmarshal(new StringReader(new String(documentoFirmado.getEnXML())));
 								JAXBContext contexto=JAXBContext.newInstance(NotaCredito.class);
 								Unmarshaller unmarshaller=contexto.createUnmarshaller();
-								NotaCredito lanc=(NotaCredito) unmarshaller.unmarshal(new StringReader(documentoFirmado.getConvertidoEnXML()));
+								NotaCredito lanc=(NotaCredito) unmarshaller.unmarshal(new StringReader(autorizacion.getComprobante()));
 								bean.setMonto(String.valueOf(lanc.getInfoNotaCredito().getValorModificacion()));
 								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
 								comprobante.setMonto(lanc.getInfoNotaCredito().getValorModificacion());
@@ -467,10 +472,48 @@ public class ListarComprobantesEmitidos {
 					}
 					if(c.getTipo().equals(TipoComprobante.guiaRemision)){
 						bean.setTipo("GR");
+						if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){
+							
+							try {
+								ComprobanteAutorizado documentoFirmado=c.getComprobanteAutorizado();
+								JAXBContext contextoAutorizacion=JAXBContext.newInstance(Autorizacion.class);
+								Unmarshaller unmarshalerAutorizacion=contextoAutorizacion.createUnmarshaller();																								
+								Autorizacion autorizacion=(Autorizacion)unmarshalerAutorizacion.unmarshal(new StringReader(new String(documentoFirmado.getEnXML())));
+								JAXBContext contexto=JAXBContext.newInstance(GuiaRemision.class);
+								Unmarshaller unmarshaller=contexto.createUnmarshaller();
+								GuiaRemision lanc=(GuiaRemision) unmarshaller.unmarshal(new StringReader(autorizacion.getComprobante()));
+								//bean.setMonto(String.valueOf(lanc.getInfoGuiaRemision().getValorModificacion()));
+								//ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
+								//comprobante.setMonto(lanc.getInfoNotaCredito().getValorModificacion());
+							} catch (JAXBException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
 					}
 					if(c.getTipo().equals(TipoComprobante.retencion)){
 						bean.setTipo("RETENCION");
-						
+//							if((bean.getMonto()==null)||(c.getMonto().doubleValue()==0)){							
+//							try {
+//								ComprobanteAutorizado documentoFirmado=c.getComprobanteAutorizado();
+//								JAXBContext contextoAutorizacion=JAXBContext.newInstance(Autorizacion.class);
+//								Unmarshaller unmarshalerAutorizacion=contextoAutorizacion.createUnmarshaller();																								
+//								Autorizacion autorizacion=(Autorizacion)unmarshalerAutorizacion.unmarshal(new StringReader(new String(documentoFirmado.getEnXML())));
+//								JAXBContext contexto=JAXBContext.newInstance(Retencion.class);
+//								Unmarshaller unmarshaller=contexto.createUnmarshaller();
+//								Retencion lanc=(Retencion) unmarshaller.unmarshal(new StringReader(autorizacion.getComprobante()));
+								//lanc.ge
+								
+//								bean.setMonto(String.valueOf(lanc.get.getValorModificacion()));
+//								ComprobanteElectronico comprobante=em.find(ComprobanteElectronico.class, c.getId());
+//								comprobante.setMonto(lanc.getInfoNotaCredito().getValorModificacion());
+//							} catch (JAXBException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
+							
+//						}
 					}
 					
 					listadoRetorno.add(bean);
