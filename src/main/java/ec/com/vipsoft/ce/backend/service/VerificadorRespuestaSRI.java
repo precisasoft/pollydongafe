@@ -19,9 +19,9 @@ import ec.com.vipsoft.ce.services.recepcionComprobantesNeutros.EnviadorSRIEJB;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.Autorizacion;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.ConsultaAutorizacion;
 import ec.com.vipsoft.ce.sri.autorizacion.wsclient.RespuestaAutorizacionComprobante;
-import ec.com.vipsoft.ce.utils.UtilClaveAcceso;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteAutorizado;
 import ec.com.vipsoft.erp.abinadi.dominio.ComprobanteElectronico;
+import ec.com.vipsoft.erp.abinadi.dominio.DocumentoFirmado;
 
 @Stateless
 public class VerificadorRespuestaSRI {
@@ -33,8 +33,8 @@ public class VerificadorRespuestaSRI {
 	private ConsultaAutorizacion consultorAutorizacion;
 	@EJB
 	private EnviadorSRIEJB enviadorSRI;
-	@Inject
-	private UtilClaveAcceso utilClaveAcceso;
+//	@Inject
+//	private UtilClaveAcceso utilClaveAcceso;
 	@EJB
 	private VerificadorIndisponibilidad verificadorIndisponibilidad;
 	@EJB
@@ -83,7 +83,12 @@ public class VerificadorRespuestaSRI {
 										StringWriter sw=new StringWriter();
 										marshaller.marshal(autorizacion, sw);
 										ca.setEnXML(sw.toString().getBytes());
-										comprobante.setComprobanteAutorizado(ca);					
+										comprobante.setComprobanteAutorizado(ca);
+										DocumentoFirmado doc=comprobante.getDocumentoFirmado();										
+										comprobante.setDocumentoFirmado(null);
+										em.remove(doc);										
+										administradorRegistroRedis.borrarFacturaXML(comprobante.getClaveAcceso());
+										
 									}else{				
 										comprobante.setAutorizado(false);
 										comprobante.setAutorizacionConsultadoAlSRI(true);

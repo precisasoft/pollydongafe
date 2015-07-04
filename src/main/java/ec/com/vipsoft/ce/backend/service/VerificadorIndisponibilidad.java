@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import ec.com.vipsoft.ce.backend.model.CalendarioIndisponibilidad;
+import ec.com.vipsoft.erp.abinadi.dominio.Entidad;
 
 @Stateless
 public class VerificadorIndisponibilidad {
@@ -35,8 +36,8 @@ public class VerificadorIndisponibilidad {
 		
 		CalendarioIndisponibilidad calendarioahora=new CalendarioIndisponibilidad();
 		calendarioahora.setFechaInicial(ahora.getTime());
-		ahora.add(Calendar.SECOND,20);
-		calendarioahora.setFechaFinal(ahora.getTime());
+		ahora.add(Calendar.SECOND,40);
+		calendarioahora.setFechaFinal(ahora.getTime());		
 		em.persist(calendarioahora);
 		
 	}

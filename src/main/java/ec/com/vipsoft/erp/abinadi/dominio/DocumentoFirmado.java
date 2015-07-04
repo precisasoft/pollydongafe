@@ -17,7 +17,7 @@ public class DocumentoFirmado implements Serializable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-	@Column(columnDefinition = "varchar(16384)")
+	@Column(columnDefinition = "varchar(32768)")
 	private String convertidoEnXML;
 	@ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE)
 	private Entidad entidad;

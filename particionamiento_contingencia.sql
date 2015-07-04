@@ -109,6 +109,7 @@ create or replace function insert_comprobanteelectronico() returns trigger as $$
 begin
 
 	if NEW.fecha_e is null then NEW.fecha_e=NEW.fecha_a; end if;
+	if NEW.codigoerror='43' then NEW.enviado=true; end if;
 	if NEW.entidademisora_id=null then insert into comprobanteelectronico_00 values(NEW.*); end if;
 	if NEW.entidademisora_id=1 then insert into comprobanteelectronico_01 values(NEW.*); end if;
 	if NEW.entidademisora_id=2 then insert into comprobanteelectronico_02 values(NEW.*); end if; 	

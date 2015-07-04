@@ -12,7 +12,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 import ec.com.vipsoft.ce.backend.managedbean.UserInfo;
-import ec.com.vipsoft.ce.backend.service.ImportadorComprobanteElectronico;
+import ec.com.vipsoft.ce.backend.remoteinterface.ImportadorComprobanteElectronicoRemote;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonCancelar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.BotonRegistrar;
 import ec.com.vipsoft.erp.gui.componentesbasicos.CampoClaveAcceso;
@@ -23,7 +23,7 @@ public class ImportadorComprobanteUI extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = -2322505750446653928L;
 	@EJB
-	private ImportadorComprobanteElectronico importadorComprobante;
+	private ImportadorComprobanteElectronicoRemote importadorComprobante;
 	@Inject
 	private UserInfo userInfo;
 	public ImportadorComprobanteUI() {

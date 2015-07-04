@@ -79,6 +79,10 @@ public class AdministradorRegistrosREDIS implements Serializable{
 		sb.append(":").append(g.getInfoTributaria().getEstab()+":"+g.getInfoTributaria().getPtoEmi()+":"+g.getInfoTributaria().getSecuencial());
 		return sb.toString();
 	}
+	/**
+	 * registra el archivo xml sin firmar ...
+	 * @param f
+	 */
 	public void registrarFactura(Factura f){
 		
 		Document convertidoEnDOM;
@@ -101,7 +105,7 @@ public class AdministradorRegistrosREDIS implements Serializable{
 			String documentoSinFirmar=writer.toString();
 			loger.info("vamos a guardar en redis "+claveFactura+"   :     "+documentoSinFirmar);
 			jedis.set(claveFactura, documentoSinFirmar);
-			jedis.expire(claveFactura, 2592000);			
+			jedis.expire(claveFactura, 172800);			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -111,5 +115,19 @@ public class AdministradorRegistrosREDIS implements Serializable{
 		//JAXBContext contexto=new 
 	//	String generarDocumento=
 	//	jedis.set(generarCadenaFactura(f), value)
+	}
+	public void borrarFacturaXML(String claveAcceso) {
+		StringBuilder sb=new StringBuilder();
+		sb.append("F:");
+		sb.append(utilClaveAcceso.obtemerRucEmisor(claveAcceso));
+		sb.append(":").append(utilClaveAcceso.obtenerCodigoEstablecimiento(claveAcceso)).append(":").append(utilClaveAcceso.obtenerCodigoPuntoEmision(claveAcceso)).append(":").append(utilClaveAcceso.obtenerSecuanciaDocumento(claveAcceso));
+		Jedis jedis=new Jedis("localhost");
+		jedis.expire(sb.toString(),5);
+		
+//		StringBuilder sb=new StringBuilder("F:");
+//		sb.append(f.getInfoTributaria().getRuc());
+//		sb.append(":").append(f.getInfoTributaria().getEstab()+":"+f.getInfoTributaria().getPtoEmi()+":"+f.getInfoTributaria().getSecuencial());
+//		return sb.toString();
+		
 	}
 }

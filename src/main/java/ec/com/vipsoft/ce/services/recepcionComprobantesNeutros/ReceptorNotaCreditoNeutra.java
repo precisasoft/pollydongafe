@@ -101,7 +101,7 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 	
 		
 		Query q = em.createQuery("select e from Entidad e where e.ruc=?1 and e.habilitado=?2");
-		q.setParameter(1, rucEmisor);
+		q.setParameter(1, notaCredito.getRucEmisor());
 		q.setParameter(2, Boolean.TRUE);
 		List<Entidad> lista = q.getResultList();
 		if (!lista.isEmpty()) {
@@ -143,11 +143,17 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 					comprobante.getInfoTributaria().setAmbiente(ambiente);
 					comprobante.getInfoTributaria().setClaveAcceso(claveAcceso);
 					comprobante.getInfoTributaria().setCodDoc(codigoDocumento);
-					comprobante.getInfoTributaria().setDirMatriz(entidad.getDireccionMatriz());
+					comprobante.getInfoTributaria().setDirMatriz(entidad.getDireccionMatriz().trim());
 					comprobante.getInfoTributaria().setEstab(establecimiento);
-					comprobante.getInfoTributaria().setNombreComercial(entidad.getNombreComercial());
+					String nombreComercial=entidad.getNombreComercial();
+					if(nombreComercial==null){
+						nombreComercial=entidad.getRazonSocial();
+					}else{
+						nombreComercial=nombreComercial.trim();
+					}
+					comprobante.getInfoTributaria().setNombreComercial(nombreComercial);
 					comprobante.getInfoTributaria().setPtoEmi(puntoEmision);
-					comprobante.getInfoTributaria().setRazonSocial(entidad.getRazonSocial());
+					comprobante.getInfoTributaria().setRazonSocial(entidad.getRazonSocial().trim());
 					comprobante.getInfoTributaria().setSecuencial(secuenciaDocumento);
 					if (utilClaveAccesl.esEnContingencia(claveAcceso)) {
 						comprobante.getInfoTributaria().setTipoEmision("2");
@@ -162,16 +168,16 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 					}else{
 						comprobante.getInfoNotaCredito().setObligadoContabilidad(ObligadoContabilidad.NO);
 					}
-					comprobante.getInfoNotaCredito().setDirEstablecimiento(entidad.getDireccionMatriz());
+					comprobante.getInfoNotaCredito().setDirEstablecimiento(entidad.getDireccionMatriz().trim());
 					comprobante.getInfoNotaCredito().setCodDocModificado("01");
 					SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
 					comprobante.getInfoNotaCredito().setFechaEmision(sdf2.format(new Date()));
 					comprobante.getInfoNotaCredito().setFechaEmisionDocSustento(factura.getInfoFactura().getFechaEmision());
-					comprobante.getInfoNotaCredito().setIdentificacionComprador(factura.getInfoFactura().getIdentificacionComprador());
+					comprobante.getInfoNotaCredito().setIdentificacionComprador(factura.getInfoFactura().getIdentificacionComprador().trim());
 					comprobante.getInfoNotaCredito().setMoneda("DOLAR");
-					comprobante.getInfoNotaCredito().setMotivo(notaCredito.getMotivoAModificar());
-					comprobante.getInfoNotaCredito().setNumDocModificado(notaCredito.getNumeroFacturaAModificar());
-					comprobante.getInfoNotaCredito().setRazonSocialComprador(factura.getInfoFactura().getRazonSocialComprador());
+					comprobante.getInfoNotaCredito().setMotivo(notaCredito.getMotivoAModificar().trim());
+					comprobante.getInfoNotaCredito().setNumDocModificado(notaCredito.getNumeroFacturaAModificar().trim());
+					comprobante.getInfoNotaCredito().setRazonSocialComprador(factura.getInfoFactura().getRazonSocialComprador().trim());
 					comprobante.getInfoNotaCredito().setTipoIdentificacionComprador(factura.getInfoFactura().getTipoIdentificacionComprador());
 					
 					
@@ -189,14 +195,14 @@ public class ReceptorNotaCreditoNeutra implements ReceptorNotaCreditoNeutraRemot
 						if(dam.getCodigoAlterno()!=null){
 							detalle.setCodigoAdicional(dam.getCodigoAlterno());	
 						}
-						detalle.setCodigoInterno(dam.getCodigo());
-						detalle.setDescripcion(dam.getDescripcion());
+						detalle.setCodigoInterno(dam.getCodigo().trim());
+						detalle.setDescripcion(dam.getDescripcion().trim());
 						detalle.setDescuento(dam.getDescuento());
 						if(dam.getInfoAdicional1()!=null){
 							
 							DetAdicional da=new DetAdicional();
 							da.setNombre("info");
-							da.setValor(dam.getInfoAdicional1());
+							da.setValor(dam.getInfoAdicional1().trim());
 							detalle.getDetallesAdicionales().getDetAdicional().add(da);	
 						}
 						Impuesto impuesto=new Impuesto();
